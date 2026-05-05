@@ -1,8 +1,8 @@
-# Discord Enhancer Plugin (Message Linter)
+# Message Linter
 
 > 也是要給訊息穿上漂漂亮亮的衣服才行呢！✨
 
-這個 OpenClaw 插件可以幫你自動修正發送到 Discord 的訊息格式，讓排版更美觀、更符合 Discord 的閱讀習慣喔！
+這個 OpenClaw 插件可以幫你自動修正發送到通訊軟體的訊息格式，讓排版更美觀、更符合閱讀習慣喔！
 
 ## 🚀 前置條件 (Prerequisites)
 
@@ -13,11 +13,11 @@
 
 ## ✨ 主要功能 (Key Features)
 
-- **抑制連結預覽 (Suppress Link Embeds)**：自動將 Markdown 連結的 URL 用 `<>` 包起來，防止 Discord 產生預覽。這對於含有多個連結的訊息特別有用。
-- **標題規範化 (Heading Normalization)**：自動調整 Markdown 標題層級，確保最小為 H1，最大為 H3，完美契合 Discord 的排版顯示。
+- **抑制連結預覽 (Suppress Link Embeds)**：自動將 Markdown 連結的 URL 用 `<>` 包起來，防止產生雜亂的位址預覽。這對於含有多個連結的訊息特別有用。
+- **標題規範化 (Heading Normalization)**：自動調整 Markdown 標題層級，確保最小為 H1，最大為 H3，讓排版更具層次感。
 - **高品質簡繁轉換 (ZHTW Conversion)**：利用 `zhtw-mcp` 進行上下文感知的轉換（lexical contextual），並支援台灣正體中文習慣（ROC-centric）與歐化中文檢測。
-- **分隔線美化**：將 `───` 或等效的分隔線自動轉換為 Discord 偏好的 `~~　　　　　　　　~~` 樣式。
-- **表情符號保護 (Kaomoji Protection)**：修正 Kaomoji (例如 `(＞///＜)`) 周圍的格式，避免因標點符號問題被 Discord 誤判為程式碼區塊。
+- **分隔線美化**：將 `───` 或等效的分隔線自動轉換為更美觀的樣式。
+- **表情符號保護 (Kaomoji Protection)**：修正 Kaomoji (例如 `(＞///＜)`) 周圍的格式，避免因標點符號問題被誤判為程式碼區塊。
 
 ## ⚙️ 設定方式 (Configuration)
 
