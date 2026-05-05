@@ -4,17 +4,24 @@
 
 這個 OpenClaw 插件可以幫你自動修正發送到 Discord 的訊息格式，讓排版更美觀、更符合 Discord 的閱讀習慣喔！
 
+## 🚀 前置條件 (Prerequisites)
+
+若要啟用 **簡繁轉換 (ZHTW Conversion)** 功能，您必須在系統中安裝 `zhtw-mcp` 執行檔：
+
+1. **下載與安裝**：請前往 [wei840222/zhtw-mcp](https://github.com/wei840222/zhtw-mcp) 依照說明進行安裝。
+2. **路徑配置**：確保 `zhtw-mcp` 執行檔位於您的 `PATH` 中，或放置於 `~/.local/bin/zhtw-mcp`。
+
 ## ✨ 主要功能 (Key Features)
 
-- **抑制連結預覽 (Suppress Link Embeds)**：自動將 Markdown 連結的 URL 用 `<>` 包起來，防止 Discord 產生一大堆雜亂的連結預覽。
-- **標題規範化 (Heading Normalization)**：自動調整 Markdown 標題層級（確保最小為 H1，最大為 H3），符合 Discord 的排版規範。
-- **簡繁轉換 (ZHTW Conversion)**：可選用功能，自動將簡體中文轉換為繁體中文（需要 `zhtw-mcp`）。
-- **分隔線轉換**：將 `───` 類型的分隔線轉換為 Discord 風格的 `~~...~~`。
-- **表情符號保護 (Kaomoji Protection)**：修正 kaomoji 周圍的標點符號，避免被誤認為程式碼區塊。
+- **抑制連結預覽 (Suppress Link Embeds)**：自動將 Markdown 連結的 URL 用 `<>` 包起來，防止 Discord 產生預覽。這對於含有多個連結的訊息特別有用。
+- **標題規範化 (Heading Normalization)**：自動調整 Markdown 標題層級，確保最小為 H1，最大為 H3，完美契合 Discord 的排版顯示。
+- **高品質簡繁轉換 (ZHTW Conversion)**：利用 `zhtw-mcp` 進行上下文感知的轉換（lexical contextual），並支援台灣正體中文習慣（ROC-centric）與歐化中文檢測。
+- **分隔線美化**：將 `───` 或等效的分隔線自動轉換為 Discord 偏好的 `~~　　　　　　　　~~` 樣式。
+- **表情符號保護 (Kaomoji Protection)**：修正 Kaomoji (例如 `(＞///＜)`) 周圍的格式，避免因標點符號問題被 Discord 誤判為程式碼區塊。
 
 ## ⚙️ 設定方式 (Configuration)
 
-可以在 `openclaw.json` 中配置開關：
+請在您的 `openclaw.json` (或插件配置區塊) 中進行設定：
 
 ```json
 {
@@ -25,12 +32,14 @@
         "headings": true,
         "separators": true,
         "kaomoji": true,
-        "zhtw": false
+        "zhtw": true 
       }
     }
   }
 }
 ```
+
+> **注意**：`zhtw` 功能預設為關閉，請在確認安裝 `zhtw-mcp` 後手動開啟。
 
 ---
 
