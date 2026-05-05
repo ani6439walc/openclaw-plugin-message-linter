@@ -25,4 +25,10 @@ describe("message-linter kaomoji backtick sanitization", () => {
     const output = sanitizeTokens(input);
     expect(output).toBe("(σˋ∀ˊ)σ");
   });
+
+  it("sanitizes kaomoji with acute accent and backtick", () => {
+    const input = "(๑´ڡ`๑)";
+    const output = sanitizeTokens(input);
+    expect(output).toBe("(๑ˊڡˋ๑)");
+  });
 });
