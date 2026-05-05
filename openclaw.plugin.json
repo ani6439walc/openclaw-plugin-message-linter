@@ -1,0 +1,46 @@
+{
+  "id": "message-linter",
+  "name": "Discord Enhancer",
+  "description": "Suppresses automatic URL embeds in Discord messages by wrapping Markdown link URLs in angle brackets.",
+  "activation": {
+    "onStartup": false
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "features": {
+        "type": "object",
+        "description": "Toggle individual formatting features",
+        "additionalProperties": false,
+        "properties": {
+          "zhtw": {
+            "type": "boolean",
+            "description": "Convert Simplified Chinese to Traditional Chinese (via zhtw-mcp)",
+            "default": false
+          },
+          "links": {
+            "type": "boolean",
+            "description": "Wrap Markdown link URLs in angle brackets to suppress Discord embeds",
+            "default": true
+          },
+          "separators": {
+            "type": "boolean",
+            "description": "Replace ─── separators with ~~...~~",
+            "default": true
+          },
+          "headings": {
+            "type": "boolean",
+            "description": "Normalize Markdown headings (shift down so minimum becomes H1, cap at H3)",
+            "default": true
+          },
+          "kaomoji": {
+            "type": "boolean",
+            "description": "Sanitize backticks around kaomoji to prevent accidental code formatting",
+            "default": true
+          }
+        }
+      }
+    }
+  }
+}
