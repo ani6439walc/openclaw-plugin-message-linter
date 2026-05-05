@@ -1,7 +1,7 @@
 {
   "id": "message-linter",
-  "name": "Discord Enhancer",
-  "description": "Suppresses automatic URL embeds in Discord messages by wrapping Markdown link URLs in angle brackets.",
+  "name": "Message Linter",
+  "description": "Suppresses automatic URL embeds in messages by wrapping Markdown link URLs in angle brackets.",
   "activation": {
     "onStartup": false
   },
