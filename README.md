@@ -1,28 +1,30 @@
-# Message Linter
+# Message Linter for OpenClaw
 
-> 也是要給訊息穿上漂漂亮亮的衣服才行呢！✨
+A robust message formatting and sanitization plugin for the OpenClaw platform, designed to ensure consistent, readable, and aesthetically pleasing message presentation across modern communication platforms.
 
-這個 OpenClaw 插件可以幫你自動修正發送到通訊軟體的訊息格式，讓排版更美觀、更符合閱讀習慣喔！
+## Overview
 
-## 🚀 前置條件 (Prerequisites)
+Message Linter automatically processes outgoing communications to normalize Markdown structure, suppress unwanted rich media embeds, and perform high-fidelity linguistic conversion. It is built to maintain professional communication standards while preserving expressive elements like Kaomoji.
 
-若要啟用 **簡繁轉換 (ZHTW Conversion)** 功能，您必須在系統中安裝 `zhtw-mcp` 執行檔：
+## Key Features
 
-1. **下載與安裝**：請前往 [wei840222/zhtw-mcp](https://github.com/wei840222/zhtw-mcp) 依照說明進行安裝。
-2. **路徑配置**：確保 `zhtw-mcp` 執行檔位於您的 `PATH` 中，或放置於 `~/.local/bin/zhtw-mcp`。
+- **Link Embed Suppression**: Automatically wraps Markdown link URLs in angle brackets (`<URL>`) to prevent cluttered automatic previews in clients like Discord.
+- **Heading Normalization**: Dynamically adjusts Markdown heading levels (shifting to a minimum of H1 and capping at H3) to maintain a consistent visual hierarchy.
+- **Advanced ZHTW Conversion**: Provides high-fidelity, context-aware Simplified-to-Traditional Chinese conversion via the `zhtw-mcp` engine, adhering to Taiwan (ROC) linguistic standards.
+- **Separator Beautification**: Converts standard ASCII separators (e.g., `---` or `───`) into visually optimized placeholders for cleaner section breaks.
+- **Kaomoji Integrity**: Intelligently sanitizes tokens containing Kaomoji (e.g., `(＞///＜)`) by neutralizing backticks and accents that might otherwise trigger accidental Markdown code block formatting.
+- **Discord-Compatible Blockquotes**: Ensures blockquote syntax is correctly formatted for reliable rendering across all supported clients.
 
-## ✨ 主要功能 (Key Features)
+## Prerequisites
 
-- **抑制連結預覽 (Suppress Link Embeds)**：自動將 Markdown 連結的 URL 用 `<>` 包起來，防止產生雜亂的位址預覽。這對於含有多個連結的訊息特別有用。
-- **標題規範化 (Heading Normalization)**：自動調整 Markdown 標題層級，確保最小為 H1，最大為 H3，讓排版更具層次感。
-- **高品質簡繁轉換 (ZHTW Conversion)**：利用 `zhtw-mcp` 進行上下文感知的轉換（lexical contextual），並支援台灣正體中文習慣（ROC-centric）與歐化中文檢測。
-- **分隔線美化**：將 `───` 或等效的分隔線自動轉換為更美觀的樣式。
-- **表情符號保護 (Kaomoji Protection)**：修正 Kaomoji (例如 `(＞///＜)`) 周圍的格式，避免因標點符號問題被誤判為程式碼區塊。包含針對重音符號與反引號的淨化最佳化。
-- **區塊引用格式化 (Blockquote Formatting)**：支援 Discord 相容的區塊引用解析與轉換。
+To utilize the **ZHTW Conversion** feature, the `zhtw-mcp` binary must be installed on your host system:
 
-## ⚙️ 設定方式 (Configuration)
+1. **Installation**: Refer to [wei840222/zhtw-mcp](https://github.com/wei840222/zhtw-mcp) for platform-specific instructions.
+2. **Path Configuration**: Ensure the binary is available in your system `PATH` or located at `~/.local/bin/zhtw-mcp`.
 
-請在您的 `openclaw.json` (或插件配置區塊) 中進行設定：
+## Configuration
+
+Integrate the plugin into your `openclaw.json` (or specific plugin configuration block) as follows:
 
 ```json
 {
@@ -33,15 +35,12 @@
         "headings": true,
         "separators": true,
         "kaomoji": true,
-        "zhtw": true 
+        "blockquotes": true,
+        "zhtw": false
       }
     }
   }
 }
 ```
 
-> **注意**：`zhtw` 功能預設為關閉，請在確認安裝 `zhtw-mcp` 後手動開啟。
-
----
-
-_Generated with ❤️ by Ani._
+> **Note**: The `zhtw` feature is disabled by default and requires `zhtw-mcp` to be correctly configured on the host.

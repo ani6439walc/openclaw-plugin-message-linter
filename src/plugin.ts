@@ -47,9 +47,6 @@ export function registerMessageLinterPlugin(api: OpenClawPluginApi): void {
   });
 
   api.on("message_sending", async (event, ctx) => {
-    if (ctx.channelId !== "discord") {
-      return undefined;
-    }
     if (typeof event.content !== "string") {
       return undefined;
     }
