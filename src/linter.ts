@@ -4,6 +4,7 @@ import { formatLinks } from "./transforms/links.js";
 import { replaceSeparators } from "./transforms/separators.js";
 import { normalizeMarkdownHeadings } from "./transforms/headings.js";
 import { sanitizeTokens } from "./transforms/kaomoji.js";
+import { formatBlockquotes } from "./transforms/blockquotes.js";
 import { convertZhTwViaMcp } from "./transforms/zhtw.js";
 
 const HAS_CJK_RE = /[\u3400-\u9fff]/;
@@ -44,6 +45,10 @@ export async function lintMessageContent(
 
   if (cfg.headings) {
     inlineText = normalizeMarkdownHeadings(inlineText);
+  }
+
+  if (cfg.blockquotes) {
+    inlineText = formatBlockquotes(inlineText);
   }
 
   const withInline = inlineMask.restore(inlineText);

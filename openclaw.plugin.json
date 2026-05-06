@@ -38,6 +38,11 @@
             "type": "boolean",
             "description": "Sanitize backticks around kaomoji to prevent accidental code formatting",
             "default": true
+          },
+          "blockquotes": {
+            "type": "boolean",
+            "description": "Ensure blockquote lines have a space after > for Discord compatibility",
+            "default": true
           }
         }
       }

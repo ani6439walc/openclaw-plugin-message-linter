@@ -196,4 +196,18 @@ describe("message-linter feature toggles", () => {
     const output = await lintMessageContent(input, async (text) => text);
     expect(output).toBe("## Sub and `#### inline` heading");
   });
+
+  it("fixes blockquote continuation lines for Discord", async () => {
+    const input = "> line 1\n>\n> line 2";
+    const output = await lintMessageContent(input, async (text) => text);
+    expect(output).toBe("> line 1\n> \n> line 2");
+  });
+
+  it("does not fix blockquotes when blockquotes feature is disabled", async () => {
+    const input = "> line 1\n>\n> line 2";
+    const output = await lintMessageContent(input, async (text) => text, {
+      blockquotes: false,
+    });
+    expect(output).toBe("> line 1\n>\n> line 2");
+  });
 });
