@@ -17,7 +17,8 @@
 - **標題規範化 (Heading Normalization)**：自動調整 Markdown 標題層級，確保最小為 H1，最大為 H3，讓排版更具層次感。
 - **高品質簡繁轉換 (ZHTW Conversion)**：利用 `zhtw-mcp` 進行上下文感知的轉換（lexical contextual），並支援台灣正體中文習慣（ROC-centric）與歐化中文檢測。
 - **分隔線美化**：將 `───` 或等效的分隔線自動轉換為更美觀的樣式。
-- **表情符號保護 (Kaomoji Protection)**：修正 Kaomoji (例如 `(＞///＜)`) 周圍的格式，避免因標點符號問題被誤判為程式碼區塊。
+- **表情符號保護 (Kaomoji Protection)**：修正 Kaomoji (例如 `(＞///＜)`) 周圍的格式，避免因標點符號問題被誤判為程式碼區塊。包含針對重音符號與反引號的淨化最佳化。
+- **區塊引用格式化 (Blockquote Formatting)**：支援 Discord 相容的區塊引用解析與轉換。
 
 ## ⚙️ 設定方式 (Configuration)
 
