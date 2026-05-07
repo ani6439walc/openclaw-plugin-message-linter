@@ -1,5 +1,6 @@
 const KAOMOJI_SYMBOLS_RE =
-  /[・ω▽＞＜￣＿｡•ˇ‸╬◣д◢ノ゜Д︵╥﹏∀≧◡≦☆★✧⊙°ロΣ⌒ˊˋ´⁄＼／＊〃σᴗ̀́۶ᕦᕤᓫงวᐛ｡]/u;
+  /[・ω▽＞＜￣＿｡•ˇ‸╬◣д◢ノ゜Д︵╥﹏∀≧◡≦☆★✧⊙°ロΣ⌒ˊˋ´⁄＼／＊〃σᴗ̀́۶ᕦᕤᓫงวᐛ｡๑ㅂ]/u;
+const TOKEN_RE = /[^\s，。！？；：,.!?]+/gu;
 
 function looksLikeKaomoji(content: string): boolean {
   if (content.length > 25) return false;
@@ -7,7 +8,7 @@ function looksLikeKaomoji(content: string): boolean {
 }
 
 export function sanitizeTokens(text: string): string {
-  return text.replace(/[^\s]+/g, (token) => {
+  return text.replace(TOKEN_RE, (token) => {
     if (!token.includes("`") && !token.includes("´")) return token;
 
     const stripped = token.replace(/[`´]/g, "");

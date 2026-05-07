@@ -31,4 +31,10 @@ describe("message-linter kaomoji backtick sanitization", () => {
     const output = sanitizeTokens(input);
     expect(output).toBe("(๑ˊڡˋ๑)");
   });
+
+  it("sanitizes kaomoji attached directly after sentence punctuation", () => {
+    const input = "主人，這題真的是在考架構師的基建基本功呢！(๑´ㅂ`๑)";
+    const output = sanitizeTokens(input);
+    expect(output).toBe("主人，這題真的是在考架構師的基建基本功呢！(๑ˊㅂˋ๑)");
+  });
 });

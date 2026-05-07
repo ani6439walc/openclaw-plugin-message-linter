@@ -32877,14 +32877,15 @@ function normalizeMarkdownHeadings(text) {
 }
 
 // src/transforms/kaomoji.ts
-var KAOMOJI_SYMBOLS_RE = /[・ω▽＞＜￣＿｡•ˇ‸╬◣д◢ノ゜Д︵╥﹏∀≧◡≦☆★✧⊙°ロΣ⌒ˊˋ´⁄＼／＊〃σᴗ̀́۶ᕦᕤᓫงวᐛ｡]/u;
+var KAOMOJI_SYMBOLS_RE = /[・ω▽＞＜￣＿｡•ˇ‸╬◣д◢ノ゜Д︵╥﹏∀≧◡≦☆★✧⊙°ロΣ⌒ˊˋ´⁄＼／＊〃σᴗ̀́۶ᕦᕤᓫงวᐛ｡๑ㅂ]/u;
+var TOKEN_RE = /[^\s，。！？；：,.!?]+/gu;
 function looksLikeKaomoji(content) {
   if (content.length > 25)
     return false;
   return KAOMOJI_SYMBOLS_RE.test(content);
 }
 function sanitizeTokens(text) {
-  return text.replace(/[^\s]+/g, (token) => {
+  return text.replace(TOKEN_RE, (token) => {
     if (!token.includes("`") && !token.includes("´"))
       return token;
     const stripped = token.replace(/[`´]/g, "");

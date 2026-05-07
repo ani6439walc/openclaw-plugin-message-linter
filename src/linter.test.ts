@@ -179,6 +179,12 @@ describe("message-linter feature toggles", () => {
     expect(output).toBe("Use `console.log` and (ˋ・ω・ˊ)");
   });
 
+  it("sanitizes kaomoji attached directly after sentence punctuation", async () => {
+    const input = "主人，這題真的是在考架構師的基建基本功呢！(๑´ㅂ`๑)";
+    const output = await lintMessageContent(input, async (text) => text);
+    expect(output).toBe("主人，這題真的是在考架構師的基建基本功呢！(๑ˊㅂˋ๑)");
+  });
+
   it("preserves inline code spans with common operators", async () => {
     const input = "Use `a + b` and `x == y`";
     const output = await lintMessageContent(input, async (text) => text);
