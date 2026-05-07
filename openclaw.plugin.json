@@ -3,7 +3,7 @@
   "name": "Message Linter",
   "description": "Suppresses automatic URL embeds in messages by wrapping Markdown link URLs in angle brackets.",
   "activation": {
-    "onStartup": false
+    "onStartup": true
   },
   "configSchema": {
     "type": "object",
