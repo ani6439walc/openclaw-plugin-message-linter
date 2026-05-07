@@ -37,4 +37,16 @@ describe("message-linter kaomoji backtick sanitization", () => {
     const output = sanitizeTokens(input);
     expect(output).toBe("主人，這題真的是在考架構師的基建基本功呢！(๑ˊㅂˋ๑)");
   });
+
+  it("sanitizes structurally kaomoji-like faces without adding new whitelist chars", () => {
+    const input = "最新款顏文字：(ʘ`ʘ)";
+    const output = sanitizeTokens(input);
+    expect(output).toBe("最新款顏文字：(ʘˋʘ)");
+  });
+
+  it("does not sanitize short code-like tokens that are mostly ascii", () => {
+    const input = "比較式 `x<=y` 先保留原樣";
+    const output = sanitizeTokens(input);
+    expect(output).toBe("比較式 `x<=y` 先保留原樣");
+  });
 });

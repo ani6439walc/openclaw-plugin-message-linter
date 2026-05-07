@@ -32751,48 +32751,200 @@ var DEFAULT_FEATURES = {
   blockquotes: true
 };
 
+// src/utils/kaomoji.ts
+var TOKEN_SEPARATOR_RE = /[\s，。！？；：,.!?]/u;
+var FACE_WRAPPER_RE = /[()（）\[\]{}「」『』【】]/u;
+var ASCII_CODEISH_RE = /[A-Za-z0-9_$.\[\]<>!=+\-*/%&|^~:?]/;
+var LETTER_OR_NUMBER_RE = /[\p{L}\p{N}]/u;
+function extractTokenAround(text, index) {
+  const { start, end } = extractTokenBounds(text, index);
+  return text.slice(start, end);
+}
+function extractTokenBounds(text, index) {
+  let start = index;
+  while (start > 0 && !TOKEN_SEPARATOR_RE.test(text[start - 1])) {
+    start -= 1;
+  }
+  let end = index;
+  while (end < text.length && !TOKEN_SEPARATOR_RE.test(text[end])) {
+    end += 1;
+  }
+  return { start, end };
+}
+function isLikelyKaomojiToken(token) {
+  const normalized = token.trim().replace(/[`´]/g, "");
+  const chars = Array.from(normalized);
+  if (chars.length < 3 || chars.length > 32)
+    return false;
+  let asciiCodeishChars = 0;
+  let nonAsciiChars = 0;
+  let decorativeChars = 0;
+  for (const char of chars) {
+    if (ASCII_CODEISH_RE.test(char))
+      asciiCodeishChars += 1;
+    if (char.charCodeAt(0) > 127)
+      nonAsciiChars += 1;
+    if (!LETTER_OR_NUMBER_RE.test(char) && !ASCII_CODEISH_RE.test(char)) {
+      decorativeChars += 1;
+    }
+  }
+  const compactLength = chars.length;
+  const hasFaceWrapper = FACE_WRAPPER_RE.test(normalized);
+  const mostlyAsciiCode = asciiCodeishChars >= Math.ceil(compactLength * 0.65) && nonAsciiChars === 0;
+  const denseNonCode = nonAsciiChars + decorativeChars >= Math.ceil(compactLength / 2);
+  if (mostlyAsciiCode)
+    return false;
+  if (nonAsciiChars === 0 && !hasFaceWrapper)
+    return false;
+  return hasFaceWrapper && (nonAsciiChars >= 2 || decorativeChars >= 2) || denseNonCode || nonAsciiChars >= 3 && asciiCodeishChars <= 1;
+}
+
 // src/utils/mask.ts
-var FENCED_CODE_RE = /```[\s\S]*?```/g;
-var INLINE_CODE_RE = /`([^`\n]+)`/g;
-var MARKDOWN_CODE_RE = /```[\s\S]*?```|`[^`\n]+`/g;
-function maskFencedCode(text) {
-  const segments = [];
-  const maskedText = text.replace(FENCED_CODE_RE, (segment) => {
-    const index = segments.push(segment) - 1;
-    return `FENCED_${index}`;
-  });
+var CODE_PLACEHOLDER_PREFIX = "CODE_";
+function countLineBreaks(segment) {
+  return (segment.match(/\r\n|\r|\n/g) ?? []).join("");
+}
+function createMask(entries, maskedText) {
   return {
     maskedText,
     restore(input) {
-      return segments.reduce((output, segment, index) => output.split(`FENCED_${index}`).join(segment), input);
+      return entries.reduce((output, entry) => output.split(entry.placeholder).join(entry.segment), input);
     }
   };
 }
-function maskInlineCode(text) {
-  const segments = [];
-  const maskedText = text.replace(INLINE_CODE_RE, (match) => {
-    const index = segments.push(match) - 1;
-    return `INLINE_${index}`;
-  });
+function createMaskEntry(index, segment, preserveLines = false) {
+  const marker = `${CODE_PLACEHOLDER_PREFIX}${index}`;
   return {
-    maskedText,
-    restore(input) {
-      return segments.reduce((output, segment, index) => output.split(`INLINE_${index}`).join(segment), input);
-    }
+    placeholder: preserveLines ? `${marker}${countLineBreaks(segment)}` : marker,
+    segment
   };
+}
+function countBackticks(text, index) {
+  let end = index;
+  while (end < text.length && text[end] === "`") {
+    end += 1;
+  }
+  return end - index;
+}
+function findLineStart(text, index) {
+  let cursor = index;
+  while (cursor > 0 && text[cursor - 1] !== `
+` && text[cursor - 1] !== "\r") {
+    cursor -= 1;
+  }
+  return cursor;
+}
+function skipLine(text, index) {
+  let cursor = index;
+  while (cursor < text.length && text[cursor] !== `
+` && text[cursor] !== "\r") {
+    cursor += 1;
+  }
+  if (text[cursor] === "\r" && text[cursor + 1] === `
+`) {
+    return cursor + 2;
+  }
+  if (text[cursor] === `
+` || text[cursor] === "\r") {
+    return cursor + 1;
+  }
+  return cursor;
+}
+function isFenceOpenerAt(text, index, backtickCount) {
+  if (backtickCount < 3)
+    return false;
+  const lineStart = findLineStart(text, index);
+  const indent = text.slice(lineStart, index);
+  return indent.length <= 3 && /^[ ]*$/.test(indent);
+}
+function isFenceCloserAt(text, index, openerLength) {
+  const lineStart = findLineStart(text, index);
+  if (lineStart !== index)
+    return false;
+  let cursor = index;
+  let indent = 0;
+  while (cursor < text.length && text[cursor] === " " && indent < 4) {
+    cursor += 1;
+    indent += 1;
+  }
+  const backtickCount = countBackticks(text, cursor);
+  if (backtickCount < openerLength)
+    return false;
+  const lineEnd = skipLine(text, index);
+  return /^[ \t]*$/.test(text.slice(cursor + backtickCount, lineEnd).replace(/[\r\n]+$/g, ""));
+}
+function findFenceEnd(text, index, openerLength) {
+  let cursor = skipLine(text, index);
+  while (cursor < text.length) {
+    if (isFenceCloserAt(text, cursor, openerLength)) {
+      return skipLine(text, cursor);
+    }
+    cursor = skipLine(text, cursor);
+  }
+  return text.length;
+}
+function isLikelyKaomojiOpener(text, index, backtickCount) {
+  if (backtickCount !== 1)
+    return false;
+  const { start, end } = extractTokenBounds(text, index);
+  if (index <= start || index >= end - 1)
+    return false;
+  return isLikelyKaomojiToken(extractTokenAround(text, index));
+}
+function findInlineCodeEnd(text, index, openerLength) {
+  let cursor = index + openerLength;
+  while (cursor < text.length) {
+    if (text[cursor] !== "`") {
+      cursor += 1;
+      continue;
+    }
+    const backtickCount = countBackticks(text, cursor);
+    if (isFenceOpenerAt(text, cursor, backtickCount)) {
+      return -1;
+    }
+    if (backtickCount === openerLength) {
+      return cursor + backtickCount;
+    }
+    cursor += backtickCount;
+  }
+  return -1;
 }
 function maskMarkdownCode(text) {
-  const segments = [];
-  const maskedText = text.replace(MARKDOWN_CODE_RE, (segment) => {
-    const index = segments.push(segment) - 1;
-    return `ZHTW_CODE_${index}`;
-  });
-  return {
-    maskedText,
-    restore(input) {
-      return segments.reduce((output, segment, index) => output.split(`ZHTW_CODE_${index}`).join(segment), input);
+  const entries = [];
+  let maskedText = "";
+  let cursor = 0;
+  while (cursor < text.length) {
+    if (text[cursor] !== "`") {
+      maskedText += text[cursor];
+      cursor += 1;
+      continue;
     }
-  };
+    const backtickCount = countBackticks(text, cursor);
+    if (isFenceOpenerAt(text, cursor, backtickCount)) {
+      const fenceEnd = findFenceEnd(text, cursor, backtickCount);
+      const entry2 = createMaskEntry(entries.length, text.slice(cursor, fenceEnd), true);
+      entries.push(entry2);
+      maskedText += entry2.placeholder;
+      cursor = fenceEnd;
+      continue;
+    }
+    if (isLikelyKaomojiOpener(text, cursor, backtickCount)) {
+      maskedText += text.slice(cursor, cursor + backtickCount);
+      cursor += backtickCount;
+      continue;
+    }
+    const inlineEnd = findInlineCodeEnd(text, cursor, backtickCount);
+    if (inlineEnd === -1) {
+      maskedText += text.slice(cursor, cursor + backtickCount);
+      cursor += backtickCount;
+      continue;
+    }
+    const entry = createMaskEntry(entries.length, text.slice(cursor, inlineEnd), true);
+    entries.push(entry);
+    maskedText += entry.placeholder;
+    cursor = inlineEnd;
+  }
+  return createMask(entries, maskedText);
 }
 
 // src/transforms/links.ts
@@ -32877,20 +33029,15 @@ function normalizeMarkdownHeadings(text) {
 }
 
 // src/transforms/kaomoji.ts
-var KAOMOJI_SYMBOLS_RE = /[・ω▽＞＜￣＿｡•ˇ‸╬◣д◢ノ゜Д︵╥﹏∀≧◡≦☆★✧⊙°ロΣ⌒ˊˋ´⁄＼／＊〃σᴗ̀́۶ᕦᕤᓫงวᐛ｡๑ㅂ]/u;
 var TOKEN_RE = /[^\s，。！？；：,.!?]+/gu;
-function looksLikeKaomoji(content) {
-  if (content.length > 25)
-    return false;
-  return KAOMOJI_SYMBOLS_RE.test(content);
-}
 function sanitizeTokens(text) {
   return text.replace(TOKEN_RE, (token) => {
     if (!token.includes("`") && !token.includes("´"))
       return token;
     const stripped = token.replace(/[`´]/g, "");
-    if (!looksLikeKaomoji(stripped) && !looksLikeKaomoji(token))
+    if (!isLikelyKaomojiToken(stripped) && !isLikelyKaomojiToken(token)) {
       return token;
+    }
     return token.replace(/`/g, "ˋ").replace(/´/g, "ˊ");
   });
 }
@@ -33073,33 +33220,33 @@ var HAS_CJK_RE = /[\u3400-\u9fff]/;
 async function lintMessageContent(content, converter = convertZhTwViaMcp, features = {}) {
   const cfg = { ...DEFAULT_FEATURES, ...features };
   let processed = content;
+  let activeMask = maskMarkdownCode(processed);
+  processed = activeMask.maskedText;
   if (cfg.zhtw && HAS_CJK_RE.test(content)) {
     const converted = await converter(content);
     if (typeof converted === "string" && converted.length > 0) {
-      processed = converted;
+      activeMask = maskMarkdownCode(converted);
+      processed = activeMask.maskedText;
     }
   }
   if (cfg.links) {
     processed = formatLinks(processed);
   }
-  const fencedMask = maskFencedCode(processed);
-  let maskedText = fencedMask.maskedText;
+  let maskedText = processed;
   if (cfg.separators) {
     maskedText = replaceSeparators(maskedText);
   }
   if (cfg.kaomoji) {
     maskedText = sanitizeTokens(maskedText);
   }
-  const inlineMask = maskInlineCode(maskedText);
-  let inlineText = inlineMask.maskedText;
+  let inlineText = maskedText;
   if (cfg.headings) {
     inlineText = normalizeMarkdownHeadings(inlineText);
   }
   if (cfg.blockquotes) {
     inlineText = formatBlockquotes(inlineText);
   }
-  const withInline = inlineMask.restore(inlineText);
-  return fencedMask.restore(withInline);
+  return activeMask.restore(inlineText);
 }
 async function lintMessageToolParams(params, converter = convertZhTwViaMcp, features = {}) {
   if (params.action !== "send" || typeof params.message !== "string") {

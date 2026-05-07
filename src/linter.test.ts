@@ -74,6 +74,19 @@ describe("message-linter logic (lintMessageContent)", () => {
     expect(output).toBe("[example.com](<https://example.com>) 中国");
   });
 
+  it("preserves code regions after zh-TW conversion remasks the converted text", async () => {
+    const input = "中国 `字节`\n```txt\n视频\n```\n[連結](https://a.com)";
+    const output = await lintMessageContent(
+      input,
+      async () => "中國 `字节`\n```txt\n影片\n```\n[連結](https://a.com)",
+      { zhtw: true },
+    );
+
+    expect(output).toBe(
+      "中國 `字节`\n```txt\n影片\n```\n[連結](<https://a.com>)",
+    );
+  });
+
   it("skips converter for non-CJK content", async () => {
     let called = false;
     const input = "Hello [https://example.com](https://example.com)";
@@ -179,10 +192,52 @@ describe("message-linter feature toggles", () => {
     expect(output).toBe("Use `console.log` and (ˋ・ω・ˊ)");
   });
 
+  it("sanitizes kaomoji before a later inline code span without cross-matching backticks", async () => {
+    const input =
+      "主人，這題真的是在考架構師的基建基本功呢！(๑´ㅂ`๑)\nUse `console.log`";
+    const output = await lintMessageContent(input, async (text) => text);
+    expect(output).toBe(
+      "主人，這題真的是在考架構師的基建基本功呢！(๑ˊㅂˋ๑)\nUse `console.log`",
+    );
+  });
+
   it("sanitizes kaomoji attached directly after sentence punctuation", async () => {
     const input = "主人，這題真的是在考架構師的基建基本功呢！(๑´ㅂ`๑)";
     const output = await lintMessageContent(input, async (text) => text);
     expect(output).toBe("主人，這題真的是在考架構師的基建基本功呢！(๑ˊㅂˋ๑)");
+  });
+
+  it("preserves links inside inline code and fenced code blocks", async () => {
+    const input = [
+      "`[A](https://a.com)`",
+      "```md",
+      "[B](https://b.com)",
+      "```",
+      "[C](https://c.com)",
+    ].join("\n");
+    const output = await lintMessageContent(input, async (text) => text);
+
+    expect(output).toBe(
+      [
+        "`[A](https://a.com)`",
+        "```md",
+        "[B](https://b.com)",
+        "```",
+        "[C](<https://c.com>)",
+      ].join("\n"),
+    );
+  });
+
+  it("preserves multi-backtick inline code spans", async () => {
+    const input = "Use ``value with `inner` tick`` and (ʘ`ʘ)";
+    const output = await lintMessageContent(input, async (text) => text);
+    expect(output).toBe("Use ``value with `inner` tick`` and (ʘˋʘ)");
+  });
+
+  it("does not treat a token-leading backtick as a kaomoji opener", async () => {
+    const input = "`(ʘʘ)` and (ʘ`ʘ)";
+    const output = await lintMessageContent(input, async (text) => text);
+    expect(output).toBe("`(ʘʘ)` and (ʘˋʘ)");
   });
 
   it("preserves inline code spans with common operators", async () => {

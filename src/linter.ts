@@ -1,5 +1,5 @@
 import { DEFAULT_FEATURES, type LinterFeatures } from "./config.js";
-import { maskFencedCode, maskInlineCode } from "./utils/mask.js";
+import { maskMarkdownCode } from "./utils/mask.js";
 import { formatLinks } from "./transforms/links.js";
 import { replaceSeparators } from "./transforms/separators.js";
 import { normalizeMarkdownHeadings } from "./transforms/headings.js";
@@ -17,11 +17,14 @@ export async function lintMessageContent(
   const cfg = { ...DEFAULT_FEATURES, ...features };
 
   let processed = content;
+  let activeMask = maskMarkdownCode(processed);
+  processed = activeMask.maskedText;
 
   if (cfg.zhtw && HAS_CJK_RE.test(content)) {
     const converted = await converter(content);
     if (typeof converted === "string" && converted.length > 0) {
-      processed = converted;
+      activeMask = maskMarkdownCode(converted);
+      processed = activeMask.maskedText;
     }
   }
 
@@ -29,8 +32,7 @@ export async function lintMessageContent(
     processed = formatLinks(processed);
   }
 
-  const fencedMask = maskFencedCode(processed);
-  let maskedText = fencedMask.maskedText;
+  let maskedText = processed;
 
   if (cfg.separators) {
     maskedText = replaceSeparators(maskedText);
@@ -40,8 +42,7 @@ export async function lintMessageContent(
     maskedText = sanitizeTokens(maskedText);
   }
 
-  const inlineMask = maskInlineCode(maskedText);
-  let inlineText = inlineMask.maskedText;
+  let inlineText = maskedText;
 
   if (cfg.headings) {
     inlineText = normalizeMarkdownHeadings(inlineText);
@@ -51,8 +52,7 @@ export async function lintMessageContent(
     inlineText = formatBlockquotes(inlineText);
   }
 
-  const withInline = inlineMask.restore(inlineText);
-  return fencedMask.restore(withInline);
+  return activeMask.restore(inlineText);
 }
 
 export async function lintMessageToolParams(
