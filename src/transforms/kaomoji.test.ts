@@ -49,4 +49,10 @@ describe("message-linter kaomoji backtick sanitization", () => {
     const output = sanitizeTokens(input);
     expect(output).toBe("比較式 `x<=y` 先保留原樣");
   });
+
+  it("does not sanitize mixed safe/raw accent file-like tokens", () => {
+    const input = "（ˋdist` 檔案）";
+    const output = sanitizeTokens(input);
+    expect(output).toBe("（ˋdist` 檔案）");
+  });
 });

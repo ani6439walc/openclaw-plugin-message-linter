@@ -2,6 +2,7 @@ const TOKEN_SEPARATOR_RE = /[\s，。！？；：,.!?]/u;
 const FACE_WRAPPER_RE = /[()（）\[\]{}「」『』【】]/u;
 const ASCII_CODEISH_RE = /[A-Za-z0-9_$.\[\]<>!=+\-*/%&|^~:?]/;
 const LETTER_OR_NUMBER_RE = /[\p{L}\p{N}]/u;
+const KAOMOJI_ACCENT_RE = /[`´ˋˊ]/g;
 
 export function extractTokenAround(text: string, index: number): string {
   const { start, end } = extractTokenBounds(text, index);
@@ -29,7 +30,7 @@ export function extractTokenBounds(
 }
 
 export function isLikelyKaomojiToken(token: string): boolean {
-  const normalized = token.trim().replace(/[`´]/g, "");
+  const normalized = token.trim().replace(KAOMOJI_ACCENT_RE, "");
   const chars = Array.from(normalized);
 
   if (chars.length < 3 || chars.length > 32) return false;

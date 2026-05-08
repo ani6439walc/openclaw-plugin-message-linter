@@ -246,6 +246,12 @@ describe("message-linter feature toggles", () => {
     expect(output).toBe("Use `a + b` and `x == y`");
   });
 
+  it("does not treat mixed safe/raw accent file-like tokens as kaomoji", async () => {
+    const input = "（ˋdist` 檔案）";
+    const output = await lintMessageContent(input, async (text) => text);
+    expect(output).toBe("（ˋdist` 檔案）");
+  });
+
   it("does not touch headings inside fenced code blocks", async () => {
     const input = "## Sub\n```\n# Code\n#### Block\n```\n#### H4";
     const output = await lintMessageContent(input, async (text) => text);
