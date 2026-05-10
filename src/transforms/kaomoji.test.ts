@@ -50,6 +50,12 @@ describe("message-linter kaomoji backtick sanitization", () => {
     expect(output).toBe("比較式 `x<=y` 先保留原樣");
   });
 
+  it("does not sanitize CJK-only inline code tokens", () => {
+    const input = "請查看 `記憶體` 獲取資訊，以及 `中文內容`";
+    const output = sanitizeTokens(input);
+    expect(output).toBe("請查看 `記憶體` 獲取資訊，以及 `中文內容`");
+  });
+
   it("does not sanitize mixed safe/raw accent file-like tokens", () => {
     const input = "（ˋdist` 檔案）";
     const output = sanitizeTokens(input);

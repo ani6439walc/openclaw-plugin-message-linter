@@ -1,6 +1,7 @@
+const CJK_RE = /[\u3400-\u9fff\uac00-\ud7af\u3000-\u303f\uff00-\uffef]/u;
 const TOKEN_SEPARATOR_RE = /[\s，。！？；：,.!?]/u;
 const FACE_WRAPPER_RE = /[()（）\[\]{}「」『』【】]/u;
-const ASCII_CODEISH_RE = /[A-Za-z0-9_$.\[\]<>!=+\-*/%&|^~:?]/;
+const ASCII_CODEISH_RE = /[A-Za-z0-9_$\.\[\]<>!=+\-*/%&|^~:?]/;
 const LETTER_OR_NUMBER_RE = /[\p{L}\p{N}]/u;
 const KAOMOJI_ACCENT_RE = /[`´ˋˊ]/g;
 
@@ -38,6 +39,7 @@ export function isLikelyKaomojiToken(token: string): boolean {
   let asciiCodeishChars = 0;
   let nonAsciiChars = 0;
   let decorativeChars = 0;
+  let cjkChars = 0;
 
   for (const char of chars) {
     if (ASCII_CODEISH_RE.test(char)) asciiCodeishChars += 1;
@@ -45,21 +47,24 @@ export function isLikelyKaomojiToken(token: string): boolean {
     if (!LETTER_OR_NUMBER_RE.test(char) && !ASCII_CODEISH_RE.test(char)) {
       decorativeChars += 1;
     }
+    if (CJK_RE.test(char)) cjkChars += 1;
   }
 
   const compactLength = chars.length;
   const hasFaceWrapper = FACE_WRAPPER_RE.test(normalized);
   const mostlyAsciiCode =
     asciiCodeishChars >= Math.ceil(compactLength * 0.65) && nonAsciiChars === 0;
+  const realNonAsciiChars = nonAsciiChars - cjkChars;
+  const realDecorativeChars = decorativeChars - cjkChars;
   const denseNonCode =
-    nonAsciiChars + decorativeChars >= Math.ceil(compactLength / 2);
+    realNonAsciiChars + realDecorativeChars >= Math.ceil(compactLength / 2);
 
   if (mostlyAsciiCode) return false;
   if (nonAsciiChars === 0 && !hasFaceWrapper) return false;
 
   return (
-    (hasFaceWrapper && (nonAsciiChars >= 2 || decorativeChars >= 2)) ||
+    (hasFaceWrapper && (realNonAsciiChars >= 2 || realDecorativeChars >= 2)) ||
     denseNonCode ||
-    (nonAsciiChars >= 3 && asciiCodeishChars <= 1)
+    (realNonAsciiChars >= 3 && asciiCodeishChars <= 1)
   );
 }
