@@ -1,7 +1,7 @@
 # Message Linter for OpenClaw
+
 [![OpenClaw](https://img.shields.io/badge/Platform-OpenClaw-blue.svg)](https://github.com/openclaw/openclaw)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 
 A robust message formatting and sanitization plugin for the OpenClaw platform, designed to ensure consistent, readable, and aesthetically pleasing message presentation across modern communication platforms.
 
@@ -47,3 +47,7 @@ Integrate the plugin into your `openclaw.json` (or specific plugin configuration
 ```
 
 > **Note**: The `zhtw` feature is disabled by default and requires `zhtw-mcp` to be correctly configured on the host.
+
+---
+
+_🌸　Powered by Ａni | [OpenClaw Plugin] © 2026_
