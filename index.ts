@@ -14,7 +14,7 @@ export { replaceSeparators } from "./src/transforms/separators.js";
 export { normalizeMarkdownHeadings } from "./src/transforms/headings.js";
 export { sanitizeTokens } from "./src/transforms/kaomoji.js";
 export { formatBlockquotes } from "./src/transforms/blockquotes.js";
-export { convertZhTwViaMcp, resolveZhtwMcpBin } from "./src/transforms/zhtw.js";
+export { convertZhTwViaMcp } from "./src/transforms/zhtw.js";
 export { lintMessageContent, lintMessageToolParams } from "./src/linter.js";
 export type { LinterFeatures } from "./src/config.js";
 export { DEFAULT_FEATURES } from "./src/config.js";
