@@ -1,20 +1,23 @@
 import { DEFAULT_FEATURES, type LinterFeatures } from "./config.js";
 import { maskMarkdownCode } from "./utils/mask.js";
-import { formatLinks } from "./transforms/links.js";
-import { replaceSeparators } from "./transforms/separators.js";
-import { normalizeMarkdownHeadings } from "./transforms/headings.js";
+import {
+  formatLinks,
+  replaceSeparators,
+  normalizeMarkdownHeadings,
+  formatBlockquotes,
+} from "./transforms/discord.js";
 import { sanitizeTokens } from "./transforms/kaomoji.js";
-import { formatBlockquotes } from "./transforms/blockquotes.js";
-import { convertZhTwViaMcp } from "./transforms/zhtw.js";
+import { convertZhTw } from "./transforms/zhtw.js";
 
 const HAS_CJK_RE = /[\u3400-\u9fff]/;
 
 export async function lintMessageContent(
   content: string,
-  converter: (text: string) => Promise<string | undefined> = convertZhTwViaMcp,
+  converter: (text: string) => Promise<string | undefined> = convertZhTw,
   features: LinterFeatures = {},
 ): Promise<string> {
   const cfg = { ...DEFAULT_FEATURES, ...features };
+  const discord = { ...DEFAULT_FEATURES.discord, ...cfg.discord };
 
   let processed = content;
   let activeMask = maskMarkdownCode(processed);
@@ -28,13 +31,13 @@ export async function lintMessageContent(
     }
   }
 
-  if (cfg.links) {
+  if (discord.links) {
     processed = formatLinks(processed);
   }
 
   let maskedText = processed;
 
-  if (cfg.separators) {
+  if (discord.separators) {
     maskedText = replaceSeparators(maskedText);
   }
 
@@ -44,11 +47,11 @@ export async function lintMessageContent(
 
   let inlineText = maskedText;
 
-  if (cfg.headings) {
+  if (discord.headings) {
     inlineText = normalizeMarkdownHeadings(inlineText);
   }
 
-  if (cfg.blockquotes) {
+  if (discord.blockquotes) {
     inlineText = formatBlockquotes(inlineText);
   }
 
@@ -57,7 +60,7 @@ export async function lintMessageContent(
 
 export async function lintMessageToolParams(
   params: Record<string, unknown>,
-  converter: (text: string) => Promise<string | undefined> = convertZhTwViaMcp,
+  converter: (text: string) => Promise<string | undefined> = convertZhTw,
   features: LinterFeatures = {},
 ): Promise<Record<string, unknown>> {
   if (params.action !== "send" || typeof params.message !== "string") {

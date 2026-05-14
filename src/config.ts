@@ -1,17 +1,21 @@
 export type LinterFeatures = {
   zhtw?: boolean;
-  links?: boolean;
-  separators?: boolean;
-  headings?: boolean;
   kaomoji?: boolean;
-  blockquotes?: boolean;
+  discord?: {
+    headings?: boolean;
+    separators?: boolean;
+    links?: boolean;
+    blockquotes?: boolean;
+  };
 };
 
 export const DEFAULT_FEATURES: Required<LinterFeatures> = {
   zhtw: false,
-  links: true,
-  separators: true,
-  headings: true,
   kaomoji: true,
-  blockquotes: true,
+  discord: {
+    headings: true,
+    separators: true,
+    links: true,
+    blockquotes: true,
+  },
 };

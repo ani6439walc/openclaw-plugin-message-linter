@@ -122,15 +122,9 @@ async function main() {
   console.log("Writing assets...");
   await mkdir(OUT_DIR, { recursive: true });
 
-  await writeFile(
-    path.join(OUT_DIR, "s2t-phrases.txt"),
-    formatTsv(stPhrases),
-  );
+  await writeFile(path.join(OUT_DIR, "s2t-phrases.txt"), formatTsv(stPhrases));
 
-  await writeFile(
-    path.join(OUT_DIR, "s2t-chars.txt"),
-    formatTsv(stChars),
-  );
+  await writeFile(path.join(OUT_DIR, "s2t-chars.txt"), formatTsv(stChars));
 
   await writeFile(
     path.join(OUT_DIR, "s2t-tw-variants.txt"),

@@ -134,7 +134,7 @@ describe("message-linter feature toggles", () => {
   it("disables link formatting when links is false", async () => {
     const input = "[Example](https://example.com)";
     const output = await lintMessageContent(input, async (text) => text, {
-      links: false,
+      discord: { links: false },
     });
     expect(output).toBe("[Example](https://example.com)");
   });
@@ -142,7 +142,7 @@ describe("message-linter feature toggles", () => {
   it("disables separator replacement when separators is false", async () => {
     const input = "Hello\n───\nWorld";
     const output = await lintMessageContent(input, async (text) => text, {
-      separators: false,
+      discord: { separators: false },
     });
     expect(output).toBe("Hello\n───\nWorld");
   });
@@ -150,7 +150,7 @@ describe("message-linter feature toggles", () => {
   it("disables heading normalization when headings is false", async () => {
     const input = "## Sub\n#### H4";
     const output = await lintMessageContent(input, async (text) => text, {
-      headings: false,
+      discord: { headings: false },
     });
     expect(output).toBe("## Sub\n#### H4");
   });
@@ -166,10 +166,8 @@ describe("message-linter feature toggles", () => {
   it("only applies enabled features", async () => {
     const input = "[A](https://a.com)\n───\n(`・ω・´)\n#### H4";
     const output = await lintMessageContent(input, async (text) => text, {
-      links: true,
-      separators: false,
+      discord: { links: true, separators: false, headings: true },
       kaomoji: false,
-      headings: true,
     });
     expect(output).toBe("[A](<https://a.com>)\n───\n(`・ω・´)\n# H4");
   });
@@ -273,7 +271,7 @@ describe("message-linter feature toggles", () => {
   it("does not fix blockquotes when blockquotes feature is disabled", async () => {
     const input = "> line 1\n>\n> line 2";
     const output = await lintMessageContent(input, async (text) => text, {
-      blockquotes: false,
+      discord: { blockquotes: false },
     });
     expect(output).toBe("> line 1\n>\n> line 2");
   });

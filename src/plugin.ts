@@ -1,6 +1,6 @@
 import { createSubsystemLogger, type OpenClawPluginApi } from "../api.js";
 import { lintMessageContent, lintMessageToolParams } from "./linter.js";
-import { convertZhTwViaMcp } from "./transforms/zhtw.js";
+import { convertZhTw } from "./transforms/zhtw.js";
 import type { LinterFeatures } from "./config.js";
 
 const logger = createSubsystemLogger("plugins");
@@ -28,7 +28,7 @@ export function registerMessageLinterPlugin(api: OpenClawPluginApi): void {
 
     const lintedParams = await lintMessageToolParams(
       event.params as Record<string, unknown>,
-      convertZhTwViaMcp,
+      convertZhTw,
       features,
     );
     if (lintedParams === event.params) {
@@ -52,7 +52,7 @@ export function registerMessageLinterPlugin(api: OpenClawPluginApi): void {
     }
     const linted = await lintMessageContent(
       event.content,
-      convertZhTwViaMcp,
+      convertZhTw,
       features,
     );
     if (linted === event.content) {

@@ -22,7 +22,9 @@ async function findAssetsDir(): Promise<string> {
   throw new Error("Could not find assets directory");
 }
 
-async function loadTsvPairs(filename: string): Promise<Array<[string, string]>> {
+async function loadTsvPairs(
+  filename: string,
+): Promise<Array<[string, string]>> {
   const assetsDir = await findAssetsDir();
   const text = await readFile(join(assetsDir, filename), "utf-8");
   const pairs: Array<[string, string]> = [];
@@ -54,9 +56,7 @@ async function ensureLoaded(): Promise<void> {
   spellingRules = JSON.parse(rulesText) as SpellingRule[];
 }
 
-export async function convertZhTwViaMcp(
-  text: string,
-): Promise<string | undefined> {
+export async function convertZhTw(text: string): Promise<string | undefined> {
   await ensureLoaded();
   const codeMask = maskMarkdownCode(text);
   const s2tResult = converter!.convert(codeMask.maskedText);

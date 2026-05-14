@@ -23,14 +23,20 @@ function containsClue(text: string, clues: readonly string[]): boolean {
   return false;
 }
 
-function containsException(text: string, exceptions: readonly string[]): boolean {
+function containsException(
+  text: string,
+  exceptions: readonly string[],
+): boolean {
   for (const exc of exceptions) {
     if (text.includes(exc)) return true;
   }
   return false;
 }
 
-export function scanSpelling(text: string, rules: readonly SpellingRule[]): Issue[] {
+export function scanSpelling(
+  text: string,
+  rules: readonly SpellingRule[],
+): Issue[] {
   const issues: Issue[] = [];
 
   for (const rule of rules) {

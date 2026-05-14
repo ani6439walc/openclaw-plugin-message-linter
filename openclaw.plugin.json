@@ -16,33 +16,40 @@
         "properties": {
           "zhtw": {
             "type": "boolean",
-            "description": "Convert Simplified Chinese to Traditional Chinese (via zhtw-mcp)",
+            "description": "Convert Simplified Chinese to Traditional Chinese",
             "default": false
-          },
-          "links": {
-            "type": "boolean",
-            "description": "Wrap Markdown link URLs in angle brackets to suppress Discord embeds",
-            "default": true
-          },
-          "separators": {
-            "type": "boolean",
-            "description": "Replace ─── separators with ~~...~~",
-            "default": true
-          },
-          "headings": {
-            "type": "boolean",
-            "description": "Normalize Markdown headings (shift down so minimum becomes H1, cap at H3)",
-            "default": true
           },
           "kaomoji": {
             "type": "boolean",
             "description": "Sanitize backticks around kaomoji to prevent accidental code formatting",
             "default": true
           },
-          "blockquotes": {
-            "type": "boolean",
-            "description": "Ensure blockquote lines have a space after > for Discord compatibility",
-            "default": true
+          "discord": {
+            "type": "object",
+            "description": "Discord-specific formatting features",
+            "additionalProperties": false,
+            "properties": {
+              "headings": {
+                "type": "boolean",
+                "description": "Normalize Markdown headings (shift down so minimum becomes H1, cap at H3)",
+                "default": true
+              },
+              "separators": {
+                "type": "boolean",
+                "description": "Replace ─── separators with ~~...~~",
+                "default": true
+              },
+              "links": {
+                "type": "boolean",
+                "description": "Wrap Markdown link URLs in angle brackets to suppress Discord embeds",
+                "default": true
+              },
+              "blockquotes": {
+                "type": "boolean",
+                "description": "Ensure blockquote lines have a space after > for Discord compatibility",
+                "default": true
+              }
+            }
           }
         }
       }

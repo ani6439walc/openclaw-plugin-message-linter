@@ -1,1 +1,1 @@
-export { convertZhTwViaMcp } from "./zhtw/index.js";
+export { convertZhTw } from "./zhtw/index.js";

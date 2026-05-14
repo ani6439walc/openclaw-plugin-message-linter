@@ -11,12 +11,13 @@ Message Linter automatically processes outgoing communications to normalize Mark
 
 ## Key Features
 
-- **Link Embed Suppression**: Automatically wraps Markdown link URLs in angle brackets (`<URL>`) to prevent cluttered automatic previews in clients like Discord.
-- **Heading Normalization**: Dynamically adjusts Markdown heading levels (shifting to a minimum of H1 and capping at H3) to maintain a consistent visual hierarchy.
-- **Advanced ZHTW Conversion**: Provides high-fidelity, context-aware Simplified-to-Traditional Chinese conversion, adhering to Taiwan (ROC) linguistic standards. Powered by a native TypeScript implementation with embedded OpenCC dictionaries and zhtw-mcp spelling rules.
-- **Separator Beautification**: Converts standard ASCII separators (e.g., `---` or `───`) into visually optimized placeholders for cleaner section breaks.
+- **Discord Formatters**: A suite of Discord-specific formatters that run before message dispatch:
+  - **Link Embed Suppression**: Wraps Markdown link URLs in angle brackets (`<URL>`) to prevent cluttered automatic previews.
+  - **Heading Normalization**: Dynamically adjusts Markdown heading levels (shifting to a minimum of H1 and capping at H3) to maintain a consistent visual hierarchy.
+  - **Separator Beautification**: Converts standard ASCII separators (e.g., `---` or `───`) into visually optimized placeholders for cleaner section breaks.
+  - **Blockquote Compatibility**: Ensures blockquote syntax is correctly formatted for reliable rendering across all supported clients.
+- **Advanced ZHTW Conversion**: Provides high-fidelity, context-aware Simplified-to-Traditional Chinese conversion, adhering to Taiwan (ROC) linguistic standards. Powered by a native TypeScript implementation with embedded OpenCC dictionaries and contextual spelling rules.
 - **Kaomoji Integrity**: Intelligently sanitizes tokens containing Kaomoji (e.g., `(＞///＜)`) by neutralizing backticks and accents that might otherwise trigger accidental Markdown code block formatting.
-- **Discord-Compatible Blockquotes**: Ensures blockquote syntax is correctly formatted for reliable rendering across all supported clients.
 
 ## ZHTW Conversion
 
@@ -32,20 +33,20 @@ The Simplified-to-Traditional Chinese conversion feature is implemented entirely
 
 Dictionary files are stored in the `assets/` directory and loaded at runtime:
 
-| File | Description |
-|---|---|
-| `assets/s2t-phrases.txt` | OpenCC STPhrases (49,263 entries) |
-| `assets/s2t-chars.txt` | OpenCC STCharacters (3,980 entries) |
-| `assets/s2t-tw-variants.txt` | OpenCC TWVariants (39 entries) |
-| `assets/spelling-rules.json` | zhtw-mcp spelling rules (1,694 rules) |
+| File                         | Description                               |
+| ---------------------------- | ----------------------------------------- |
+| `assets/s2t-phrases.txt`     | OpenCC STPhrases (49,263 entries)         |
+| `assets/s2t-chars.txt`       | OpenCC STCharacters (3,980 entries)       |
+| `assets/s2t-tw-variants.txt` | OpenCC TWVariants (39 entries)            |
+| `assets/spelling-rules.json` | Cross-strait spelling rules (1,694 rules) |
 
 To update dictionaries from upstream:
 
 ```bash
-bun run scripts/generate-zhtw-data.ts
+pnpm exec tsx scripts/generate-zhtw-data.ts
 ```
 
-This script fetches the latest OpenCC dictionaries and zhtw-mcp ruleset and regenerates the `assets/` files.
+This script fetches the latest OpenCC dictionaries and spelling ruleset and regenerates the `assets/` files.
 
 ## Configuration
 
@@ -56,11 +57,13 @@ Integrate the plugin into your `openclaw.json` (or specific plugin configuration
   "plugins": {
     "message-linter": {
       "features": {
-        "links": true,
-        "headings": true,
-        "separators": true,
+        "discord": {
+          "links": true,
+          "headings": true,
+          "separators": true,
+          "blockquotes": true
+        },
         "kaomoji": true,
-        "blockquotes": true,
         "zhtw": false
       }
     }
@@ -72,7 +75,7 @@ Integrate the plugin into your `openclaw.json` (or specific plugin configuration
 
 ## Acknowledgments
 
-The ZHTW conversion feature was inspired by [zhtw-mcp](https://github.com/sysprog21/zhtw-mcp), an excellent Rust-based MCP server for Traditional Chinese text processing. The spelling rules, linguistic standards, and architectural insights from the zhtw-mcp project were instrumental in building this native TypeScript implementation.
+The ZHTW conversion feature was inspired by [zhtw-mcp](https://github.com/sysprog21/zhtw-mcp), an excellent Rust-based text processing server for Traditional Chinese. The spelling rules, linguistic standards, and architectural insights from the zhtw-mcp project were instrumental in building this native TypeScript implementation.
 
 ---
 
