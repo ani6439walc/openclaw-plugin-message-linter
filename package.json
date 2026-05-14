@@ -4,6 +4,7 @@
   "type": "module",
   "files": [
     "dist",
+    "assets",
     "package.json",
     "openclaw.plugin.json",
     "README.md"
