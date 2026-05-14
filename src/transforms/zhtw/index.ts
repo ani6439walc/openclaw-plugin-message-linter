@@ -10,6 +10,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function findAssetsDir(): Promise<string> {
   const candidates = [
+    join(__dirname, "..", "..", "..", "..", "assets"),
     join(__dirname, "..", "..", "..", "assets"),
     join(__dirname, "..", "assets"),
   ];
