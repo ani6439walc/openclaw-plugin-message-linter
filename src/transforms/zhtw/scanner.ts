@@ -16,19 +16,9 @@ export interface Issue {
 
 const CONTEXT_WINDOW_CHARS = 40;
 
-function containsClue(text: string, clues: readonly string[]): boolean {
-  for (const clue of clues) {
-    if (text.includes(clue)) return true;
-  }
-  return false;
-}
-
-function containsException(
-  text: string,
-  exceptions: readonly string[],
-): boolean {
-  for (const exc of exceptions) {
-    if (text.includes(exc)) return true;
+function hasMatchAny(text: string, terms: readonly string[]): boolean {
+  for (const term of terms) {
+    if (text.includes(term)) return true;
   }
   return false;
 }
@@ -41,47 +31,59 @@ export function scanSpelling(
 
   for (const rule of rules) {
     const found = rule.from;
-    let pos = text.indexOf(found);
+    const hasClue = rule.contextClues != null && rule.contextClues.length > 0;
+    const hasNeg =
+      rule.negativeContextClues != null && rule.negativeContextClues.length > 0;
+    const hasExcept = rule.exceptions != null && rule.exceptions.length > 0;
 
+    if (!hasClue && !hasNeg && !hasExcept) {
+      let pos = text.indexOf(found);
+      while (pos !== -1) {
+        issues.push({ found, suggestions: rule.to, offset: pos });
+        pos = text.indexOf(found, pos + 1);
+      }
+      continue;
+    }
+
+    let pos = text.indexOf(found);
     while (pos !== -1) {
       let accepted = true;
 
-      if (rule.exceptions) {
-        const window = text.slice(
-          Math.max(0, pos - CONTEXT_WINDOW_CHARS),
-          Math.min(text.length, pos + found.length + CONTEXT_WINDOW_CHARS),
+      let window: string | undefined;
+      const needWindow = hasExcept || hasClue || hasNeg;
+      if (needWindow) {
+        const start = Math.max(0, pos - CONTEXT_WINDOW_CHARS);
+        const end = Math.min(
+          text.length,
+          pos + found.length + CONTEXT_WINDOW_CHARS,
         );
-        if (containsException(window, rule.exceptions)) {
-          accepted = false;
-        }
+        window = text.slice(start, end);
       }
 
-      if (accepted && rule.contextClues) {
-        const window = text.slice(
-          Math.max(0, pos - CONTEXT_WINDOW_CHARS),
-          Math.min(text.length, pos + found.length + CONTEXT_WINDOW_CHARS),
-        );
-        if (!containsClue(window, rule.contextClues)) {
-          accepted = false;
-        }
+      if (hasExcept && window && hasMatchAny(window, rule.exceptions!)) {
+        accepted = false;
       }
 
-      if (accepted && rule.negativeContextClues) {
-        const window = text.slice(
-          Math.max(0, pos - CONTEXT_WINDOW_CHARS),
-          Math.min(text.length, pos + found.length + CONTEXT_WINDOW_CHARS),
-        );
-        if (containsClue(window, rule.negativeContextClues)) {
-          accepted = false;
-        }
+      if (
+        accepted &&
+        hasClue &&
+        window &&
+        !hasMatchAny(window, rule.contextClues!)
+      ) {
+        accepted = false;
+      }
+
+      if (
+        accepted &&
+        hasNeg &&
+        window &&
+        hasMatchAny(window, rule.negativeContextClues!)
+      ) {
+        accepted = false;
       }
 
       if (accepted) {
-        issues.push({
-          found,
-          suggestions: rule.to,
-          offset: pos,
-        });
+        issues.push({ found, suggestions: rule.to, offset: pos });
       }
 
       pos = text.indexOf(found, pos + 1);

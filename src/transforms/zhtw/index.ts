@@ -8,6 +8,29 @@ import type { SpellingRule } from "./scanner.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+class ZhTwManager {
+  private readonly converter: S2TConverter;
+  private readonly spellingRules: SpellingRule[];
+
+  constructor(
+    phrases: Array<[string, string]>,
+    chars: Array<[string, string]>,
+    variants: Array<[string, string]>,
+    rules: SpellingRule[],
+  ) {
+    this.converter = new S2TConverter(phrases, chars, variants);
+    this.spellingRules = rules;
+  }
+
+  async convertZhTw(text: string): Promise<string | undefined> {
+    const codeMask = maskMarkdownCode(text);
+    const s2tResult = this.converter.convert(codeMask.maskedText);
+    const issues = scanSpelling(s2tResult, this.spellingRules);
+    const fixed = applyFixes(s2tResult, issues);
+    return codeMask.restore(fixed);
+  }
+}
+
 async function findAssetsDir(): Promise<string> {
   const candidates = [
     join(__dirname, "..", "..", "..", "..", "assets"),
@@ -40,28 +63,14 @@ async function loadTsvPairs(
   return pairs;
 }
 
-let converter: S2TConverter | null = null;
-let spellingRules: SpellingRule[] | null = null;
+const [phrases, chars, variants, rulesText] = await Promise.all([
+  loadTsvPairs("s2t-phrases.txt"),
+  loadTsvPairs("s2t-chars.txt"),
+  loadTsvPairs("s2t-tw-variants.txt"),
+  readFile(join(await findAssetsDir(), "spelling-rules.json"), "utf-8"),
+]);
 
-async function ensureLoaded(): Promise<void> {
-  if (converter && spellingRules) return;
+const rules = JSON.parse(rulesText) as SpellingRule[];
+export const zhTwManager = new ZhTwManager(phrases, chars, variants, rules);
 
-  const [phrases, chars, variants, rulesText] = await Promise.all([
-    loadTsvPairs("s2t-phrases.txt"),
-    loadTsvPairs("s2t-chars.txt"),
-    loadTsvPairs("s2t-tw-variants.txt"),
-    readFile(join(await findAssetsDir(), "spelling-rules.json"), "utf-8"),
-  ]);
-
-  converter = new S2TConverter(phrases, chars, variants);
-  spellingRules = JSON.parse(rulesText) as SpellingRule[];
-}
-
-export async function convertZhTw(text: string): Promise<string | undefined> {
-  await ensureLoaded();
-  const codeMask = maskMarkdownCode(text);
-  const s2tResult = converter!.convert(codeMask.maskedText);
-  const issues = scanSpelling(s2tResult, spellingRules!);
-  const fixed = applyFixes(s2tResult, issues);
-  return codeMask.restore(fixed);
-}
+export const convertZhTw = zhTwManager.convertZhTw.bind(zhTwManager);

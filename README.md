@@ -16,18 +16,35 @@ Message Linter automatically processes outgoing communications to normalize Mark
   - **Heading Normalization**: Dynamically adjusts Markdown heading levels (shifting to a minimum of H1 and capping at H3) to maintain a consistent visual hierarchy.
   - **Separator Beautification**: Converts standard ASCII separators (e.g., `---` or `───`) into visually optimized placeholders for cleaner section breaks.
   - **Blockquote Compatibility**: Ensures blockquote syntax is correctly formatted for reliable rendering across all supported clients.
-- **Advanced ZHTW Conversion**: Provides high-fidelity, context-aware Simplified-to-Traditional Chinese conversion, adhering to Taiwan (ROC) linguistic standards. Powered by a native TypeScript implementation with embedded OpenCC dictionaries and contextual spelling rules.
+- **Advanced ZHTW Conversion**: Provides high-fidelity, context-aware Simplified-to-Traditional Chinese conversion, adhering to Taiwan (ROC) linguistic standards. Powered by a native TypeScript trie-based converter with embedded OpenCC dictionaries and contextual spelling rules.
 - **Kaomoji Integrity**: Intelligently sanitizes tokens containing Kaomoji (e.g., `(＞///＜)`) by neutralizing backticks and accents that might otherwise trigger accidental Markdown code block formatting.
 
 ## ZHTW Conversion
 
 The Simplified-to-Traditional Chinese conversion feature is implemented entirely in native TypeScript, eliminating the need for external binaries.
 
+### Architecture
+
+The conversion pipeline uses a **Trie-based longest-match phrase matcher** with eager initialization:
+
+1. **Module Singleton**: Assets are loaded eagerly at module import time via top-level `await`. The `ZhTwManager` singleton holds a pre-built Trie, character map, variant map, and spelling rules — no lazy-load overhead during conversion.
+2. **Trie Matching**: All ~49K phrases are stored in a Trie tree keyed by character, giving O(max_phrase_length) lookup per input position instead of scanning candidate arrays. Longest-match priority is guaranteed by deeper traversal.
+3. **Protected Zones**: Phrase mappings create protected zones where Taiwan variant normalization is suppressed, ensuring phrase output characters aren't overwritten by the TW variants pass.
+
 ### How It Works
 
-1. **S2T Conversion**: Uses OpenCC dictionaries (`STPhrases`, `STCharacters`, `TWVariants`) for longest-match phrase substitution, single-character fallback, and Taiwan variant normalization.
-2. **Spelling Correction**: Applies 1,600+ cross-strait spelling rules with context-aware gating (e.g., "支持" becomes "支援" in IT contexts, but remains "支持" in political contexts).
+1. **S2T Conversion**: Uses a Trie built from OpenCC dictionaries (`STPhrases`, `STCharacters`) for longest-match phrase substitution and single-character fallback. Taiwan variant normalization (`TWVariants`) applies after phrase matching while preserving protected zone integrity.
+2. **Spelling Correction**: Applies 1,600+ cross-strait spelling rules with context-aware gating (e.g., "支持" becomes "支援" in IT contexts, but remains "支持" in political contexts). Optimized to avoid redundant string slicing for rules without context conditions.
 3. **Smart Fixing**: Overlapping rules are automatically deduplicated, and fixes are applied from right-to-left to preserve string offsets.
+
+### Performance
+
+| Metric                    | Value                                    |
+| ------------------------- | ---------------------------------------- |
+| Phrase lookup complexity  | O(max_phrase_length) per position (Trie) |
+| Hot conversion (4K chars) | ~0.39ms/call                             |
+| Dictionary phrases        | 49,263 entries                           |
+| Total tests               | 98 passing (8 suites)                    |
 
 ### Dictionary Data
 
