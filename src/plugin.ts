@@ -1,9 +1,7 @@
-import { createSubsystemLogger, type OpenClawPluginApi } from "../api.js";
+import { logger, type OpenClawPluginApi } from "../api.js";
 import { lintMessageContent, lintMessageToolParams } from "./linter.js";
 import { convertZhTw } from "./transforms/zhtw.js";
 import type { LinterFeatures } from "./config.js";
-
-const logger = createSubsystemLogger("plugins");
 
 export function registerMessageLinterPlugin(api: OpenClawPluginApi): void {
   const pluginConfig = (api.pluginConfig ?? {}) as Record<string, unknown>;
@@ -18,14 +16,6 @@ export function registerMessageLinterPlugin(api: OpenClawPluginApi): void {
       return undefined;
     }
 
-    logger.debug(
-      `message-linter: before_tool_call event: ${JSON.stringify(event)}`,
-      {
-        subsystem: "plugins",
-        ctx,
-      },
-    );
-
     const lintedParams = await lintMessageToolParams(
       event.params as Record<string, unknown>,
       convertZhTw,
@@ -36,10 +26,7 @@ export function registerMessageLinterPlugin(api: OpenClawPluginApi): void {
     }
 
     logger.debug(
-      "message-linter: before_tool_call (formatted/normalized) message tool payload.",
-      {
-        subsystem: "plugins",
-      },
+      `before_tool_call ctx: ${JSON.stringify(ctx)}, event: ${JSON.stringify(event)}`,
     );
     return {
       params: lintedParams,
@@ -59,10 +46,7 @@ export function registerMessageLinterPlugin(api: OpenClawPluginApi): void {
       return undefined;
     }
     logger.debug(
-      "message-linter: message_sending (formatted/normalized) message.",
-      {
-        subsystem: "plugins",
-      },
+      `message_sending (formatted/normalized) message, ctx: ${JSON.stringify(ctx)}`,
     );
     return { content: linted };
   });
