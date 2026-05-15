@@ -25,9 +25,9 @@ The Simplified-to-Traditional Chinese conversion feature is implemented entirely
 
 ### Architecture
 
-The conversion pipeline uses a **Trie-based longest-match phrase matcher** with eager initialization:
+The conversion pipeline uses a **Trie-based longest-match phrase matcher** with lazy initialization:
 
-1. **Module Singleton**: Assets are loaded eagerly at module import time via top-level `await`. The `ZhTwManager` singleton holds a pre-built Trie, character map, variant map, and spelling rules — no lazy-load overhead during conversion.
+1. **Module Singleton**: `ZhTwManager` is a class-based singleton with lazy async init. Assets are loaded on first `convertZhTw()` call via a cached Promise — no module-level top-level await, ensuring bundler compatibility.
 2. **Trie Matching**: All ~49K phrases are stored in a Trie tree keyed by character, giving O(max_phrase_length) lookup per input position instead of scanning candidate arrays. Longest-match priority is guaranteed by deeper traversal.
 3. **Protected Zones**: Phrase mappings create protected zones where Taiwan variant normalization is suppressed, ensuring phrase output characters aren't overwritten by the TW variants pass.
 
