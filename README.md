@@ -9,6 +9,18 @@ A robust message formatting and sanitization plugin for the OpenClaw platform, d
 
 Message Linter automatically processes outgoing communications to normalize Markdown structure, suppress unwanted rich media embeds, and perform high-fidelity linguistic conversion. It is built to maintain professional communication standards while preserving expressive elements like Kaomoji.
 
+## Use with X/Twitter automation
+
+Message Linter is useful when an OpenClaw agent prepares visible public messages through another plugin. For X/Twitter workflows, install [TweetClaw](https://github.com/Xquik-dev/tweetclaw) separately:
+
+```bash
+openclaw plugins install @xquik/tweetclaw
+```
+
+Use TweetClaw to search tweets, search tweet replies, draft post tweet or post tweet reply actions, look up users, monitor tweets, and receive webhooks. Keep Message Linter enabled so outgoing text is normalized before the agent asks for approval or sends a visible action through TweetClaw.
+
+Ask the agent to keep these fields in review notes before posting: target account or tweet, draft text, link preview risk, language conversion result, reply context, approval decision, and final action. Do not store API keys, cookies, direct messages, or private account material in message-lint notes.
+
 ## Key Features
 
 - **Discord Formatters**: A suite of Discord-specific formatters that run before message dispatch:

@@ -9,13 +9,13 @@
   "contributors": [
     "Wan, Jiun Wei <wei840222@gmail.com>"
   ],
-  "homepage": "https://github.com/wei840222/message-linter#readme",
+  "homepage": "https://github.com/ani6439walc/openclaw-plugin-message-linter#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wei840222/message-linter.git"
+    "url": "git+https://github.com/ani6439walc/openclaw-plugin-message-linter.git"
   },
   "bugs": {
-    "url": "https://github.com/wei840222/message-linter/issues"
+    "url": "https://github.com/ani6439walc/openclaw-plugin-message-linter/issues"
   },
   "keywords": [
     "openclaw",
