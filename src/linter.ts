@@ -5,6 +5,7 @@ import {
   replaceSeparators,
   normalizeMarkdownHeadings,
   formatBlockquotes,
+  wrapBoldWithBackticks,
 } from "./transforms/discord.js";
 import { sanitizeTokens } from "./transforms/kaomoji.js";
 import { convertZhTw } from "./transforms/zhtw.js";
@@ -20,6 +21,11 @@ export async function lintMessageContent(
   const discord = { ...DEFAULT_FEATURES.discord, ...cfg.discord };
 
   let processed = content;
+
+  if (discord.boldInlineCode) {
+    processed = wrapBoldWithBackticks(processed);
+  }
+
   let activeMask = maskMarkdownCode(processed);
   processed = activeMask.maskedText;
 

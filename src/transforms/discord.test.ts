@@ -4,6 +4,7 @@ import {
   replaceSeparators,
   normalizeMarkdownHeadings,
   formatBlockquotes,
+  wrapBoldWithBackticks,
 } from "./discord.js";
 
 describe("message-linter discord formatters (formatLinks)", () => {
@@ -152,5 +153,61 @@ describe("message-linter discord formatters (formatBlockquotes)", () => {
     const input = "5 > 3 and 2 < 4";
     const output = formatBlockquotes(input);
     expect(output).toBe("5 > 3 and 2 < 4");
+  });
+});
+
+describe("message-linter discord formatters (wrapBoldWithBackticks)", () => {
+  it("converts backtick-wrapped bold to bold-wrapped backticks", () => {
+    const input = "`**文字**`";
+    const expected = "**`文字`**";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("converts English backtick-wrapped bold", () => {
+    const input = "`**hello world**`";
+    const expected = "**`hello world`**";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("handles multiple backtick-wrapped bold segments", () => {
+    const input = "`**foo**` and `**bar**`";
+    const expected = "**`foo`** and **`bar`**";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("does not double-wrap when already correctly formatted", () => {
+    const input = "**`文字`**";
+    const expected = "**`文字`**";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("ignores non-wrapped bold text", () => {
+    const input = "**bold**";
+    const expected = "**bold**";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("ignores inline code without bold", () => {
+    const input = "`just code`";
+    const expected = "`just code`";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("handles mixed content on same line", () => {
+    const input = "prefix `**bold**` suffix";
+    const expected = "prefix **`bold`** suffix";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("handles CJK characters in backtick-wrapped bold", () => {
+    const input = "`**這是粗體文字**`";
+    const expected = "**`這是粗體文字`**";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("does not affect placeholders", () => {
+    const input = `\uE000CODE_0\uE000`;
+    const expected = `\uE000CODE_0\uE000`;
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
   });
 });

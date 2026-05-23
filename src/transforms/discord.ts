@@ -87,6 +87,12 @@ export function normalizeMarkdownHeadings(text: string): string {
   return result;
 }
 
+const BOLD_INLINE_RE = /\`\*\*([^`]+?)\*\*\`/g;
+
+export function wrapBoldWithBackticks(text: string): string {
+  return text.replace(BOLD_INLINE_RE, "**`$1`**");
+}
+
 export function formatBlockquotes(text: string): string {
   return text.replace(/^>(?![ \t])/gm, "> ");
 }

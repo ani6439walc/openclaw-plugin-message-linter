@@ -6,6 +6,7 @@ export type LinterFeatures = {
     separators?: boolean;
     links?: boolean;
     blockquotes?: boolean;
+    boldInlineCode?: boolean;
   };
 };
 
@@ -17,5 +18,6 @@ export const DEFAULT_FEATURES: Required<LinterFeatures> = {
     separators: true,
     links: true,
     blockquotes: true,
+    boldInlineCode: true,
   },
 };
