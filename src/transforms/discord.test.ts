@@ -66,6 +66,89 @@ describe("message-linter discord formatters (formatLinks)", () => {
       "[肯德基 北投光明餐廳](<https://www.google.com/maps/dir/?api=1&destination=%E8%82%AF%E5%BE%B7%E5%9F%BA%20%E5%8C%97%E6%8A%95%E5%85%89%E6%98%8E%E9%A4%90%E5%BB%B3>)";
     expect(formatLinks(input)).toBe(expected);
   });
+
+  it("strips angle brackets from URL-like label text", () => {
+    const input = "[<https://example.com>](https://example.com)";
+    const expected = "[example.com](<https://example.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("strips angle brackets with path from URL-like label text", () => {
+    const input =
+      "[<https://example.com/path/to/page?q=1>](https://example.com/path/to/page?q=1)";
+    const expected =
+      "[example.com/path/to/page?q=1](<https://example.com/path/to/page?q=1>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("strips emojis from label text", () => {
+    const input = "[🎉 Check this link](https://example.com)";
+    const expected = "[Check this link](<https://example.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("strips multiple emojis from label text", () => {
+    const input = "[🔥🎉🚀 Hot link](https://example.com)";
+    const expected = "[Hot link](<https://example.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("strips angle brackets, scheme, and emojis together", () => {
+    const input = "[🎉 <https://example.com>](https://example.com)";
+    const expected = "[example.com](<https://example.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("strips emojis that appear after text", () => {
+    const input = "[Click here 🔗](https://example.com)";
+    const expected = "[Click here](<https://example.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("handles label with only emojis (results in empty label)", () => {
+    const input = "[🎉🔥🚀](https://example.com)";
+    const expected = "[](<https://example.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("does not strip emojis from non-URL-like labels that are not at start or end", () => {
+    const input = "[Visit 🎉 our site](https://example.com)";
+    const expected = "[Visit our site](<https://example.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("preserves emojis outside the markdown link", () => {
+    const input = "🎉 [Check this](https://example.com) 🔥";
+    const expected = "🎉 [Check this](<https://example.com>) 🔥";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("preserves angle brackets outside the markdown link", () => {
+    const input = "See <https://raw-url.com> and [Google](https://google.com)";
+    const expected =
+      "See <https://raw-url.com> and [Google](<https://google.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("preserves scheme text outside the markdown link", () => {
+    const input = "Use https:// directly with [click](https://google.com)";
+    const expected = "Use https:// directly with [click](<https://google.com>)";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("preserves all non-link content with emojis, angle brackets, and schemes", () => {
+    const input =
+      "[<https://link.com>](<https://link.com>) 🚀 <ftp://files.com> mailto:test@x.com";
+    const expected =
+      "[link.com](<https://link.com>) 🚀 <ftp://files.com> mailto:test@x.com";
+    expect(formatLinks(input)).toBe(expected);
+  });
+
+  it("preserves emoji and <> adjacent to but not inside markdown link", () => {
+    const input = "🎉[link](https://example.com)🔥 <not-a-link>";
+    const expected = "🎉[link](<https://example.com>)🔥 <not-a-link>";
+    expect(formatLinks(input)).toBe(expected);
+  });
 });
 
 describe("message-linter discord formatters (replaceSeparators)", () => {
