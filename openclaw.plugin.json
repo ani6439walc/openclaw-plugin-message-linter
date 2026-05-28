@@ -48,6 +48,11 @@
                 "type": "boolean",
                 "description": "Ensure blockquote lines have a space after > for Discord compatibility",
                 "default": true
+              },
+              "boldInlineCode": {
+                "type": "boolean",
+                "description": "Convert `**bold**` to **`bold`** for inline bold formatting",
+                "default": true
               }
             }
           }
