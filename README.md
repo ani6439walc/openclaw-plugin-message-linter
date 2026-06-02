@@ -28,7 +28,7 @@ Ask the agent to keep these fields in review notes before posting: target accoun
   - **Heading Normalization**: Dynamically adjusts Markdown heading levels (shifting to a minimum of H1 and capping at H3) to maintain a consistent visual hierarchy.
   - **Separator Beautification**: Converts standard ASCII separators (e.g., `---` or `───`) into visually optimized placeholders for cleaner section breaks.
   - **Blockquote Compatibility**: Ensures blockquote syntax is correctly formatted for reliable rendering across all supported clients.
-  - **Inline Bold to Bold Code**: Converts `` `**text**` `` to `` **`text`** `` for better inline bold rendering.
+  - **Inline Bold to Bold Code**: Converts `` `**text**` `` to ``**`text`**`` for better inline bold rendering.
 - **Advanced ZHTW Conversion**: Provides high-fidelity, context-aware Simplified-to-Traditional Chinese conversion, adhering to Taiwan (ROC) linguistic standards. Powered by a native TypeScript trie-based converter with embedded OpenCC dictionaries and contextual spelling rules.
 - **Kaomoji Integrity**: Intelligently sanitizes tokens containing Kaomoji (e.g., `(＞///＜)`) by neutralizing backticks and accents that might otherwise trigger accidental Markdown code block formatting.
 

@@ -66,6 +66,27 @@ describe("message-linter logic (lintMessageContent)", () => {
     );
   });
 
+  it("keeps Discord formatting fixes after zh-TW conversion", async () => {
+    const input = [
+      "本次跳過之檔案",
+      "",
+      "`**projects/ai/harness-engineering.md**`",
+      "• 原因: 已有 [[syntheses/harness-engineering-方法論與實踐模式]] 完整覆蓋",
+    ].join("\n");
+    const output = await lintMessageContent(input, async (text) => text, {
+      zhtw: true,
+    });
+
+    expect(output).toBe(
+      [
+        "本次跳過之檔案",
+        "",
+        "**`projects/ai/harness-engineering.md`**",
+        "• 原因: 已有 [[syntheses/harness-engineering-方法論與實踐模式]] 完整覆蓋",
+      ].join("\n"),
+    );
+  });
+
   it("falls back to formatted text when converter has no output", async () => {
     const input = "[https://example.com](https://example.com) 中国";
     const output = await lintMessageContent(input, async () => undefined, {

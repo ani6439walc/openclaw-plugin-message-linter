@@ -22,20 +22,19 @@ export async function lintMessageContent(
 
   let processed = content;
 
+  if (cfg.zhtw && HAS_CJK_RE.test(content)) {
+    const converted = await converter(content);
+    if (typeof converted === "string" && converted.length > 0) {
+      processed = converted;
+    }
+  }
+
   if (discord.boldInlineCode) {
     processed = wrapBoldWithBackticks(processed);
   }
 
-  let activeMask = maskMarkdownCode(processed);
+  const activeMask = maskMarkdownCode(processed);
   processed = activeMask.maskedText;
-
-  if (cfg.zhtw && HAS_CJK_RE.test(content)) {
-    const converted = await converter(content);
-    if (typeof converted === "string" && converted.length > 0) {
-      activeMask = maskMarkdownCode(converted);
-      processed = activeMask.maskedText;
-    }
-  }
 
   if (discord.links) {
     processed = formatLinks(processed);
