@@ -1,4 +1,4 @@
-import { z, preprocess } from "openclaw/plugin-sdk/zod";
+import { z } from "zod";
 
 export type LinterFeatures = {
   zhtw?: boolean;
@@ -34,44 +34,34 @@ export type MessageLinterConfig = {
   features: ResolvedLinterFeatures;
 };
 
-const asConfigObject = (value: unknown): Record<string, unknown> => {
-  return typeof value === "object" && value !== null && !Array.isArray(value)
-    ? (value as Record<string, unknown>)
-    : {};
-};
+const DiscordFeaturesSchema = z
+  .object({
+    headings: z.boolean().catch(DEFAULT_FEATURES.discord.headings),
+    separators: z.boolean().catch(DEFAULT_FEATURES.discord.separators),
+    links: z.boolean().catch(DEFAULT_FEATURES.discord.links),
+    blockquotes: z.boolean().catch(DEFAULT_FEATURES.discord.blockquotes),
+    boldInlineCode: z.boolean().catch(DEFAULT_FEATURES.discord.boldInlineCode),
+  })
+  .catch(DEFAULT_FEATURES.discord);
 
-const booleanFeature = (fallback: boolean) =>
-  preprocess(
-    (value) => (typeof value === "boolean" ? value : fallback),
-    z.boolean(),
-  );
-
-const DiscordFeaturesSchema = preprocess(
-  asConfigObject,
-  z.object({
-    headings: booleanFeature(DEFAULT_FEATURES.discord.headings),
-    separators: booleanFeature(DEFAULT_FEATURES.discord.separators),
-    links: booleanFeature(DEFAULT_FEATURES.discord.links),
-    blockquotes: booleanFeature(DEFAULT_FEATURES.discord.blockquotes),
-    boldInlineCode: booleanFeature(DEFAULT_FEATURES.discord.boldInlineCode),
-  }),
-);
-
-const FeaturesSchema = preprocess(
-  asConfigObject,
-  z.object({
-    zhtw: booleanFeature(DEFAULT_FEATURES.zhtw),
-    kaomoji: booleanFeature(DEFAULT_FEATURES.kaomoji),
+const FeaturesSchema = z
+  .object({
+    zhtw: z.boolean().catch(DEFAULT_FEATURES.zhtw),
+    kaomoji: z.boolean().catch(DEFAULT_FEATURES.kaomoji),
     discord: DiscordFeaturesSchema,
-  }),
-);
+  })
+  .catch(DEFAULT_FEATURES);
+
+const ConfigSchema = z
+  .object({
+    features: FeaturesSchema,
+  })
+  .catch({ features: DEFAULT_FEATURES });
 
 export function resolveFeatures(raw: unknown): ResolvedLinterFeatures {
-  return FeaturesSchema.parse(raw) as ResolvedLinterFeatures;
+  return FeaturesSchema.parse(raw);
 }
 
 export function resolveConfig(raw: unknown): MessageLinterConfig {
-  return {
-    features: resolveFeatures(asConfigObject(raw).features),
-  };
+  return ConfigSchema.parse(raw);
 }
