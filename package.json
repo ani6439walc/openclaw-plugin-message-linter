@@ -2,7 +2,7 @@
   "name": "message-linter",
   "displayName": "MessageLinter",
   "description": "A robust message formatting and sanitization plugin for the OpenClaw platform, ensuring consistent, readable, and aesthetically pleasing message presentation.",
-  "version": "2026.5.20",
+  "version": "2026.5.28",
   "type": "module",
   "license": "MIT",
   "author": "Ani <ani6439walc@gmail.com>",
@@ -36,12 +36,12 @@
       "./dist/index.js"
     ],
     "compat": {
-      "pluginApi": ">=2026.5.20",
-      "minGatewayVersion": "2026.5.20"
+      "pluginApi": ">=2026.5.28",
+      "minGatewayVersion": "2026.5.28"
     },
     "build": {
-      "openclawVersion": "2026.5.20",
-      "pluginSdkVersion": "2026.5.20"
+      "openclawVersion": "2026.5.28",
+      "pluginSdkVersion": "2026.5.28"
     }
   },
   "scripts": {
@@ -52,7 +52,7 @@
     "format": "prettier --write '**/*.md' '**/*.json' '**/*.ts'"
   },
   "peerDependencies": {
-    "openclaw": "2026.5.20"
+    "openclaw": "2026.5.28"
   },
   "devDependencies": {
     "prettier": "3.8.3",
