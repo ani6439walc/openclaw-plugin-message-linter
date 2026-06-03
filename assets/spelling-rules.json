@@ -543,12 +543,6 @@
     "context": "@domain 資安。區分驗證/授權、加密貨幣、NLP 分詞 (tokenization) 等不同語境"
   },
   {
-    "from": "令牌環",
-    "to": [],
-    "type": "cross_strait",
-    "context": "@domain 網路。IEEE 802.5 token ring 不應意譯，tw 直接使用英文 token ring"
-  },
-  {
     "from": "以太",
     "to": ["乙太"],
     "type": "cross_strait",
@@ -1118,12 +1112,6 @@
     "contextClues": ["銀行", "提款", "帳戶", "刷卡"]
   },
   {
-    "from": "元數據",
-    "to": [],
-    "type": "cross_strait",
-    "context": "@domain 資料。源自希臘文 meta- (關於) + data (資料)，原意為「描述資料的資料」。preferred: metadata；可接受: 詮釋資料 / 後設資料；rejected: 元資料"
-  },
-  {
     "from": "元旦倒計時",
     "to": ["跨年倒數"],
     "type": "cross_strait",
@@ -1134,12 +1122,6 @@
     "to": ["超程式設計"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
-  },
-  {
-    "from": "元資料",
-    "to": [],
-    "type": "cross_strait",
-    "context": "@domain 資料。`元資料` 為機械式 Sinification (從 `元數據` 字面替換而來)，無 NAER / MoE 立足點。preferred: metadata；可接受替代: 詮釋資料 / 後設資料"
   },
   {
     "from": "元音",
@@ -1573,6 +1555,12 @@
       "指標",
       "介面",
       "實作"
+    ],
+    "positionalClues": [
+      "not_after:程式",
+      "not_after:呼叫",
+      "not_after:回呼",
+      "not_after:匿名"
     ],
     "exceptions": [
       "函式庫",
@@ -2382,12 +2370,6 @@
     "to": ["原聲帶"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "參數",
-    "to": ["引數"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。tw: 參數=parameter (correct tw), 引數=argument. Rule disabled: flagging 參數 is a false positive."
   },
   {
     "from": "參數列表",
@@ -3414,6 +3396,12 @@
     "to": ["乳酪"],
     "type": "cross_strait",
     "context": "@domain 日常"
+  },
+  {
+    "from": "如需協助請聯繫",
+    "to": ["如需協助請聯絡"],
+    "type": "cross_strait",
+    "context": "@domain IT。客服 CTA；避免把日常用法「聯繫」一概改寫"
   },
   {
     "from": "委託",
@@ -5101,12 +5089,6 @@
     "contextClues": ["復原", "操作", "Ctrl", "上一步", "編輯"]
   },
   {
-    "from": "播客",
-    "to": [],
-    "type": "cross_strait",
-    "context": "@domain 社群"
-  },
-  {
     "from": "操作數",
     "to": ["運算元"],
     "type": "cross_strait",
@@ -5381,12 +5363,6 @@
     "to": ["陣列"],
     "type": "cross_strait",
     "context": "@domain 資料結構"
-  },
-  {
-    "from": "文件",
-    "to": ["檔案"],
-    "type": "cross_strait",
-    "context": "tw 「文件」= document (正確用法)；cn 「文件」= file。裸詞歧義無法消歧，停用以避免誤判。複合詞 (文件夾→資料夾、頭文件→標頭檔) 不受影響 (@seealso 文檔)"
   },
   {
     "from": "文件內容",
@@ -5714,7 +5690,8 @@
     "to": ["最關鍵", "最主要"],
     "type": "confusable",
     "context": "「核心」保留給 kernel (OS/ML)；形容詞用「關鍵」或「主要」避免語意混淆",
-    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"]
+    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"],
+    "positionalClues": ["not_after:kernel", "not_after:Linux"]
   },
   {
     "from": "最終用戶",
@@ -5883,14 +5860,16 @@
     "type": "confusable",
     "context": "避免混用 kernel (核心) 和 core (關鍵)；除非指 kernel feature",
     "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"],
-    "negativeContextClues": ["kernel", "核心", "核心模組", "核心空間"]
+    "negativeContextClues": ["kernel", "核心", "核心模組", "核心空間"],
+    "positionalClues": ["not_after:kernel", "not_after:Linux"]
   },
   {
     "from": "核心問題",
     "to": ["關鍵問題"],
     "type": "confusable",
     "context": "避免混用 kernel (核心) 和 core (關鍵)",
-    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"]
+    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"],
+    "positionalClues": ["not_after:kernel", "not_after:Linux"]
   },
   {
     "from": "核心映象",
@@ -5929,7 +5908,8 @@
     "to": ["關鍵邏輯", "主要邏輯"],
     "type": "confusable",
     "context": "避免混用 kernel (核心) 和 core (關鍵)",
-    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"]
+    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"],
+    "positionalClues": ["not_after:kernel", "not_after:Linux"]
   },
   {
     "from": "格林納達",
@@ -6577,7 +6557,8 @@
     "from": "消息",
     "to": ["訊息"],
     "type": "cross_strait",
-    "context": "@domain IT。`好消息`/`壞消息`/`消息來源` 為合法 zh-TW 用法"
+    "context": "@domain IT。`好消息`/`壞消息`/`消息來源` 為合法 zh-TW 用法",
+    "positionalClues": ["not_after:好", "not_after:壞", "not_before:來源"]
   },
   {
     "from": "消息環",
@@ -8607,16 +8588,46 @@
     "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
   },
   {
-    "from": "聯繫",
-    "to": ["聯絡"],
+    "from": "聯繫客服",
+    "to": ["聯絡客服"],
     "type": "cross_strait",
-    "context": "@domain IT"
+    "context": "@domain IT。客服 CTA；避免把日常用法「聯繫」一概改寫"
+  },
+  {
+    "from": "聯繫我們",
+    "to": ["聯絡我們"],
+    "type": "cross_strait",
+    "context": "@domain IT。客服 CTA / contact us copy；避免把日常用法「聯繫」一概改寫"
+  },
+  {
+    "from": "聯繫方式",
+    "to": ["聯絡方式"],
+    "type": "cross_strait",
+    "context": "@domain IT。聯絡資訊欄位標籤；避免把日常用法「聯繫」一概改寫"
   },
   {
     "from": "聯繫歷史",
     "to": ["通話記錄"],
     "type": "cross_strait",
     "context": "@domain 通訊"
+  },
+  {
+    "from": "聯繫管道",
+    "to": ["聯絡管道"],
+    "type": "cross_strait",
+    "context": "@domain IT。聯絡資訊欄位標籤；避免把日常用法「聯繫」一概改寫"
+  },
+  {
+    "from": "聯繫資訊",
+    "to": ["聯絡資訊"],
+    "type": "cross_strait",
+    "context": "@domain IT。聯絡資訊欄位標籤；避免把日常用法「聯繫」一概改寫"
+  },
+  {
+    "from": "聯繫電話",
+    "to": ["聯絡電話"],
+    "type": "cross_strait",
+    "context": "@domain IT。聯絡資訊欄位標籤；避免把日常用法「聯繫」一概改寫"
   },
   {
     "from": "聲卡",
@@ -9515,7 +9526,8 @@
     "to": ["呼叫"],
     "type": "cross_strait",
     "context": "@domain 通訊。cn 調用 = call/invoke；tw 用「呼叫」(程式)、「調閱」(法律)、「調派」(行政)",
-    "contextClues": ["函式", "函數", "API", "程式", "方法", "介面"]
+    "contextClues": ["函式", "函數", "API", "程式", "方法", "介面"],
+    "positionalClues": ["not_after:法院", "not_after:調閱"]
   },
   {
     "from": "調用操作符",
@@ -10976,7 +10988,8 @@
       "工程",
       "建置",
       "維護"
-    ]
+    ],
+    "positionalClues": ["not_after:個", "not_after:各", "not_after:每"]
   },
   {
     "from": "項目管理",

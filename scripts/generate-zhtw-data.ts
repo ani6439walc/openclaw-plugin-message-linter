@@ -19,7 +19,7 @@ const ZHTW_MCP_RULESET =
 
 const OUT_DIR = path.resolve(import.meta.dirname, "../assets");
 
-const ALLOWED_RULE_TYPES = new Set([
+const AUTO_FIX_RULE_TYPES = new Set([
   "cross_strait",
   "political_coloring",
   "variant",
@@ -48,9 +48,21 @@ function parseOpenCCTsv(text: string): Array<[string, string]> {
     if (parts.length < 2) continue;
     const key = parts[0];
     const values = parts[1].split(" ");
-    entries.push([key, values[0]]);
+    const value = values[0];
+    if (key === value) continue;
+    entries.push([key, value]);
   }
   return entries;
+}
+
+function parseOpenCCCharTsv(text: string): Array<[string, string]> {
+  return parseOpenCCTsv(text).filter(
+    ([key, value]) => charLength(key) === 1 && charLength(value) === 1,
+  );
+}
+
+function charLength(text: string): number {
+  return Array.from(text).length;
 }
 
 function formatTsv(entries: Array<[string, string]>): string {
@@ -61,10 +73,12 @@ interface RawRule {
   from: string;
   to: string[];
   type: string;
+  disabled?: boolean;
   context?: string;
   english?: string;
   context_clues?: string[];
   negative_context_clues?: string[];
+  positional_clues?: string[];
   exceptions?: string[];
 }
 
@@ -75,6 +89,7 @@ interface CleanRule {
   context?: string;
   contextClues?: string[];
   negativeContextClues?: string[];
+  positionalClues?: string[];
   exceptions?: string[];
 }
 
@@ -89,9 +104,21 @@ function cleanRules(rules: RawRule[]): CleanRule[] {
     if (r.context_clues?.length) clean.contextClues = r.context_clues;
     if (r.negative_context_clues?.length)
       clean.negativeContextClues = r.negative_context_clues;
+    if (r.positional_clues?.length) clean.positionalClues = r.positional_clues;
     if (r.exceptions?.length) clean.exceptions = r.exceptions;
     return clean;
   });
+}
+
+function isAutoFixRule(rule: RawRule): boolean {
+  return (
+    AUTO_FIX_RULE_TYPES.has(rule.type) &&
+    rule.disabled !== true &&
+    Array.isArray(rule.to) &&
+    rule.to.length > 0 &&
+    typeof rule.to[0] === "string" &&
+    rule.to[0].length > 0
+  );
 }
 
 async function main() {
@@ -109,15 +136,13 @@ async function main() {
 
   console.log("Parsing data...");
   const stPhrases = parseOpenCCTsv(stPhrasesText);
-  const stChars = parseOpenCCTsv(stCharsText);
-  const twVariants = parseOpenCCTsv(twVariantsText);
+  const stChars = parseOpenCCCharTsv(stCharsText);
+  const twVariants = parseOpenCCCharTsv(twVariantsText);
 
   // Sort phrases by longest key first for leftmost-longest matching
   stPhrases.sort((a, b) => b[0].length - a[0].length);
 
-  const filteredRules = ruleset.spelling_rules.filter((r) =>
-    ALLOWED_RULE_TYPES.has(r.type),
-  );
+  const filteredRules = ruleset.spelling_rules.filter(isAutoFixRule);
 
   console.log("Writing assets...");
   await mkdir(OUT_DIR, { recursive: true });

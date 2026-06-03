@@ -5,6 +5,7 @@ export interface SpellingRule {
   readonly context?: string;
   readonly contextClues?: readonly string[];
   readonly negativeContextClues?: readonly string[];
+  readonly positionalClues?: readonly string[];
   readonly exceptions?: readonly string[];
 }
 
@@ -15,12 +16,69 @@ export interface Issue {
 }
 
 const CONTEXT_WINDOW_CHARS = 40;
+const POSITIONAL_WINDOW_CHARS = 20;
 
 function hasMatchAny(text: string, terms: readonly string[]): boolean {
   for (const term of terms) {
     if (text.includes(term)) return true;
   }
   return false;
+}
+
+function positionalWindowBefore(text: string, matchStart: number): string {
+  return text.slice(
+    Math.max(0, matchStart - POSITIONAL_WINDOW_CHARS),
+    matchStart,
+  );
+}
+
+function positionalWindowAfter(text: string, matchEnd: number): string {
+  return text.slice(matchEnd, matchEnd + POSITIONAL_WINDOW_CHARS);
+}
+
+function checkPositionalClues(
+  text: string,
+  matchStart: number,
+  matchEnd: number,
+  clues: readonly string[],
+): boolean {
+  const before = positionalWindowBefore(text, matchStart);
+  const after = positionalWindowAfter(text, matchEnd);
+
+  for (const clue of clues) {
+    const separator = clue.indexOf(":");
+    if (separator <= 0) {
+      return false;
+    }
+
+    const operator = clue.slice(0, separator);
+    const term = clue.slice(separator + 1);
+    if (!term) {
+      return false;
+    }
+
+    switch (operator) {
+      case "before":
+        if (!after.includes(term)) return false;
+        break;
+      case "after":
+        if (!before.includes(term)) return false;
+        break;
+      case "adjacent":
+        if (!before.endsWith(term) && !after.startsWith(term)) return false;
+        break;
+      case "not_before":
+        if (after.includes(term)) return false;
+        break;
+      case "not_after":
+        if (before.includes(term)) return false;
+        break;
+      default:
+        return false;
+    }
+  }
+
+  return true;
 }
 
 export function scanSpelling(
@@ -35,8 +93,10 @@ export function scanSpelling(
     const hasNeg =
       rule.negativeContextClues != null && rule.negativeContextClues.length > 0;
     const hasExcept = rule.exceptions != null && rule.exceptions.length > 0;
+    const hasPos =
+      rule.positionalClues != null && rule.positionalClues.length > 0;
 
-    if (!hasClue && !hasNeg && !hasExcept) {
+    if (!hasClue && !hasNeg && !hasExcept && !hasPos) {
       let pos = text.indexOf(found);
       while (pos !== -1) {
         issues.push({ found, suggestions: rule.to, offset: pos });
@@ -78,6 +138,19 @@ export function scanSpelling(
         hasNeg &&
         window &&
         hasMatchAny(window, rule.negativeContextClues!)
+      ) {
+        accepted = false;
+      }
+
+      if (
+        accepted &&
+        hasPos &&
+        !checkPositionalClues(
+          text,
+          pos,
+          pos + found.length,
+          rule.positionalClues!,
+        )
       ) {
         accepted = false;
       }

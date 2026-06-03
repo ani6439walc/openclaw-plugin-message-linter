@@ -127,6 +127,23 @@ describe("scanSpelling edge cases", () => {
     expect(issues).toHaveLength(3);
     expect(issues.map((i) => i.offset)).toEqual([0, 9, 18]);
   });
+
+  it("honors positional clues when scanning spelling rules", () => {
+    const rules = [
+      {
+        from: "消息",
+        to: ["訊息"],
+        type: "cross_strait",
+        positionalClues: ["not_after:好", "not_before:來源"],
+      },
+    ];
+
+    expect(scanSpelling("錯誤消息", rules)).toEqual([
+      { found: "消息", suggestions: ["訊息"], offset: 2 },
+    ]);
+    expect(scanSpelling("好消息", rules)).toEqual([]);
+    expect(scanSpelling("消息來源", rules)).toEqual([]);
+  });
 });
 
 describe("applyFixes edge cases", () => {

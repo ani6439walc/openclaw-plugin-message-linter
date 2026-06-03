@@ -62,6 +62,16 @@ describe("message-linter integration (convertZhTw)", () => {
     expect(output).toBe("  - 😀 寶貝的簡體寫作：寶貝。\n    - 😺 支持後臺。");
   }, 10000);
 
+  it("uses upstream-safe contact phrases without rewriting broad valid wording", async () => {
+    const input =
+      "如需協助請聯繫客服，留下聯繫電話，但也可以保持聯繫。參數與文件照原意保留。";
+    const output = await convertZhTw(input);
+
+    expect(output).toBe(
+      "如需協助請聯絡客服，留下聯絡電話，但也可以保持聯繫。參數與文件照原意保留。",
+    );
+  }, 10000);
+
   it("preserves inline code spans while converting surrounding markdown text", async () => {
     const input = "Ani 會用 `字節`、`字节` 說明差異，外面是中国软件。";
     const output = await convertZhTw(input);
