@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_FEATURES, resolveConfig } from "./config.js";
+import { DEFAULT_FEATURES, resolveConfig, resolveFeatures } from "./config.js";
 
 describe("resolveConfig", () => {
   it("returns default features when raw config is empty", () => {
@@ -47,6 +47,16 @@ describe("resolveConfig", () => {
       links: false,
       blockquotes: false,
       boldInlineCode: false,
+    });
+  });
+
+  it("resolves feature defaults directly for linter callers", () => {
+    expect(resolveFeatures({ discord: { links: false } })).toEqual({
+      ...DEFAULT_FEATURES,
+      discord: {
+        ...DEFAULT_FEATURES.discord,
+        links: false,
+      },
     });
   });
 

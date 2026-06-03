@@ -128,6 +128,54 @@ describe("scanSpelling edge cases", () => {
     expect(issues.map((i) => i.offset)).toEqual([0, 9, 18]);
   });
 
+  it("honors context clues when scanning spelling rules", () => {
+    const rules = [
+      {
+        from: "后台",
+        to: ["後臺"],
+        type: "cross_strait",
+        contextClues: ["系統"],
+      },
+    ];
+
+    expect(scanSpelling("系統后台", rules)).toEqual([
+      { found: "后台", suggestions: ["後臺"], offset: 2 },
+    ]);
+    expect(scanSpelling("普通后台", rules)).toEqual([]);
+  });
+
+  it("honors negative context clues when scanning spelling rules", () => {
+    const rules = [
+      {
+        from: "参数",
+        to: ["參數"],
+        type: "cross_strait",
+        negativeContextClues: ["程式"],
+      },
+    ];
+
+    expect(scanSpelling("設定参数", rules)).toEqual([
+      { found: "参数", suggestions: ["參數"], offset: 2 },
+    ]);
+    expect(scanSpelling("程式参数", rules)).toEqual([]);
+  });
+
+  it("honors exceptions when scanning spelling rules", () => {
+    const rules = [
+      {
+        from: "文件",
+        to: ["檔案"],
+        type: "cross_strait",
+        exceptions: ["法律"],
+      },
+    ];
+
+    expect(scanSpelling("一般文件", rules)).toEqual([
+      { found: "文件", suggestions: ["檔案"], offset: 2 },
+    ]);
+    expect(scanSpelling("法律文件", rules)).toEqual([]);
+  });
+
   it("honors positional clues when scanning spelling rules", () => {
     const rules = [
       {

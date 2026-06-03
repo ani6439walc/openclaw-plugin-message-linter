@@ -25,6 +25,30 @@ function hasMatchAny(text: string, terms: readonly string[]): boolean {
   return false;
 }
 
+function forEachOccurrence(
+  text: string,
+  search: string,
+  visit: (offset: number) => void,
+): void {
+  if (!search) return;
+
+  let offset = text.indexOf(search);
+  while (offset !== -1) {
+    visit(offset);
+    offset = text.indexOf(search, offset + 1);
+  }
+}
+
+function contextWindow(
+  text: string,
+  matchStart: number,
+  matchEnd: number,
+): string {
+  const start = Math.max(0, matchStart - CONTEXT_WINDOW_CHARS);
+  const end = Math.min(text.length, matchEnd + CONTEXT_WINDOW_CHARS);
+  return text.slice(start, end);
+}
+
 function positionalWindowBefore(text: string, matchStart: number): string {
   return text.slice(
     Math.max(0, matchStart - POSITIONAL_WINDOW_CHARS),
@@ -81,6 +105,48 @@ function checkPositionalClues(
   return true;
 }
 
+function acceptsRuleAt(
+  text: string,
+  rule: SpellingRule,
+  offset: number,
+): boolean {
+  const found = rule.from;
+  const matchEnd = offset + found.length;
+  const contextClues = rule.contextClues ?? [];
+  const negativeContextClues = rule.negativeContextClues ?? [];
+  const exceptions = rule.exceptions ?? [];
+  const positionalClues = rule.positionalClues ?? [];
+  const needsContext =
+    exceptions.length > 0 ||
+    contextClues.length > 0 ||
+    negativeContextClues.length > 0;
+
+  if (needsContext) {
+    const window = contextWindow(text, offset, matchEnd);
+    if (exceptions.length > 0 && hasMatchAny(window, exceptions)) {
+      return false;
+    }
+    if (contextClues.length > 0 && !hasMatchAny(window, contextClues)) {
+      return false;
+    }
+    if (
+      negativeContextClues.length > 0 &&
+      hasMatchAny(window, negativeContextClues)
+    ) {
+      return false;
+    }
+  }
+
+  if (
+    positionalClues.length > 0 &&
+    !checkPositionalClues(text, offset, matchEnd, positionalClues)
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
 export function scanSpelling(
   text: string,
   rules: readonly SpellingRule[],
@@ -89,78 +155,11 @@ export function scanSpelling(
 
   for (const rule of rules) {
     const found = rule.from;
-    const hasClue = rule.contextClues != null && rule.contextClues.length > 0;
-    const hasNeg =
-      rule.negativeContextClues != null && rule.negativeContextClues.length > 0;
-    const hasExcept = rule.exceptions != null && rule.exceptions.length > 0;
-    const hasPos =
-      rule.positionalClues != null && rule.positionalClues.length > 0;
-
-    if (!hasClue && !hasNeg && !hasExcept && !hasPos) {
-      let pos = text.indexOf(found);
-      while (pos !== -1) {
-        issues.push({ found, suggestions: rule.to, offset: pos });
-        pos = text.indexOf(found, pos + 1);
+    forEachOccurrence(text, found, (offset) => {
+      if (acceptsRuleAt(text, rule, offset)) {
+        issues.push({ found, suggestions: rule.to, offset });
       }
-      continue;
-    }
-
-    let pos = text.indexOf(found);
-    while (pos !== -1) {
-      let accepted = true;
-
-      let window: string | undefined;
-      const needWindow = hasExcept || hasClue || hasNeg;
-      if (needWindow) {
-        const start = Math.max(0, pos - CONTEXT_WINDOW_CHARS);
-        const end = Math.min(
-          text.length,
-          pos + found.length + CONTEXT_WINDOW_CHARS,
-        );
-        window = text.slice(start, end);
-      }
-
-      if (hasExcept && window && hasMatchAny(window, rule.exceptions!)) {
-        accepted = false;
-      }
-
-      if (
-        accepted &&
-        hasClue &&
-        window &&
-        !hasMatchAny(window, rule.contextClues!)
-      ) {
-        accepted = false;
-      }
-
-      if (
-        accepted &&
-        hasNeg &&
-        window &&
-        hasMatchAny(window, rule.negativeContextClues!)
-      ) {
-        accepted = false;
-      }
-
-      if (
-        accepted &&
-        hasPos &&
-        !checkPositionalClues(
-          text,
-          pos,
-          pos + found.length,
-          rule.positionalClues!,
-        )
-      ) {
-        accepted = false;
-      }
-
-      if (accepted) {
-        issues.push({ found, suggestions: rule.to, offset: pos });
-      }
-
-      pos = text.indexOf(found, pos + 1);
-    }
+    });
   }
 
   issues.sort((a, b) => a.offset - b.offset);

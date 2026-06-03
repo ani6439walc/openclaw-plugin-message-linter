@@ -1,4 +1,4 @@
-import { DEFAULT_FEATURES, type LinterFeatures } from "./config.js";
+import { resolveFeatures, type LinterFeatures } from "./config.js";
 import { maskMarkdownCode } from "./utils/mask.js";
 import {
   formatLinks,
@@ -17,8 +17,8 @@ export async function lintMessageContent(
   converter: (text: string) => Promise<string | undefined> = convertZhTw,
   features: LinterFeatures = {},
 ): Promise<string> {
-  const cfg = { ...DEFAULT_FEATURES, ...features };
-  const discord = { ...DEFAULT_FEATURES.discord, ...cfg.discord };
+  const cfg = resolveFeatures(features);
+  const { discord } = cfg;
 
   let processed = content;
 

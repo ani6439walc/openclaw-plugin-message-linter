@@ -1,3 +1,5 @@
+import { z, preprocess } from "openclaw/plugin-sdk/zod";
+
 export type LinterFeatures = {
   zhtw?: boolean;
   kaomoji?: boolean;
@@ -10,7 +12,7 @@ export type LinterFeatures = {
   };
 };
 
-type ResolvedLinterFeatures = {
+export type ResolvedLinterFeatures = {
   zhtw: boolean;
   kaomoji: boolean;
   discord: Required<NonNullable<LinterFeatures["discord"]>>;
@@ -29,46 +31,47 @@ export const DEFAULT_FEATURES: ResolvedLinterFeatures = {
 };
 
 export type MessageLinterConfig = {
-  features: LinterFeatures;
+  features: ResolvedLinterFeatures;
 };
 
-export function resolveConfig(
-  raw: Record<string, unknown>,
-): MessageLinterConfig {
-  const features = isRecord(raw.features) ? raw.features : {};
-  const discord = isRecord(features.discord) ? features.discord : {};
+const asConfigObject = (value: unknown): Record<string, unknown> => {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+};
 
+const booleanFeature = (fallback: boolean) =>
+  preprocess(
+    (value) => (typeof value === "boolean" ? value : fallback),
+    z.boolean(),
+  );
+
+const DiscordFeaturesSchema = preprocess(
+  asConfigObject,
+  z.object({
+    headings: booleanFeature(DEFAULT_FEATURES.discord.headings),
+    separators: booleanFeature(DEFAULT_FEATURES.discord.separators),
+    links: booleanFeature(DEFAULT_FEATURES.discord.links),
+    blockquotes: booleanFeature(DEFAULT_FEATURES.discord.blockquotes),
+    boldInlineCode: booleanFeature(DEFAULT_FEATURES.discord.boldInlineCode),
+  }),
+);
+
+const FeaturesSchema = preprocess(
+  asConfigObject,
+  z.object({
+    zhtw: booleanFeature(DEFAULT_FEATURES.zhtw),
+    kaomoji: booleanFeature(DEFAULT_FEATURES.kaomoji),
+    discord: DiscordFeaturesSchema,
+  }),
+);
+
+export function resolveFeatures(raw: unknown): ResolvedLinterFeatures {
+  return FeaturesSchema.parse(raw) as ResolvedLinterFeatures;
+}
+
+export function resolveConfig(raw: unknown): MessageLinterConfig {
   return {
-    features: {
-      zhtw: readBoolean(features.zhtw, DEFAULT_FEATURES.zhtw),
-      kaomoji: readBoolean(features.kaomoji, DEFAULT_FEATURES.kaomoji),
-      discord: {
-        headings: readBoolean(
-          discord.headings,
-          DEFAULT_FEATURES.discord.headings,
-        ),
-        separators: readBoolean(
-          discord.separators,
-          DEFAULT_FEATURES.discord.separators,
-        ),
-        links: readBoolean(discord.links, DEFAULT_FEATURES.discord.links),
-        blockquotes: readBoolean(
-          discord.blockquotes,
-          DEFAULT_FEATURES.discord.blockquotes,
-        ),
-        boldInlineCode: readBoolean(
-          discord.boldInlineCode,
-          DEFAULT_FEATURES.discord.boldInlineCode,
-        ),
-      },
-    },
+    features: resolveFeatures(asConfigObject(raw).features),
   };
-}
-
-function readBoolean(value: unknown, fallback: boolean): boolean {
-  return typeof value === "boolean" ? value : fallback;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
