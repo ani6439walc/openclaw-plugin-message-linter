@@ -1,13 +1,15 @@
-import { definePluginEntry } from "./api.js";
+import { definePluginEntry, type OpenClawPluginDefinition } from "./api.js";
 import { registerMessageLinterPlugin } from "./src/plugin.js";
 
-export default definePluginEntry({
+const plugin: OpenClawPluginDefinition = definePluginEntry({
   id: "message-linter",
   name: "Message Linter",
   description:
     "Suppresses automatic URL embeds in Discord messages by wrapping Markdown link URLs in angle brackets.",
   register: registerMessageLinterPlugin,
 });
+
+export default plugin;
 
 export {
   formatLinks,
