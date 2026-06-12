@@ -264,6 +264,28 @@ describe("message-linter discord formatters (wrapBoldWithBackticks)", () => {
     expect(wrapBoldWithBackticks(input)).toBe(expected);
   });
 
+  it("preserves multiple correctly formatted segments on the same line", () => {
+    const input = "- **`edit-article`** and **`humanizer`**";
+    expect(wrapBoldWithBackticks(input)).toBe(input);
+  });
+
+  it("preserves multiple correctly formatted segments across lines", () => {
+    const input = ["- **`edit-article`**", "- **`humanizer`**"].join("\n");
+    expect(wrapBoldWithBackticks(input)).toBe(input);
+  });
+
+  it("only converts misplaced segments when formats are mixed", () => {
+    const input = "**`correct`** and `**misplaced**` and **`also-correct`**";
+    const expected = "**`correct`** and **`misplaced`** and **`also-correct`**";
+    expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+
+  it("is idempotent after converting misplaced segments", () => {
+    const input = "`**first**` and `**second**`";
+    const converted = wrapBoldWithBackticks(input);
+    expect(wrapBoldWithBackticks(converted)).toBe(converted);
+  });
+
   it("ignores non-wrapped bold text", () => {
     const input = "**bold**";
     const expected = "**bold**";

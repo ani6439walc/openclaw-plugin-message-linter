@@ -87,6 +87,30 @@ describe("message-linter logic (lintMessageContent)", () => {
     );
   });
 
+  it("preserves a skill list with multiple bold inline-code segments", async () => {
+    const input = [
+      "主人～根據這篇文章的特性，Ani 推薦以下技能組合：",
+      "",
+      "**🎯 核心潤色技能**",
+      "",
+      "- **`edit-article`** — 把現有的技術文件改寫成 blog 格式（加入 lead hook、subheadings、短段落）",
+      "- **`humanizer`** — 移除 AI 寫作痕跡（第一人稱、感官細節、句子節奏變化、真實反應）",
+      "- **`article`** — 如果需要從頭重寫成新聞學標準的文章",
+      "",
+      "**💡 輔助技能**",
+      "",
+      "- **`treemd`** — 先預覽大綱結構，決定哪些段落要保留/重組",
+      "- **`humor`** — 加入主人的幽默風格（SRE 式的乾式幽默）",
+      "- **`markdown`** — 最後的格式潤色",
+    ].join("\n");
+
+    const output = await lintMessageContent(input, async (text) => text, {
+      zhtw: true,
+    });
+
+    expect(output).toBe(input);
+  });
+
   it("falls back to formatted text when converter has no output", async () => {
     const input = "[https://example.com](https://example.com) 中国";
     const output = await lintMessageContent(input, async () => undefined, {

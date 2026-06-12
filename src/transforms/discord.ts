@@ -109,10 +109,14 @@ export function normalizeMarkdownHeadings(text: string): string {
   return result;
 }
 
-const BOLD_INLINE_RE = /\`\*\*([^`]+?)\*\*\`/g;
+const BOLD_INLINE_RE = /\*\*`[^`]+?`\*\*|`\*\*([^`]+?)\*\*`/g;
 
 export function wrapBoldWithBackticks(text: string): string {
-  return text.replace(BOLD_INLINE_RE, "**`$1`**");
+  return text.replace(BOLD_INLINE_RE, (match, misplacedContent) =>
+    typeof misplacedContent === "string"
+      ? `**\`${misplacedContent}\`**`
+      : match,
+  );
 }
 
 export function formatBlockquotes(text: string): string {
