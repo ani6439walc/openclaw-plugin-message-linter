@@ -85,4 +85,22 @@ describe("message-linter integration (convertZhTw)", () => {
 
     expect(output).toBe("```txt\n字节\n中国软件\n```\n外面是中國軟體。");
   }, 10000);
+
+  it("applies case rules only when explicitly enabled", async () => {
+    const input = "github 和 typescript 支持中国软件。";
+
+    await expect(convertZhTw(input)).resolves.toBe(
+      "github 和 typescript 支援中國軟體。",
+    );
+    await expect(convertZhTw(input, { case: true })).resolves.toBe(
+      "GitHub 和 TypeScript 支援中國軟體。",
+    );
+  }, 10000);
+
+  it("preserves case rule matches inside markdown code regions", async () => {
+    const input = "github `github`\n```txt\ntypescript\n```";
+    const output = await convertZhTw(input, { case: true });
+
+    expect(output).toBe("GitHub `github`\n```txt\ntypescript\n```");
+  }, 10000);
 });

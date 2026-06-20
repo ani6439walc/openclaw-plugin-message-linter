@@ -86,6 +86,20 @@ function cleanRules(rules) {
   });
 }
 
+function cleanCaseRules(rules) {
+  return rules
+    .filter((r) => r && r.disabled !== true && typeof r.term === "string")
+    .map((r) => {
+      const clean = { term: r.term };
+      if (Array.isArray(r.alternatives) && r.alternatives.length > 0) {
+        clean.alternatives = r.alternatives.filter(
+          (value) => typeof value === "string" && value.length > 0,
+        );
+      }
+      return clean;
+    });
+}
+
 function isAutoFixRule(rule) {
   return (
     AUTO_FIX_RULE_TYPES.has(rule.type) &&
@@ -117,6 +131,7 @@ async function main() {
   stPhrases.sort((a, b) => b[0].length - a[0].length);
 
   const filteredRules = ruleset.spelling_rules.filter(isAutoFixRule);
+  const caseRules = cleanCaseRules(ruleset.case_rules ?? []);
 
   console.log("Writing assets...");
   await mkdir(OUT_DIR, { recursive: true });
@@ -135,11 +150,17 @@ async function main() {
     JSON.stringify(cleanRules(filteredRules), null, 2) + "\n",
   );
 
+  await writeFile(
+    path.join(OUT_DIR, "case-rules.json"),
+    JSON.stringify(caseRules, null, 2) + "\n",
+  );
+
   console.log("Done!");
   console.log(`  s2t-phrases.txt    : ${stPhrases.length} entries`);
   console.log(`  s2t-chars.txt      : ${stChars.length} entries`);
   console.log(`  s2t-tw-variants.txt: ${twVariants.length} entries`);
   console.log(`  spelling-rules.json: ${filteredRules.length} rules`);
+  console.log(`  case-rules.json    : ${caseRules.length} rules`);
 }
 
 main().catch((e) => {

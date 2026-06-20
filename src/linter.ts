@@ -1,4 +1,8 @@
-import { resolveFeatures, type LinterFeatures } from "./config.js";
+import {
+  resolveFeatures,
+  type LinterFeatures,
+  type ResolvedZhTwFeatures,
+} from "./config.js";
 import { maskMarkdownCode } from "./utils/mask.js";
 import {
   formatLinks,
@@ -14,7 +18,10 @@ const HAS_CJK_RE = /[\u3400-\u9fff]/;
 
 export async function lintMessageContent(
   content: string,
-  converter: (text: string) => Promise<string | undefined> = convertZhTw,
+  converter: (
+    text: string,
+    zhtw: ResolvedZhTwFeatures,
+  ) => Promise<string | undefined> = convertZhTw,
   features: LinterFeatures = {},
 ): Promise<string> {
   const cfg = resolveFeatures(features);
@@ -23,7 +30,7 @@ export async function lintMessageContent(
   let processed = content;
 
   if (cfg.zhtw.enabled && HAS_CJK_RE.test(content)) {
-    const converted = await converter(content);
+    const converted = await converter(content, cfg.zhtw);
     if (typeof converted === "string" && converted.length > 0) {
       processed = converted;
     }
@@ -65,7 +72,10 @@ export async function lintMessageContent(
 
 export async function lintMessageToolParams(
   params: Record<string, unknown>,
-  converter: (text: string) => Promise<string | undefined> = convertZhTw,
+  converter: (
+    text: string,
+    zhtw: ResolvedZhTwFeatures,
+  ) => Promise<string | undefined> = convertZhTw,
   features: LinterFeatures = {},
 ): Promise<Record<string, unknown>> {
   if (params.action !== "send" || typeof params.message !== "string") {

@@ -2,7 +2,9 @@ import { readFile, stat } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { maskMarkdownCode } from "../../utils/mask.js";
+import type { ResolvedZhTwFeatures } from "../../config.js";
 import { S2TConverter } from "./s2t.js";
+import { applyCaseRules, type CaseRule } from "./case.js";
 import { scanSpelling, applyFixes } from "./scanner.js";
 import type { SpellingRule } from "./scanner.js";
 
@@ -11,6 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 class ZhTwManager {
   private converter: S2TConverter | null = null;
   private spellingRules: SpellingRule[] | null = null;
+  private caseRules: CaseRule[] | null = null;
   private promise: Promise<void> | null = null;
 
   private async findAssetsDir(): Promise<string> {
@@ -46,29 +49,42 @@ class ZhTwManager {
   private ensure(): Promise<void> {
     if (!this.promise) {
       this.promise = (async () => {
-        const [phrases, chars, variants, rulesText] = await Promise.all([
-          this.loadTsvPairs("s2t-phrases.txt"),
-          this.loadTsvPairs("s2t-chars.txt"),
-          this.loadTsvPairs("s2t-tw-variants.txt"),
-          readFile(
-            join(await this.findAssetsDir(), "spelling-rules.json"),
-            "utf-8",
-          ),
-        ]);
+        const [phrases, chars, variants, rulesText, caseRulesText] =
+          await Promise.all([
+            this.loadTsvPairs("s2t-phrases.txt"),
+            this.loadTsvPairs("s2t-chars.txt"),
+            this.loadTsvPairs("s2t-tw-variants.txt"),
+            readFile(
+              join(await this.findAssetsDir(), "spelling-rules.json"),
+              "utf-8",
+            ),
+            readFile(
+              join(await this.findAssetsDir(), "case-rules.json"),
+              "utf-8",
+            ),
+          ]);
         const rules = JSON.parse(rulesText) as SpellingRule[];
+        const caseRules = JSON.parse(caseRulesText) as CaseRule[];
         this.converter = new S2TConverter(phrases, chars, variants);
         this.spellingRules = rules;
+        this.caseRules = caseRules;
       })();
     }
     return this.promise;
   }
 
-  async convertZhTw(text: string): Promise<string | undefined> {
+  async convertZhTw(
+    text: string,
+    features?: Pick<ResolvedZhTwFeatures, "case">,
+  ): Promise<string | undefined> {
     await this.ensure();
     const codeMask = maskMarkdownCode(text);
     const s2tResult = this.converter!.convert(codeMask.maskedText);
     const issues = scanSpelling(s2tResult, this.spellingRules!);
-    const fixed = applyFixes(s2tResult, issues);
+    let fixed = applyFixes(s2tResult, issues);
+    if (features?.case === true) {
+      fixed = applyCaseRules(fixed, this.caseRules!);
+    }
     return codeMask.restore(fixed);
   }
 }

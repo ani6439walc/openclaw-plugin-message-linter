@@ -65,6 +65,7 @@ pnpm run build
 - `src/transforms/zhtw.ts` — barrel export for ZH-TW conversion.
 - `src/transforms/zhtw/index.ts` — lazy ZH-TW manager and asset loading.
 - `src/transforms/zhtw/s2t.ts` — trie-based S2T converter.
+- `src/transforms/zhtw/case.ts` — opt-in proper-noun case rule scanner/fixer.
 - `src/transforms/zhtw/scanner.ts` — contextual spelling rule scanner/fixer.
 - `assets/` — bundled dictionary/rule data loaded at runtime.
 - `scripts/generate-zhtw-data.mjs` — Node-run dictionary generator.
@@ -96,7 +97,7 @@ pnpm run build
 `lintMessageContent()` applies transforms in this order:
 
 1. Resolve features with `resolveFeatures()`.
-2. If `zhtw.enabled` is enabled and content contains CJK, run the converter.
+2. If `zhtw.enabled` is enabled and content contains CJK, run the converter with resolved ZH-TW feature flags.
 3. Fix misplaced inline bold code formatting.
 4. Mask Markdown fenced code blocks and inline code spans.
 5. Format Markdown links.
@@ -136,7 +137,7 @@ Current defaults:
 }
 ```
 
-Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURES` in sync. Boolean `zhtw` config remains supported for backward compatibility; `true` only enables the existing S2T + contextual spelling auto-fix pipeline, while reserved subfeature flags stay disabled unless explicitly implemented later.
+Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURES` in sync. Boolean `zhtw` config remains supported for backward compatibility; `true` only enables the existing S2T + contextual spelling auto-fix pipeline, while `case` and reserved subfeature flags stay disabled unless explicitly enabled and implemented.
 
 ## Coding Conventions
 
@@ -155,7 +156,7 @@ Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURE
 - For core pipeline changes, update `src/linter.test.ts`.
 - For Discord formatting behavior, update `src/transforms/discord.test.ts`.
 - For kaomoji behavior, update `src/transforms/kaomoji.test.ts` and/or `src/utils/mask.test.ts`.
-- For ZH-TW conversion, update `src/transforms/zhtw.test.ts` and/or `src/transforms/zhtw/s2t.test.ts`.
+- For ZH-TW conversion, update `src/transforms/zhtw.test.ts`, `src/transforms/zhtw/case.test.ts`, and/or `src/transforms/zhtw/s2t.test.ts`.
 - For plugin hook behavior, update `src/hooks.test.ts` or `src/plugin.test.ts`.
 - For manifest/schema drift, update `manifest.test.ts` and `src/config.test.ts`.
 

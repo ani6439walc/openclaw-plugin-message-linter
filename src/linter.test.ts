@@ -34,6 +34,22 @@ describe("message-linter logic (lintMessageContent)", () => {
     expect(output).toBe("中國軟體和影片");
   });
 
+  it("passes resolved zhtw feature flags to the converter", async () => {
+    let caseEnabled = false;
+    const input = "github 和中国软件";
+    const output = await lintMessageContent(
+      input,
+      async (text, zhtw) => {
+        caseEnabled = zhtw.case;
+        return text.replace("github", "GitHub").replace("中国", "中國");
+      },
+      { zhtw: { enabled: true, case: true } },
+    );
+
+    expect(caseEnabled).toBe(true);
+    expect(output).toBe("GitHub 和中國软件");
+  });
+
   it("skips zh-TW conversion by default", async () => {
     const input = "中国软件和视频";
     const output = await lintMessageContent(
