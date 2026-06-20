@@ -48,7 +48,7 @@ function addCjkAsciiSpacing(text: string): string {
 function removeFullWidthPunctuationSpacing(text: string): string {
   let output = text.replace(/\s+([，。！？；：、])/g, "$1");
   output = output.replace(
-    /([，。！？；：、])\s+(?=[\p{Script=Han}A-Za-z0-9_])/gu,
+    /([，。！？；：、])\s+(?=[\p{Script=Han}A-Za-z0-9_]|\uE000PROTECT_)/gu,
     "$1",
   );
   return output;

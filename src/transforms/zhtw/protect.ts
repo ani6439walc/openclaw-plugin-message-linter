@@ -4,7 +4,7 @@ type MaskEntry = {
 };
 
 const PROTECTED_TEXT_RE =
-  /https?:\/\/[A-Za-z0-9._~:/?#@!$&'()*+;=%-]+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+  /https?:\/\/[A-Za-z0-9._~:/?#@!$&'()*+;=%\-"']+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
 export const PROTECTED_PLACEHOLDER_START = "\uE000";
 export const PROTECTED_PLACEHOLDER_END = "\uE001";

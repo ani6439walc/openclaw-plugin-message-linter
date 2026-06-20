@@ -26,4 +26,10 @@ describe("zhtw spacing rules", () => {
       "請看 https://example.com/a/b 和 admin@test.com。",
     );
   });
+
+  it("removes spaces between full-width punctuation and protected URLs", () => {
+    expect(applySpacingRules("例如， https://example.com。")).toBe(
+      "例如，https://example.com。",
+    );
+  });
 });

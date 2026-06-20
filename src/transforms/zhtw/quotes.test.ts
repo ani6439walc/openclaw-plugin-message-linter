@@ -20,6 +20,17 @@ describe("zhtw quote rules", () => {
     );
   });
 
+  it("does not rewrite quotes inside raw URLs", () => {
+    const input = '請看 https://example.com/search?q="test"，他說"好"。';
+    expect(applyQuoteRules(input)).toBe(
+      '請看 https://example.com/search?q="test"，他說「好」。',
+    );
+  });
+
+  it("normalizes padded English quotes in Chinese context", () => {
+    expect(applyQuoteRules('他說 "Hello" 呢。')).toBe("他說 「Hello」 呢。");
+  });
+
   it("does not rewrite English quotes or apostrophes", () => {
     const input = 'He said "hello" and it\'s fine. 中文說"好"。';
     expect(applyQuoteRules(input)).toBe(

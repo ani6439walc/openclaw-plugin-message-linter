@@ -1,3 +1,5 @@
+import { maskProtectedText } from "./protect.js";
+
 const CJK_RE = /\p{Script=Han}/u;
 
 function hasCjk(text: string): boolean {
@@ -5,11 +7,30 @@ function hasCjk(text: string): boolean {
 }
 
 function hasChineseContext(text: string, start: number, end: number): boolean {
+  const before = previousNonWhitespace(text, start);
+  const after = nextNonWhitespace(text, end + 1);
   return (
     hasCjk(text.slice(start + 1, end)) ||
-    hasCjk(text[start - 1] ?? "") ||
-    hasCjk(text[end + 1] ?? "")
+    hasCjk(before ?? "") ||
+    hasCjk(after ?? "")
   );
+}
+
+function previousNonWhitespace(
+  text: string,
+  index: number,
+): string | undefined {
+  for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
+    if (!/\s/u.test(text[cursor])) return text[cursor];
+  }
+  return undefined;
+}
+
+function nextNonWhitespace(text: string, index: number): string | undefined {
+  for (let cursor = index; cursor < text.length; cursor += 1) {
+    if (!/\s/u.test(text[cursor])) return text[cursor];
+  }
+  return undefined;
 }
 
 function normalizeAsciiDoubleQuotes(text: string): string {
@@ -87,8 +108,9 @@ function normalizeSmartSingleQuotes(text: string): string {
 }
 
 export function applyQuoteRules(text: string): string {
-  let output = normalizeSmartSingleQuotes(text);
+  const protectedMask = maskProtectedText(text);
+  let output = normalizeSmartSingleQuotes(protectedMask.maskedText);
   output = normalizeSmartDoubleQuotes(output);
   output = normalizeAsciiDoubleQuotes(output);
-  return output;
+  return protectedMask.restore(output);
 }
