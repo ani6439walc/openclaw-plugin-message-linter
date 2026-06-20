@@ -67,7 +67,7 @@ pnpm run build
 - `src/transforms/zhtw/s2t.ts` — trie-based S2T converter.
 - `src/transforms/zhtw/scanner.ts` — contextual spelling rule scanner/fixer.
 - `assets/` — bundled dictionary/rule data loaded at runtime.
-- `scripts/generate-zhtw-data.ts` — Bun-based dictionary generator.
+- `scripts/generate-zhtw-data.ts` — Node-run TypeScript dictionary generator.
 - `openclaw.plugin.json` — plugin metadata and config schema.
 - `manifest.test.ts` and `src/**/*.test.ts` — Vitest coverage.
 
@@ -96,7 +96,7 @@ pnpm run build
 `lintMessageContent()` applies transforms in this order:
 
 1. Resolve features with `resolveFeatures()`.
-2. If `zhtw` is enabled and content contains CJK, run the converter.
+2. If `zhtw.enabled` is enabled and content contains CJK, run the converter.
 3. Fix misplaced inline bold code formatting.
 4. Mask Markdown fenced code blocks and inline code spans.
 5. Format Markdown links.
@@ -116,7 +116,15 @@ Current defaults:
 
 ```json
 {
-  "zhtw": false,
+  "zhtw": {
+    "enabled": false,
+    "profile": "base",
+    "relaxed": false,
+    "case": false,
+    "punctuation": false,
+    "spacing": false,
+    "quotes": false
+  },
   "kaomoji": true,
   "discord": {
     "headings": true,
@@ -128,7 +136,7 @@ Current defaults:
 }
 ```
 
-Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURES` in sync.
+Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURES` in sync. Boolean `zhtw` config remains supported for backward compatibility; `true` only enables the existing S2T + contextual spelling auto-fix pipeline, while reserved subfeature flags stay disabled unless explicitly implemented later.
 
 ## Coding Conventions
 
@@ -192,10 +200,10 @@ pnpm pack --dry-run
 `README.md` documents the current dictionary update command:
 
 ```bash
-bun run scripts/generate-zhtw-data.ts
+pnpm run generate:zhtw
 ```
 
-The generator script has a Bun shebang and uses `import.meta.dirname`. Do not document it as `pnpm exec tsx` unless `tsx` is added and the script is verified under that runtime.
+The package script is the documented entrypoint for the Node-run TypeScript generator. Do not document alternative runtimes unless the package script changes and that runtime is verified.
 
 Generated asset files are runtime inputs. If regenerated, inspect the diff carefully and run the full test suite.
 

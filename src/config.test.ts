@@ -23,9 +23,49 @@ describe("resolveConfig", () => {
       },
     });
 
-    expect(config.features.zhtw).toBe(true);
+    expect(config.features.zhtw).toEqual({
+      ...DEFAULT_FEATURES.zhtw,
+      enabled: true,
+    });
     expect(config.features.kaomoji).toBe(false);
     expect(config.features.discord).toEqual(DEFAULT_FEATURES.discord);
+  });
+
+  it("keeps boolean zhtw config backward-compatible", () => {
+    expect(resolveFeatures({ zhtw: true }).zhtw).toEqual({
+      ...DEFAULT_FEATURES.zhtw,
+      enabled: true,
+    });
+    expect(resolveFeatures({ zhtw: false }).zhtw).toEqual({
+      ...DEFAULT_FEATURES.zhtw,
+      enabled: false,
+    });
+  });
+
+  it("keeps valid object zhtw feature toggles", () => {
+    const config = resolveConfig({
+      features: {
+        zhtw: {
+          enabled: true,
+          profile: "strict",
+          relaxed: true,
+          case: true,
+          punctuation: true,
+          spacing: true,
+          quotes: true,
+        },
+      },
+    });
+
+    expect(config.features.zhtw).toEqual({
+      enabled: true,
+      profile: "strict",
+      relaxed: true,
+      case: true,
+      punctuation: true,
+      spacing: true,
+      quotes: true,
+    });
   });
 
   it("keeps valid nested Discord feature toggles", () => {
@@ -63,7 +103,15 @@ describe("resolveConfig", () => {
   it("falls back to defaults for invalid nested values", () => {
     const config = resolveConfig({
       features: {
-        zhtw: "yes",
+        zhtw: {
+          enabled: "yes",
+          profile: "full",
+          relaxed: 1,
+          case: true,
+          punctuation: null,
+          spacing: false,
+          quotes: "true",
+        },
         kaomoji: 0,
         discord: {
           headings: "false",
@@ -76,7 +124,11 @@ describe("resolveConfig", () => {
     });
 
     expect(config.features).toEqual({
-      zhtw: DEFAULT_FEATURES.zhtw,
+      zhtw: {
+        ...DEFAULT_FEATURES.zhtw,
+        case: true,
+        spacing: false,
+      },
       kaomoji: DEFAULT_FEATURES.kaomoji,
       discord: {
         headings: DEFAULT_FEATURES.discord.headings,
@@ -86,5 +138,12 @@ describe("resolveConfig", () => {
         boldInlineCode: false,
       },
     });
+  });
+
+  it("falls back to the default zhtw contract for invalid zhtw values", () => {
+    expect(resolveFeatures({ zhtw: "yes" }).zhtw).toEqual(
+      DEFAULT_FEATURES.zhtw,
+    );
+    expect(resolveFeatures({ zhtw: null }).zhtw).toEqual(DEFAULT_FEATURES.zhtw);
   });
 });

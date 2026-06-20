@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 /**
  * Generate zhtw data files from upstream sources.
  *
@@ -6,7 +6,7 @@
  *   - OpenCC dictionaries: https://github.com/ByVoid/OpenCC
  *   - zhtw-mcp ruleset:    https://github.com/sysprog21/zhtw-mcp
  *
- * Run: bun run scripts/generate-zhtw-data.ts
+ * Run: pnpm run generate:zhtw
  */
 
 import { mkdir, writeFile } from "node:fs/promises";

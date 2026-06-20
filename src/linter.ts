@@ -22,7 +22,7 @@ export async function lintMessageContent(
 
   let processed = content;
 
-  if (cfg.zhtw && HAS_CJK_RE.test(content)) {
+  if (cfg.zhtw.enabled && HAS_CJK_RE.test(content)) {
     const converted = await converter(content);
     if (typeof converted === "string" && converted.length > 0) {
       processed = converted;
