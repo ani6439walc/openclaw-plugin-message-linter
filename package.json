@@ -46,10 +46,10 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write '**/*.md' '**/*.json' '**/*.ts'",
+    "format": "prettier --write '**/*.md' '**/*.json' '**/*.ts' '**/*.mjs'",
     "test": "vitest run",
     "build": "tsc",
-    "generate:zhtw": "node scripts/generate-zhtw-data.ts"
+    "generate:zhtw": "node scripts/generate-zhtw-data.mjs"
   },
   "dependencies": {
     "zod": "4.4.3"

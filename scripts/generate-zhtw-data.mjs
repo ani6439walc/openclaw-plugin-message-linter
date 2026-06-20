@@ -27,20 +27,20 @@ const AUTO_FIX_RULE_TYPES = new Set([
   "confusable",
 ]);
 
-async function fetchText(url: string): Promise<string> {
+async function fetchText(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
   return res.text();
 }
 
-async function fetchJson(url: string): Promise<unknown> {
+async function fetchJson(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
   return res.json();
 }
 
-function parseOpenCCTsv(text: string): Array<[string, string]> {
-  const entries: Array<[string, string]> = [];
+function parseOpenCCTsv(text) {
+  const entries = [];
   for (const line of text.split("\n")) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) continue;
@@ -55,47 +55,23 @@ function parseOpenCCTsv(text: string): Array<[string, string]> {
   return entries;
 }
 
-function parseOpenCCCharTsv(text: string): Array<[string, string]> {
+function parseOpenCCCharTsv(text) {
   return parseOpenCCTsv(text).filter(
     ([key, value]) => charLength(key) === 1 && charLength(value) === 1,
   );
 }
 
-function charLength(text: string): number {
+function charLength(text) {
   return Array.from(text).length;
 }
 
-function formatTsv(entries: Array<[string, string]>): string {
+function formatTsv(entries) {
   return entries.map(([k, v]) => `${k}\t${v}`).join("\n") + "\n";
 }
 
-interface RawRule {
-  from: string;
-  to: string[];
-  type: string;
-  disabled?: boolean;
-  context?: string;
-  english?: string;
-  context_clues?: string[];
-  negative_context_clues?: string[];
-  positional_clues?: string[];
-  exceptions?: string[];
-}
-
-interface CleanRule {
-  from: string;
-  to: string[];
-  type: string;
-  context?: string;
-  contextClues?: string[];
-  negativeContextClues?: string[];
-  positionalClues?: string[];
-  exceptions?: string[];
-}
-
-function cleanRules(rules: RawRule[]): CleanRule[] {
+function cleanRules(rules) {
   return rules.map((r) => {
-    const clean: CleanRule = {
+    const clean = {
       from: r.from,
       to: r.to,
       type: r.type,
@@ -110,7 +86,7 @@ function cleanRules(rules: RawRule[]): CleanRule[] {
   });
 }
 
-function isAutoFixRule(rule: RawRule): boolean {
+function isAutoFixRule(rule) {
   return (
     AUTO_FIX_RULE_TYPES.has(rule.type) &&
     rule.disabled !== true &&
@@ -130,16 +106,14 @@ async function main() {
   ]);
 
   console.log("Fetching zhtw-mcp ruleset...");
-  const ruleset = (await fetchJson(ZHTW_MCP_RULESET)) as {
-    spelling_rules: RawRule[];
-  };
+  const ruleset = await fetchJson(ZHTW_MCP_RULESET);
 
   console.log("Parsing data...");
   const stPhrases = parseOpenCCTsv(stPhrasesText);
   const stChars = parseOpenCCCharTsv(stCharsText);
   const twVariants = parseOpenCCCharTsv(twVariantsText);
 
-  // Sort phrases by longest key first for leftmost-longest matching
+  // Sort phrases by longest key first for leftmost-longest matching.
   stPhrases.sort((a, b) => b[0].length - a[0].length);
 
   const filteredRules = ruleset.spelling_rules.filter(isAutoFixRule);

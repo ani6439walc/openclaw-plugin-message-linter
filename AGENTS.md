@@ -67,7 +67,7 @@ pnpm run build
 - `src/transforms/zhtw/s2t.ts` — trie-based S2T converter.
 - `src/transforms/zhtw/scanner.ts` — contextual spelling rule scanner/fixer.
 - `assets/` — bundled dictionary/rule data loaded at runtime.
-- `scripts/generate-zhtw-data.ts` — Node-run TypeScript dictionary generator.
+- `scripts/generate-zhtw-data.mjs` — Node-run dictionary generator.
 - `openclaw.plugin.json` — plugin metadata and config schema.
 - `manifest.test.ts` and `src/**/*.test.ts` — Vitest coverage.
 
@@ -203,7 +203,7 @@ pnpm pack --dry-run
 pnpm run generate:zhtw
 ```
 
-The package script is the documented entrypoint for the Node-run TypeScript generator. Do not document alternative runtimes unless the package script changes and that runtime is verified.
+The package script is the documented entrypoint for the Node-run generator. Do not document alternative runtimes unless the package script changes and that runtime is verified.
 
 Generated asset files are runtime inputs. If regenerated, inspect the diff carefully and run the full test suite.
 

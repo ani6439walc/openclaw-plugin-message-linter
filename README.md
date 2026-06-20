@@ -139,7 +139,7 @@ Available package scripts:
 | `pnpm run typecheck`     | Run TypeScript without emitting.            |
 | `pnpm test`              | Run the Vitest test suite.                  |
 | `pnpm run build`         | Compile TypeScript into `dist/`.            |
-| `pnpm run format`        | Format Markdown, JSON, and TS files.        |
+| `pnpm run format`        | Format Markdown, JSON, TS, and MJS files.   |
 | `pnpm run generate:zhtw` | Regenerate bundled ZH-TW dictionary assets. |
 
 Current verified test status: 148 tests passing across 10 test files.
