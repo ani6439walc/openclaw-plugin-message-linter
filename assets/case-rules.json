@@ -1,11 +1,7 @@
 [
   {
     "term": "API",
-    "alternatives": [
-      "Api",
-      "api",
-      "APIs"
-    ]
+    "alternatives": ["Api", "api", "APIs"]
   },
   {
     "term": "Facebook"
@@ -30,10 +26,7 @@
   },
   {
     "term": "JavaScript",
-    "alternatives": [
-      "javascript",
-      "JAVASCRIPT"
-    ]
+    "alternatives": ["javascript", "JAVASCRIPT"]
   },
   {
     "term": "Linux"
