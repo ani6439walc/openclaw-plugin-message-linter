@@ -143,7 +143,7 @@ Available package scripts:
 | `pnpm run format`        | Format Markdown, JSON, TS, and MJS files.   |
 | `pnpm run generate:zhtw` | Regenerate bundled ZH-TW dictionary assets. |
 
-Current verified test status: 154 tests passing across 11 test files.
+Current verified test status: 157 tests passing across 11 test files.
 
 ## Package Layout
 

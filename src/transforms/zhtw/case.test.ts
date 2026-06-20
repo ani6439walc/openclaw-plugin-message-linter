@@ -28,4 +28,24 @@ describe("zhtw case rules", () => {
     const output = applyCaseRules("mygithub apiserver javascriptcore", rules);
     expect(output).toBe("mygithub apiserver javascriptcore");
   });
+
+  it("does not rewrite terms inside snake_case identifiers", () => {
+    const output = applyCaseRules("my_api_key uses api", rules);
+    expect(output).toBe("my_api_key uses API");
+  });
+
+  it("does not rewrite terms inside URLs or email addresses", () => {
+    const output = applyCaseRules(
+      "Use https://api.github.com/v1 and admin@api.com, not github docs.",
+      rules,
+    );
+    expect(output).toBe(
+      "Use https://api.github.com/v1 and admin@api.com, not GitHub docs.",
+    );
+  });
+
+  it("fixes common casing variants without requiring exhaustive alternatives", () => {
+    const output = applyCaseRules("Github and TYPESCRIPT call api", rules);
+    expect(output).toBe("GitHub and TypeScript call API");
+  });
 });
