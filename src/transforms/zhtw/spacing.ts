@@ -1,4 +1,8 @@
-import { maskProtectedText } from "./protect.js";
+import {
+  maskProtectedText,
+  PROTECTED_PLACEHOLDER_END,
+  PROTECTED_PLACEHOLDER_START,
+} from "./protect.js";
 
 const CJK_RE = /\p{Script=Han}/u;
 const ASCII_WORD_RE = /[A-Za-z0-9_]/;
@@ -11,6 +15,14 @@ function isAsciiWord(value: string | undefined): boolean {
   return value !== undefined && ASCII_WORD_RE.test(value);
 }
 
+function isProtectedStart(value: string | undefined): boolean {
+  return value === PROTECTED_PLACEHOLDER_START;
+}
+
+function isProtectedEnd(value: string | undefined): boolean {
+  return value === PROTECTED_PLACEHOLDER_END;
+}
+
 function addCjkAsciiSpacing(text: string): string {
   let output = "";
 
@@ -21,7 +33,8 @@ function addCjkAsciiSpacing(text: string): string {
     if (
       output.length > 0 &&
       prev !== " " &&
-      ((isCjk(prev) && isAsciiWord(char)) || (isAsciiWord(prev) && isCjk(char)))
+      ((isCjk(prev) && (isAsciiWord(char) || isProtectedStart(char))) ||
+        ((isAsciiWord(prev) || isProtectedEnd(prev)) && isCjk(char)))
     ) {
       output += " ";
     }

@@ -42,12 +42,48 @@ function normalizeAsciiDoubleQuotes(text: string): string {
   return output;
 }
 
+function normalizeSmartPair(
+  text: string,
+  open: string,
+  close: string,
+  replacementOpen: string,
+  replacementClose: string,
+): string {
+  let output = "";
+  let cursor = 0;
+
+  while (cursor < text.length) {
+    const start = text.indexOf(open, cursor);
+    if (start === -1) {
+      output += text.slice(cursor);
+      break;
+    }
+
+    const end = text.indexOf(close, start + open.length);
+    if (end === -1) {
+      output += text.slice(cursor);
+      break;
+    }
+
+    output += text.slice(cursor, start);
+    const inner = text.slice(start + open.length, end);
+    if (hasChineseContext(text, start, end)) {
+      output += `${replacementOpen}${inner}${replacementClose}`;
+    } else {
+      output += `${open}${inner}${close}`;
+    }
+    cursor = end + close.length;
+  }
+
+  return output;
+}
+
 function normalizeSmartDoubleQuotes(text: string): string {
-  return text.replace(/“([^”]*\p{Script=Han}[^”]*)”/gu, "「$1」");
+  return normalizeSmartPair(text, "“", "”", "「", "」");
 }
 
 function normalizeSmartSingleQuotes(text: string): string {
-  return text.replace(/‘([^’]*\p{Script=Han}[^’]*)’/gu, "『$1』");
+  return normalizeSmartPair(text, "‘", "’", "『", "』");
 }
 
 export function applyQuoteRules(text: string): string {

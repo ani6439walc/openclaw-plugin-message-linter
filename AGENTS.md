@@ -160,7 +160,7 @@ Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURE
 - For core pipeline changes, update `src/linter.test.ts`.
 - For Discord formatting behavior, update `src/transforms/discord.test.ts`.
 - For kaomoji behavior, update `src/transforms/kaomoji.test.ts` and/or `src/utils/mask.test.ts`.
-- For ZH-TW conversion, update `src/transforms/zhtw.test.ts`, `src/transforms/zhtw/case.test.ts`, `src/transforms/zhtw/punctuation.test.ts`, `src/transforms/zhtw/spacing.test.ts`, `src/transforms/zhtw/quotes.test.ts`, and/or `src/transforms/zhtw/s2t.test.ts`.
+- For ZH-TW conversion, update `src/transforms/zhtw.test.ts`, `src/transforms/zhtw/case.test.ts`, `src/transforms/zhtw/punctuation.test.ts`, `src/transforms/zhtw/spacing.test.ts`, `src/transforms/zhtw/quotes.test.ts`, `src/transforms/zhtw/protect.test.ts`, and/or `src/transforms/zhtw/s2t.test.ts`.
 - For plugin hook behavior, update `src/hooks.test.ts` or `src/plugin.test.ts`.
 - For manifest/schema drift, update `manifest.test.ts` and `src/config.test.ts`.
 

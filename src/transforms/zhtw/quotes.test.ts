@@ -14,6 +14,12 @@ describe("zhtw quote rules", () => {
     );
   });
 
+  it("normalizes English words in smart quotes when the surrounding sentence is Chinese", () => {
+    expect(applyQuoteRules("他說“Hello”，然後說‘Apple’。")).toBe(
+      "他說「Hello」，然後說『Apple』。",
+    );
+  });
+
   it("does not rewrite English quotes or apostrophes", () => {
     const input = 'He said "hello" and it\'s fine. 中文說"好"。';
     expect(applyQuoteRules(input)).toBe(
