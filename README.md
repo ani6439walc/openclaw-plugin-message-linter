@@ -3,110 +3,151 @@
 [![OpenClaw](https://img.shields.io/badge/Platform-OpenClaw-blue.svg)](https://github.com/openclaw/openclaw)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A robust message formatting and sanitization plugin for the OpenClaw platform, designed to ensure consistent, readable, and aesthetically pleasing message presentation across modern communication platforms.
+Message Linter is an OpenClaw plugin that normalizes outgoing message text before it is sent. It currently focuses on Discord-oriented Markdown cleanup, kaomoji-safe backtick handling, and optional Simplified Chinese to Taiwan Traditional Chinese conversion.
 
 ## Overview
 
-Message Linter automatically processes outgoing communications to normalize Markdown structure, suppress unwanted rich media embeds, and perform high-fidelity linguistic conversion. It is built to maintain professional communication standards while preserving expressive elements like Kaomoji.
+The plugin registers two OpenClaw hooks:
 
-## Use with X/Twitter automation
+1. `before_tool_call` — formats `message` tool calls only when `params.action === "send"` and `params.message` is a string.
+2. `message_sending` — formats string message content immediately before dispatch.
 
-Message Linter is useful when an OpenClaw agent prepares visible public messages through another plugin. For X/Twitter workflows, install [TweetClaw](https://github.com/Xquik-dev/tweetclaw) separately:
-
-```bash
-openclaw plugins install @xquik/tweetclaw
-```
-
-Use TweetClaw to search tweets, search tweet replies, draft post tweet or post tweet reply actions, look up users, monitor tweets, and receive webhooks. Keep Message Linter enabled so outgoing text is normalized before the agent asks for approval or sends a visible action through TweetClaw.
-
-Ask the agent to keep these fields in review notes before posting: target account or tweet, draft text, link preview risk, language conversion result, reply context, approval decision, and final action. Do not store API keys, cookies, direct messages, or private account material in message-lint notes.
+Both hooks use the same linter pipeline, so tool-based sends and direct outgoing messages stay consistent.
 
 ## Key Features
 
-- **Discord Formatters**: A suite of Discord-specific formatters that run before message dispatch:
-  - **Link Embed Suppression**: Wraps Markdown link URLs in angle brackets (`<URL>`) to prevent cluttered automatic previews.
-  - **Heading Normalization**: Dynamically adjusts Markdown heading levels (shifting to a minimum of H1 and capping at H3) to maintain a consistent visual hierarchy.
-  - **Separator Beautification**: Converts standard ASCII separators (e.g., `---` or `───`) into visually optimized placeholders for cleaner section breaks.
-  - **Blockquote Compatibility**: Ensures blockquote syntax is correctly formatted for reliable rendering across all supported clients.
-  - **Inline Bold to Bold Code**: Converts `` `**text**` `` to ``**`text`**`` for better inline bold rendering.
-- **Advanced ZHTW Conversion**: Provides high-fidelity, context-aware Simplified-to-Traditional Chinese conversion, adhering to Taiwan (ROC) linguistic standards. Powered by a native TypeScript trie-based converter with embedded OpenCC dictionaries and contextual spelling rules.
-- **Kaomoji Integrity**: Intelligently sanitizes tokens containing Kaomoji (e.g., `(＞///＜)`) by neutralizing backticks and accents that might otherwise trigger accidental Markdown code block formatting.
+- **Discord formatters**
+  - Wrap Markdown link URLs in angle brackets, for example `[Example](https://example.com)` becomes `[Example](<https://example.com>)`, which suppresses Discord link embeds.
+  - Normalize Markdown headings only when H4+ headings are present: the minimum heading level is shifted to H1 and the maximum is capped at H3.
+  - Replace standalone `---` or `───` separators with a Discord-friendly strikethrough spacer.
+  - Ensure blockquote lines use `> ` spacing for Discord compatibility.
+  - Convert misplaced inline bold code from `` `**text**` `` to ``**`text`**``.
+- **Kaomoji integrity**
+  - Detect likely kaomoji tokens and replace raw backticks/accents that could accidentally start Markdown inline code.
+  - Preserve real inline code spans and fenced code blocks through Markdown code masking.
+- **Optional ZH-TW conversion**
+  - Convert Simplified Chinese to Taiwan Traditional Chinese using bundled OpenCC-derived dictionaries and contextual spelling rules.
+  - Disabled by default to avoid unnecessary cold-start asset loading.
 
-## ZHTW Conversion
+## Linter Pipeline
 
-The Simplified-to-Traditional Chinese conversion feature is implemented entirely in native TypeScript, eliminating the need for external binaries.
+`lintMessageContent()` applies transformations in this order:
+
+1. Resolve feature flags with tolerant defaults.
+2. If `features.zhtw` is enabled and the message contains CJK characters, run `convertZhTw()`.
+3. Fix misplaced inline bold code formatting.
+4. Mask Markdown fenced code blocks and inline code spans.
+5. Format Markdown links.
+6. Replace separators.
+7. Sanitize kaomoji tokens.
+8. Normalize Markdown headings.
+9. Format blockquotes.
+10. Restore masked Markdown code regions.
+
+The masking step is intentionally central: formatters should not rewrite links, headings, separators, or kaomoji-like characters inside code spans or fenced code blocks.
+
+## ZH-TW Conversion
+
+The Simplified-to-Traditional Chinese conversion feature is implemented entirely in native TypeScript and does not require an external OpenCC binary at runtime.
 
 ### Architecture
 
-The conversion pipeline uses a **Trie-based longest-match phrase matcher** with lazy initialization:
+The conversion pipeline uses a trie-based longest-match phrase matcher with lazy initialization:
 
-1. **Module Singleton**: `ZhTwManager` is a class-based singleton with lazy async init. Assets are loaded on first `convertZhTw()` call via a cached Promise — no module-level top-level await, ensuring bundler compatibility.
-2. **Trie Matching**: All ~49K phrases are stored in a Trie tree keyed by character, giving O(max_phrase_length) lookup per input position instead of scanning candidate arrays. Longest-match priority is guaranteed by deeper traversal.
-3. **Protected Zones**: Phrase mappings create protected zones where Taiwan variant normalization is suppressed, ensuring phrase output characters aren't overwritten by the TW variants pass.
-
-### How It Works
-
-1. **S2T Conversion**: Uses a Trie built from OpenCC dictionaries (`STPhrases`, `STCharacters`) for longest-match phrase substitution and single-character fallback. Taiwan variant normalization (`TWVariants`) applies after phrase matching while preserving protected zone integrity.
-2. **Spelling Correction**: Applies 1,600+ cross-strait spelling rules with context-aware gating (e.g., "支持" becomes "支援" in IT contexts, but remains "支持" in political contexts). Optimized to avoid redundant string slicing for rules without context conditions.
-3. **Smart Fixing**: Overlapping rules are automatically deduplicated, and fixes are applied from right-to-left to preserve string offsets.
-
-### Performance
-
-| Metric                    | Value                                    |
-| ------------------------- | ---------------------------------------- |
-| Phrase lookup complexity  | O(max_phrase_length) per position (Trie) |
-| Hot conversion (4K chars) | ~0.39ms/call                             |
-| Dictionary phrases        | 49,263 entries                           |
-| Total tests               | 98 passing (8 suites)                    |
+1. **Module singleton** — `ZhTwManager` owns the converter, spelling rules, and a cached initialization Promise. Assets are loaded on the first `convertZhTw()` call.
+2. **Trie matching** — phrase mappings are stored in a trie keyed by character, so each input position walks only possible phrase prefixes instead of scanning every phrase.
+3. **Single-character fallback** — when no phrase matches, the converter falls back to the character map.
+4. **Protected zones** — phrase outputs are marked so Taiwan variant normalization does not overwrite phrase-level conversion results.
+5. **Contextual spelling pass** — spelling rules are gated by context clues, negative context clues, positional clues, and exceptions before fixes are applied.
+6. **Right-to-left fixes** — overlapping fixes are deduplicated, then applied from right to left to preserve offsets.
 
 ### Dictionary Data
 
-Dictionary files are stored in the `assets/` directory and loaded at runtime:
+Dictionary files are stored in `assets/` and loaded at runtime:
 
-| File                         | Description                               |
-| ---------------------------- | ----------------------------------------- |
-| `assets/s2t-phrases.txt`     | OpenCC STPhrases (49,263 entries)         |
-| `assets/s2t-chars.txt`       | OpenCC STCharacters (3,980 entries)       |
-| `assets/s2t-tw-variants.txt` | OpenCC TWVariants (39 entries)            |
-| `assets/spelling-rules.json` | Cross-strait spelling rules (1,694 rules) |
+| File                         | Current entries | Description                            |
+| ---------------------------- | --------------: | -------------------------------------- |
+| `assets/s2t-phrases.txt`     |          38,714 | OpenCC STPhrases-derived mappings      |
+| `assets/s2t-chars.txt`       |           3,882 | OpenCC STCharacters-derived mappings   |
+| `assets/s2t-tw-variants.txt` |              38 | OpenCC TWVariants-derived mappings     |
+| `assets/spelling-rules.json` |           1,694 | Contextual cross-strait spelling rules |
 
-To update dictionaries from upstream:
+To update dictionaries from upstream, use Bun; the generator script is written with a Bun shebang and uses `import.meta.dirname`:
 
 ```bash
-pnpm exec tsx scripts/generate-zhtw-data.ts
+bun run scripts/generate-zhtw-data.ts
 ```
 
-This script fetches the latest OpenCC dictionaries and spelling ruleset and regenerates the `assets/` files.
+The script fetches OpenCC dictionaries and the zhtw-mcp ruleset, filters auto-fixable rule types, then regenerates the `assets/` files.
 
 ## Configuration
 
-Integrate the plugin into your `openclaw.json` (or specific plugin configuration block) as follows:
+Integrate the plugin into `openclaw.json` or the relevant plugin configuration block:
 
 ```json
 {
   "plugins": {
     "message-linter": {
       "features": {
+        "zhtw": false,
+        "kaomoji": true,
         "discord": {
-          "links": true,
           "headings": true,
           "separators": true,
-          "blockquotes": true
-        },
-        "kaomoji": true,
-        "zhtw": false
+          "links": true,
+          "blockquotes": true,
+          "boldInlineCode": true
+        }
       }
     }
   }
 }
 ```
 
-> **Note**: The `zhtw` feature is disabled by default.
+Defaults are tolerant: invalid or missing feature config falls back to the values above.
+
+## Development
+
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Run the standard checks:
+
+```bash
+pnpm run typecheck
+pnpm test
+pnpm run build
+```
+
+Available package scripts:
+
+| Command              | Description                          |
+| -------------------- | ------------------------------------ |
+| `pnpm run typecheck` | Run TypeScript without emitting.     |
+| `pnpm test`          | Run the Vitest test suite.           |
+| `pnpm run build`     | Compile TypeScript into `dist/`.     |
+| `pnpm run format`    | Format Markdown, JSON, and TS files. |
+
+Current verified test status: 143 tests passing across 10 test files.
+
+## Package Layout
+
+The published package includes:
+
+- `dist/` — compiled plugin entry and modules.
+- `assets/` — bundled ZH-TW dictionaries and spelling rules.
+- `openclaw.plugin.json` — plugin metadata and configuration schema.
+- `README.md`, `package.json`, and `LICENSE`.
+
+OpenClaw loads the plugin from `./dist/index.js` according to `package.json`.
 
 ## Acknowledgments
 
-The ZHTW conversion feature was inspired by [zhtw-mcp](https://github.com/sysprog21/zhtw-mcp), an excellent Rust-based text processing server for Traditional Chinese. The spelling rules, linguistic standards, and architectural insights from the zhtw-mcp project were instrumental in building this native TypeScript implementation.
+The ZH-TW conversion feature was inspired by [zhtw-mcp](https://github.com/sysprog21/zhtw-mcp), a Rust-based text processing server for Traditional Chinese. The dictionary and contextual spelling-rule approach also builds on OpenCC dictionary data.
 
 ---
 
-_🌸　Powered by Ａni | [OpenClaw Plugin] © 2026_
+_🌸 Powered by Ani | [OpenClaw Plugin] © 2026_
