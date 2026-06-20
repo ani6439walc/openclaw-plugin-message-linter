@@ -5,8 +5,6 @@ import {
   isLikelyKaomojiToken,
 } from "./kaomoji.js";
 
-const FENCED_CODE_RE = /```[\s\S]*?```/g;
-const INLINE_CODE_RE = /`([^`\n]+)`/g;
 const CODE_PLACEHOLDER_PREFIX = "\uE000CODE_";
 
 type MaskEntry = {
@@ -174,28 +172,6 @@ function findInlineCodeEnd(
   }
 
   return -1;
-}
-
-export function maskFencedCode(text: string): MarkdownCodeMask {
-  const entries: MaskEntry[] = [];
-  const maskedText = text.replace(FENCED_CODE_RE, (segment) => {
-    const entry = createMaskEntry(entries.length, segment);
-    entries.push(entry);
-    return entry.placeholder;
-  });
-
-  return createMask(entries, maskedText);
-}
-
-export function maskInlineCode(text: string): MarkdownCodeMask {
-  const entries: MaskEntry[] = [];
-  const maskedText = text.replace(INLINE_CODE_RE, (match) => {
-    const entry = createMaskEntry(entries.length, match);
-    entries.push(entry);
-    return entry.placeholder;
-  });
-
-  return createMask(entries, maskedText);
 }
 
 export function maskMarkdownCode(text: string): MarkdownCodeMask {

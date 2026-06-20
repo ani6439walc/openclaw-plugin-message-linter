@@ -11,13 +11,7 @@ import type { LinterFeatures } from "./config.js";
 import { lintMessageContent, lintMessageToolParams } from "./linter.js";
 import { convertZhTw } from "./transforms/zhtw.js";
 
-type HookHandlerDeps = {
-  features: LinterFeatures;
-};
-
-export function createHookHandlers(deps: HookHandlerDeps) {
-  const { features } = deps;
-
+export function createHookHandlers(features: LinterFeatures) {
   async function onBeforeToolCall(
     event: PluginHookBeforeToolCallEvent,
     ctx: PluginHookToolContext,
@@ -66,10 +60,10 @@ export function createHookHandlers(deps: HookHandlerDeps) {
     return { content: linted };
   }
 
-  return Object.freeze({
+  return {
     onBeforeToolCall,
     onMessageSending,
-  });
+  };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

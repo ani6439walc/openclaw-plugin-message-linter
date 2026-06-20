@@ -3,7 +3,7 @@ import { createHookHandlers } from "./hooks.js";
 
 describe("message-linter hook handlers", () => {
   it("formats message tool send payloads during before_tool_call", async () => {
-    const handlers = createHookHandlers({ features: {} });
+    const handlers = createHookHandlers({});
 
     const result = await handlers.onBeforeToolCall(
       {
@@ -27,7 +27,7 @@ describe("message-linter hook handlers", () => {
   });
 
   it("returns undefined for non-message tools during before_tool_call", async () => {
-    const handlers = createHookHandlers({ features: {} });
+    const handlers = createHookHandlers({});
 
     const result = await handlers.onBeforeToolCall(
       {
@@ -44,7 +44,7 @@ describe("message-linter hook handlers", () => {
   });
 
   it("returns undefined for missing params during before_tool_call", async () => {
-    const handlers = createHookHandlers({ features: {} });
+    const handlers = createHookHandlers({});
 
     const result = await handlers.onBeforeToolCall(
       {
@@ -58,7 +58,7 @@ describe("message-linter hook handlers", () => {
   });
 
   it("returns undefined for non-send message actions during before_tool_call", async () => {
-    const handlers = createHookHandlers({ features: {} });
+    const handlers = createHookHandlers({});
 
     const result = await handlers.onBeforeToolCall(
       {
@@ -75,7 +75,7 @@ describe("message-linter hook handlers", () => {
   });
 
   it("formats string content during message_sending", async () => {
-    const handlers = createHookHandlers({ features: {} });
+    const handlers = createHookHandlers({});
 
     const result = await handlers.onMessageSending(
       {
@@ -91,7 +91,7 @@ describe("message-linter hook handlers", () => {
   });
 
   it("returns undefined when message_sending content is unchanged", async () => {
-    const handlers = createHookHandlers({ features: {} });
+    const handlers = createHookHandlers({});
 
     const result = await handlers.onMessageSending(
       {

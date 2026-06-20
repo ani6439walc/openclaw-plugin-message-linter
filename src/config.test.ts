@@ -47,8 +47,6 @@ describe("resolveConfig", () => {
       features: {
         zhtw: {
           enabled: true,
-          profile: "strict",
-          relaxed: true,
           case: true,
           punctuation: true,
           spacing: true,
@@ -59,8 +57,6 @@ describe("resolveConfig", () => {
 
     expect(config.features.zhtw).toEqual({
       enabled: true,
-      profile: "strict",
-      relaxed: true,
       case: true,
       punctuation: true,
       spacing: true,
@@ -105,8 +101,6 @@ describe("resolveConfig", () => {
       features: {
         zhtw: {
           enabled: "yes",
-          profile: "full",
-          relaxed: 1,
           case: true,
           punctuation: null,
           spacing: false,

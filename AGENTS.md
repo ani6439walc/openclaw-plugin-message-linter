@@ -123,8 +123,6 @@ Current defaults:
 {
   "zhtw": {
     "enabled": false,
-    "profile": "base",
-    "relaxed": false,
     "case": false,
     "punctuation": false,
     "spacing": false,

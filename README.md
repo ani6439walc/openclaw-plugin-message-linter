@@ -116,8 +116,6 @@ Integrate the plugin into `openclaw.json` or the relevant plugin configuration b
       "features": {
         "zhtw": {
           "enabled": false,
-          "profile": "base",
-          "relaxed": false,
           "case": false,
           "punctuation": false,
           "spacing": false,

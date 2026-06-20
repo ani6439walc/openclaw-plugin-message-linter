@@ -30,17 +30,6 @@
                     "description": "Enable the existing S2T conversion and contextual spelling auto-fix pipeline",
                     "default": false
                   },
-                  "profile": {
-                    "type": "string",
-                    "enum": ["base", "strict"],
-                    "description": "Reserved ZH-TW profile contract for future upstream parity work",
-                    "default": "base"
-                  },
-                  "relaxed": {
-                    "type": "boolean",
-                    "description": "Reserved relaxed UI-string mode for future ZH-TW transforms",
-                    "default": false
-                  },
                   "case": {
                     "type": "boolean",
                     "description": "Enable proper-noun casing fixes such as GitHub and TypeScript",

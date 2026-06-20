@@ -34,8 +34,10 @@ class ZhTwManager {
     throw new Error("Could not find assets directory");
   }
 
-  private async loadTsvPairs(filename: string): Promise<[string, string][]> {
-    const assetsDir = await this.findAssetsDir();
+  private async loadTsvPairs(
+    assetsDir: string,
+    filename: string,
+  ): Promise<[string, string][]> {
     const text = await readFile(join(assetsDir, filename), "utf-8");
     const pairs: Array<[string, string]> = [];
     for (const line of text.split("\n")) {
@@ -52,19 +54,14 @@ class ZhTwManager {
   private ensure(): Promise<void> {
     if (!this.promise) {
       this.promise = (async () => {
+        const assetsDir = await this.findAssetsDir();
         const [phrases, chars, variants, rulesText, caseRulesText] =
           await Promise.all([
-            this.loadTsvPairs("s2t-phrases.txt"),
-            this.loadTsvPairs("s2t-chars.txt"),
-            this.loadTsvPairs("s2t-tw-variants.txt"),
-            readFile(
-              join(await this.findAssetsDir(), "spelling-rules.json"),
-              "utf-8",
-            ),
-            readFile(
-              join(await this.findAssetsDir(), "case-rules.json"),
-              "utf-8",
-            ),
+            this.loadTsvPairs(assetsDir, "s2t-phrases.txt"),
+            this.loadTsvPairs(assetsDir, "s2t-chars.txt"),
+            this.loadTsvPairs(assetsDir, "s2t-tw-variants.txt"),
+            readFile(join(assetsDir, "spelling-rules.json"), "utf-8"),
+            readFile(join(assetsDir, "case-rules.json"), "utf-8"),
           ]);
         const rules = JSON.parse(rulesText) as SpellingRule[];
         const caseRules = JSON.parse(caseRulesText) as CaseRule[];

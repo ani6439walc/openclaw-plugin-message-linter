@@ -4,9 +4,7 @@ import { createHookHandlers } from "./hooks.js";
 
 export function registerMessageLinterPlugin(api: OpenClawPluginApi): void {
   const config = resolveConfig(api.pluginConfig ?? {});
-  const handlers = createHookHandlers({
-    features: config.features,
-  });
+  const handlers = createHookHandlers(config.features);
 
   api.on("before_tool_call", handlers.onBeforeToolCall);
   api.on("message_sending", handlers.onMessageSending);

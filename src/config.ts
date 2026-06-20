@@ -1,11 +1,7 @@
 import { z } from "zod";
 
-export type ZhTwProfile = "base" | "strict";
-
 export type ZhTwFeatures = {
   enabled?: boolean;
-  profile?: ZhTwProfile;
-  relaxed?: boolean;
   case?: boolean;
   punctuation?: boolean;
   spacing?: boolean;
@@ -35,8 +31,6 @@ export type ResolvedLinterFeatures = {
 export const DEFAULT_FEATURES: ResolvedLinterFeatures = {
   zhtw: {
     enabled: false,
-    profile: "base",
-    relaxed: false,
     case: false,
     punctuation: false,
     spacing: false,
@@ -59,8 +53,6 @@ export type MessageLinterConfig = {
 const ZhTwObjectSchema = z
   .object({
     enabled: z.boolean().catch(DEFAULT_FEATURES.zhtw.enabled),
-    profile: z.enum(["base", "strict"]).catch(DEFAULT_FEATURES.zhtw.profile),
-    relaxed: z.boolean().catch(DEFAULT_FEATURES.zhtw.relaxed),
     case: z.boolean().catch(DEFAULT_FEATURES.zhtw.case),
     punctuation: z.boolean().catch(DEFAULT_FEATURES.zhtw.punctuation),
     spacing: z.boolean().catch(DEFAULT_FEATURES.zhtw.spacing),
