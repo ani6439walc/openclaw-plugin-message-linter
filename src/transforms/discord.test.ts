@@ -4,6 +4,7 @@ import {
   replaceSeparators,
   normalizeMarkdownHeadings,
   formatBlockquotes,
+  stripInlineCodeInMarkdownTables,
   wrapBoldWithBackticks,
 } from "./discord.js";
 
@@ -314,5 +315,42 @@ describe("message-linter discord formatters (wrapBoldWithBackticks)", () => {
     const input = `\uE000CODE_0\uE000`;
     const expected = `\uE000CODE_0\uE000`;
     expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+});
+
+describe("message-linter discord formatters (stripInlineCodeInMarkdownTables)", () => {
+  it("strips inline code markers from markdown table cells", () => {
+    const input = [
+      "| 幽靈技能 | 被引用的意圖檔案 |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+      "| `clawscan` | `skill-lifecycle.md` |",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "| 幽靈技能 | 被引用的意圖檔案 |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+        "| clawscan | skill-lifecycle.md |",
+      ].join("\n"),
+    );
+  });
+
+  it("leaves inline code outside markdown tables alone", () => {
+    const input = "Use `api-and-interface-design` outside a table.";
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(input);
+  });
+
+  it("leaves table-like content inside fenced code blocks alone", () => {
+    const input = [
+      "```md",
+      "| Skill | File |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+      "```",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(input);
   });
 });

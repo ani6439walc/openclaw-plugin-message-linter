@@ -111,6 +111,70 @@ export function normalizeMarkdownHeadings(text: string): string {
 
 const BOLD_INLINE_RE = /\*\*`[^`]+?`\*\*|`\*\*([^`]+?)\*\*`/g;
 
+const TABLE_CELL_CODE_RE = /`([^`\n]+)`/g;
+
+function splitMarkdownTableCells(line: string): string[] {
+  return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|");
+}
+
+function isMarkdownTableRow(line: string): boolean {
+  return line.trim().includes("|");
+}
+
+function isMarkdownTableDelimiterRow(line: string): boolean {
+  const cells = splitMarkdownTableCells(line).map((cell) => cell.trim());
+  return cells.length > 0 && cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+}
+
+function stripInlineCodeInTableRow(line: string): string {
+  return line.replace(TABLE_CELL_CODE_RE, "$1");
+}
+
+export function stripInlineCodeInMarkdownTables(text: string): string {
+  const lines = text.split("\n");
+  const result: string[] = [];
+  let fenceMarker: string | null = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const nextLine = lines[i + 1];
+    const fenceMatch = line.match(/^\s*(`{3,}|~{3,})/);
+
+    if (fenceMatch) {
+      const marker = fenceMatch[1][0];
+      fenceMarker = fenceMarker === marker ? null : marker;
+      result.push(line);
+      continue;
+    }
+
+    if (fenceMarker) {
+      result.push(line);
+      continue;
+    }
+
+    if (
+      nextLine !== undefined &&
+      isMarkdownTableRow(line) &&
+      isMarkdownTableDelimiterRow(nextLine)
+    ) {
+      result.push(stripInlineCodeInTableRow(line), nextLine);
+      i += 2;
+
+      while (i < lines.length && isMarkdownTableRow(lines[i])) {
+        result.push(stripInlineCodeInTableRow(lines[i]));
+        i += 1;
+      }
+
+      i -= 1;
+      continue;
+    }
+
+    result.push(line);
+  }
+
+  return result.join("\n");
+}
+
 export function wrapBoldWithBackticks(text: string): string {
   return text.replace(BOLD_INLINE_RE, (match, misplacedContent) =>
     typeof misplacedContent === "string"

@@ -9,6 +9,7 @@ import {
   replaceSeparators,
   normalizeMarkdownHeadings,
   formatBlockquotes,
+  stripInlineCodeInMarkdownTables,
   wrapBoldWithBackticks,
 } from "./transforms/discord.js";
 import { sanitizeTokens } from "./transforms/kaomoji.js";
@@ -34,6 +35,10 @@ export async function lintMessageContent(
     if (typeof converted === "string" && converted.length > 0) {
       processed = converted;
     }
+  }
+
+  if (discord.boldInlineCode) {
+    processed = stripInlineCodeInMarkdownTables(processed);
   }
 
   if (discord.boldInlineCode) {
