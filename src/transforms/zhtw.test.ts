@@ -103,4 +103,35 @@ describe("message-linter integration (convertZhTw)", () => {
 
     expect(output).toBe("GitHub `github`\n```txt\ntypescript\n```");
   }, 10000);
+
+  it("applies punctuation, spacing, and quote rules only when explicitly enabled", async () => {
+    const input = 'github說"你好",花了5000元買iPhone15!';
+
+    await expect(convertZhTw(input, { case: true })).resolves.toBe(
+      'GitHub說"你好",花了5000元買iPhone15!',
+    );
+    await expect(
+      convertZhTw(input, {
+        case: true,
+        punctuation: true,
+        spacing: true,
+        quotes: true,
+      }),
+    ).resolves.toBe("GitHub 說「你好」，花了 5000 元買 iPhone15！");
+  }, 10000);
+
+  it("preserves urls and markdown code regions across phase 2 rules", async () => {
+    const input =
+      '請看https://api.github.com/v1, `中文,api`\n```txt\n中文,api\n```\n他說"好"。';
+    const output = await convertZhTw(input, {
+      case: true,
+      punctuation: true,
+      spacing: true,
+      quotes: true,
+    });
+
+    expect(output).toBe(
+      "請看 https://api.github.com/v1， `中文,api`\n```txt\n中文,api\n```\n他說「好」。",
+    );
+  }, 10000);
 });

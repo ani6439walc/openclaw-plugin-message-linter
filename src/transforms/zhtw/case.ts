@@ -1,19 +1,12 @@
 import { applyFixes, type Issue } from "./scanner.js";
+import { maskProtectedText } from "./protect.js";
 
 export interface CaseRule {
   readonly term: string;
   readonly alternatives?: readonly string[];
 }
 
-type MaskEntry = {
-  placeholder: string;
-  segment: string;
-};
-
 const ASCII_WORD_RE = /[A-Za-z0-9_]/;
-const PROTECTED_TEXT_RE =
-  /https?:\/\/[^\s<>()\[\]{}"`]+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
-const CASE_PLACEHOLDER_PREFIX = "\uE000CASE_";
 
 function isAsciiWordChar(value: string | undefined): boolean {
   return value !== undefined && ASCII_WORD_RE.test(value);
@@ -48,31 +41,6 @@ function forEachCaseInsensitiveOccurrence(
     visit(offset, text.slice(offset, offset + search.length));
     offset = lowerText.indexOf(search, offset + 1);
   }
-}
-
-function maskProtectedText(text: string): {
-  maskedText: string;
-  restore: (input: string) => string;
-} {
-  const entries: MaskEntry[] = [];
-  const maskedText = text.replace(PROTECTED_TEXT_RE, (segment) => {
-    const entry = {
-      placeholder: `${CASE_PLACEHOLDER_PREFIX}${entries.length}\uE001`,
-      segment,
-    };
-    entries.push(entry);
-    return entry.placeholder;
-  });
-
-  return {
-    maskedText,
-    restore(input: string): string {
-      return entries.reduce(
-        (output, entry) => output.split(entry.placeholder).join(entry.segment),
-        input,
-      );
-    },
-  };
 }
 
 export function scanCaseRules(

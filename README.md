@@ -26,7 +26,7 @@ Both hooks use the same linter pipeline, so tool-based sends and direct outgoing
   - Detect likely kaomoji tokens and replace raw backticks/accents that could accidentally start Markdown inline code.
   - Preserve real inline code spans and fenced code blocks through Markdown code masking.
 - **Optional ZH-TW conversion**
-  - Convert Simplified Chinese to Taiwan Traditional Chinese using bundled OpenCC-derived dictionaries, contextual spelling rules, and opt-in proper-noun case rules.
+  - Convert Simplified Chinese to Taiwan Traditional Chinese using bundled OpenCC-derived dictionaries, contextual spelling rules, opt-in proper-noun case rules, and opt-in punctuation/spacing/quote normalization.
   - Disabled by default to avoid unnecessary cold-start asset loading.
 
 ## Linter Pipeline
@@ -115,7 +115,7 @@ Integrate the plugin into `openclaw.json` or the relevant plugin configuration b
 
 Defaults are tolerant: invalid or missing feature config falls back to the values above.
 
-For backward compatibility, `"zhtw": true` and `"zhtw": false` are still accepted. Boolean `true` enables the existing S2T + contextual spelling auto-fix pipeline only; `case` and the reserved subfeature flags (`punctuation`, `spacing`, `quotes`) stay disabled unless explicitly enabled and implemented.
+For backward compatibility, `"zhtw": true` and `"zhtw": false` are still accepted. Boolean `true` enables the existing S2T + contextual spelling auto-fix pipeline only; `case`, `punctuation`, `spacing`, and `quotes` stay disabled unless explicitly enabled.
 
 ## Development
 
@@ -143,7 +143,7 @@ Available package scripts:
 | `pnpm run format`        | Format Markdown, JSON, TS, and MJS files.   |
 | `pnpm run generate:zhtw` | Regenerate bundled ZH-TW dictionary assets. |
 
-Current verified test status: 157 tests passing across 11 test files.
+Current verified test status: 176 tests passing across 15 test files.
 
 ## Package Layout
 

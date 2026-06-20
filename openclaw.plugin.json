@@ -48,17 +48,17 @@
                   },
                   "punctuation": {
                     "type": "boolean",
-                    "description": "Reserved MoE punctuation transform flag",
+                    "description": "Enable conservative MoE-style punctuation normalization in Chinese context",
                     "default": false
                   },
                   "spacing": {
                     "type": "boolean",
-                    "description": "Reserved CJK-Latin/digit spacing transform flag",
+                    "description": "Enable conservative CJK-Latin/digit spacing and repeated punctuation normalization",
                     "default": false
                   },
                   "quotes": {
                     "type": "boolean",
-                    "description": "Reserved Taiwan quote normalization transform flag",
+                    "description": "Enable Taiwan quote normalization in Chinese context",
                     "default": false
                   }
                 }
