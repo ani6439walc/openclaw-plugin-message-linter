@@ -47,9 +47,6 @@ function hasCjkAround(text: string, index: number, length: number): boolean {
 function shouldNormalizePeriod(text: string, index: number): boolean {
   if (isAsciiAlnum(text[index + 1])) return false;
   if (shouldNormalize(text, index)) return true;
-  if (text[index - 1] === ")" || text[index - 1] === "）") {
-    return hasCjkBefore(text, index);
-  }
   return hasCjkBefore(text, index);
 }
 

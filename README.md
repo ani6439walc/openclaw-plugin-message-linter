@@ -81,6 +81,30 @@ pnpm run generate:zhtw
 
 The script fetches OpenCC dictionaries and the zhtw-mcp ruleset, filters auto-fixable spelling rule types, imports case rules, then regenerates the `assets/` files.
 
+### Current ZH-TW Scope
+
+The package currently implements the ZH-TW features that are safe for automatic outgoing-message normalization:
+
+- Simplified Chinese to Taiwan Traditional Chinese conversion with OpenCC-derived phrase, character, and Taiwan variant assets.
+- Contextual cross-strait spelling auto-fixes from the upstream auto-fixable rule subset.
+- Opt-in proper-noun case fixes through `zhtw.case`.
+- Opt-in punctuation normalization through `zhtw.punctuation`.
+- Opt-in CJK/ASCII spacing normalization through `zhtw.spacing`.
+- Opt-in Taiwan quote normalization through `zhtw.quotes`.
+- Raw URL and email protection for ZH-TW rule passes.
+- Markdown inline code and fenced code protection through the shared linter masking pipeline.
+
+The package intentionally remains an outgoing-message formatter. It mutates message text only when a feature flag enables a low-risk auto-fix path.
+
+### Differences from zhtw-mcp
+
+This plugin is inspired by zhtw-mcp, but it is not intended to be a full port of that server. The following zhtw-mcp capabilities are intentionally not implemented in this package:
+
+- **Issue reporting and debug diagnostics** — zhtw-mcp can act like a text-processing server with issue reporting. This plugin runs inside OpenClaw message hooks, so it keeps the public behavior to formatting outgoing messages and does not expose a separate diagnostics API.
+- **Review-only prose critique rules** — zhtw-mcp includes higher-level review categories such as AI filler, translationese, grammar, and repetition checks. Those rules are intentionally excluded because they are subjective and can easily change the user's tone. This plugin only performs deterministic, opt-in auto-fixes that are safe to apply before sending a message.
+
+In short: this package keeps the automatic normalization subset and leaves subjective review or diagnostics workflows to dedicated review tools.
+
 ## Configuration
 
 Integrate the plugin into `openclaw.json` or the relevant plugin configuration block:
@@ -143,7 +167,7 @@ Available package scripts:
 | `pnpm run format`        | Format Markdown, JSON, TS, and MJS files.   |
 | `pnpm run generate:zhtw` | Regenerate bundled ZH-TW dictionary assets. |
 
-Current verified test status: 176 tests passing across 15 test files.
+Current verified test status: 178 tests passing across 15 test files.
 
 ## Package Layout
 
@@ -155,6 +179,8 @@ The published package includes:
 - `README.md`, `package.json`, and `LICENSE`.
 
 OpenClaw loads the plugin from `./dist/index.js` according to `package.json`.
+
+The current package dry run contains the compiled ZH-TW modules for S2T conversion, spelling scanning, case rules, protected text masking, punctuation, spacing, and quote normalization. It does not include test files or `vitest.config.*`.
 
 ## Acknowledgments
 

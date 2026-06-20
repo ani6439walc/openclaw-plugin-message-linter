@@ -34,4 +34,10 @@ describe("zhtw punctuation rules", () => {
       "等等……真的嗎……好吧。",
     );
   });
+
+  it("normalizes sentence-ending periods after protected URLs", () => {
+    expect(applyPunctuationRules("請看 https://example.com.")).toBe(
+      "請看 https://example.com。",
+    );
+  });
 });

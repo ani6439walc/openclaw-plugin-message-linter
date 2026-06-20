@@ -27,6 +27,12 @@ describe("zhtw quote rules", () => {
     );
   });
 
+  it("normalizes quotes around protected URLs without absorbing closing quotes", () => {
+    expect(applyQuoteRules('他說 "https://github.com" 呢。')).toBe(
+      "他說 「https://github.com」 呢。",
+    );
+  });
+
   it("normalizes padded English quotes in Chinese context", () => {
     expect(applyQuoteRules('他說 "Hello" 呢。')).toBe("他說 「Hello」 呢。");
   });
