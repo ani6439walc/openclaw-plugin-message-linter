@@ -4,6 +4,7 @@ import {
   replaceSeparators,
   normalizeMarkdownHeadings,
   formatBlockquotes,
+  stripInlineCodeInMarkdownTables,
   wrapBoldWithBackticks,
 } from "./discord.js";
 
@@ -314,5 +315,120 @@ describe("message-linter discord formatters (wrapBoldWithBackticks)", () => {
     const input = `\uE000CODE_0\uE000`;
     const expected = `\uE000CODE_0\uE000`;
     expect(wrapBoldWithBackticks(input)).toBe(expected);
+  });
+});
+
+describe("message-linter discord formatters (stripInlineCodeInMarkdownTables)", () => {
+  it("strips inline code markers from markdown table cells", () => {
+    const input = [
+      "| 幽靈技能 | 被引用的意圖檔案 |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+      "| `clawscan` | `skill-lifecycle.md` |",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "| 幽靈技能 | 被引用的意圖檔案 |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+        "| clawscan | skill-lifecycle.md |",
+      ].join("\n"),
+    );
+  });
+
+  it("leaves inline code outside markdown tables alone", () => {
+    const input = "Use `api-and-interface-design` outside a table.";
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(input);
+  });
+
+  it("leaves table-like content inside fenced code blocks alone", () => {
+    const input = [
+      "```md",
+      "| Skill | File |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+      "```",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(input);
+  });
+
+  it("does not treat pipe-containing paragraphs after a table as table rows", () => {
+    const input = [
+      "| Skill | File |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+      "Run `npm list | filter foo` after the table.",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "| Skill | File |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+        "Run `npm list | filter foo` after the table.",
+      ].join("\n"),
+    );
+  });
+
+  it("keeps fence tracking stable when another fence marker appears inside code", () => {
+    const input = [
+      "```md",
+      "~~~",
+      "| Ignored | Row |",
+      "|---|---|",
+      "| `inside-code` | `kept.md` |",
+      "```",
+      "| Skill | File |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "```md",
+        "~~~",
+        "| Ignored | Row |",
+        "|---|---|",
+        "| `inside-code` | `kept.md` |",
+        "```",
+        "| Skill | File |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+      ].join("\n"),
+    );
+  });
+
+  it("supports single-dash markdown table delimiters", () => {
+    const input = [
+      "| Skill | File |",
+      "| - | - |",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "| Skill | File |",
+        "| - | - |",
+        "| api-and-interface-design | architecture-design.md |",
+      ].join("\n"),
+    );
+  });
+
+  it("strips multi-backtick inline code markers from table cells", () => {
+    const input = [
+      "| Skill | File |",
+      "|---|---|",
+      "| ``api-and-interface-design`` | ``architecture-design.md`` |",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "| Skill | File |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+      ].join("\n"),
+    );
   });
 });

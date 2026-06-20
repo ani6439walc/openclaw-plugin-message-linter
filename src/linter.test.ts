@@ -103,6 +103,52 @@ describe("message-linter logic (lintMessageContent)", () => {
     );
   });
 
+  it("converts bold-wrapped memory skill names in multi-line status lists", async () => {
+    const input = [
+      "`**memory-lookup**`",
+      "• 狀態: ✅ 完整",
+      "• 對應技能: 內建 memory_search/memory_get",
+      "",
+      "`**memory-recent**`",
+      "• 狀態: ✅ 完整",
+      "• 對應技能: 內建",
+    ].join("\n");
+
+    const output = await lintMessageContent(input);
+
+    expect(output).toBe(
+      [
+        "**`memory-lookup`**",
+        "• 狀態: ✅ 完整",
+        "• 對應技能: 內建 memory_search/memory_get",
+        "",
+        "**`memory-recent`**",
+        "• 狀態: ✅ 完整",
+        "• 對應技能: 內建",
+      ].join("\n"),
+    );
+  });
+
+  it("strips inline code markers from table cells before OpenClaw bullet table rendering", async () => {
+    const input = [
+      "| 幽靈技能 | 被引用的意圖檔案 |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+      "| `clawscan` | `skill-lifecycle.md` |",
+    ].join("\n");
+
+    const output = await lintMessageContent(input);
+
+    expect(output).toBe(
+      [
+        "| 幽靈技能 | 被引用的意圖檔案 |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+        "| clawscan | skill-lifecycle.md |",
+      ].join("\n"),
+    );
+  });
+
   it("preserves a skill list with multiple bold inline-code segments", async () => {
     const input = [
       "主人～根據這篇文章的特性，Ani 推薦以下技能組合：",
