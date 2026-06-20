@@ -15,9 +15,55 @@
         "additionalProperties": false,
         "properties": {
           "zhtw": {
-            "type": "boolean",
-            "description": "Convert Simplified Chinese to Traditional Chinese",
-            "default": false
+            "description": "Simplified Chinese to Taiwan Traditional Chinese conversion. Boolean values are kept for backward compatibility; object values configure planned ZH-TW subfeatures.",
+            "default": false,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Enable the existing S2T conversion and contextual spelling auto-fix pipeline",
+                    "default": false
+                  },
+                  "profile": {
+                    "type": "string",
+                    "enum": ["base", "strict"],
+                    "description": "Reserved ZH-TW profile contract for future upstream parity work",
+                    "default": "base"
+                  },
+                  "relaxed": {
+                    "type": "boolean",
+                    "description": "Reserved relaxed UI-string mode for future ZH-TW transforms",
+                    "default": false
+                  },
+                  "case": {
+                    "type": "boolean",
+                    "description": "Reserved proper-noun casing transform flag",
+                    "default": false
+                  },
+                  "punctuation": {
+                    "type": "boolean",
+                    "description": "Reserved MoE punctuation transform flag",
+                    "default": false
+                  },
+                  "spacing": {
+                    "type": "boolean",
+                    "description": "Reserved CJK-Latin/digit spacing transform flag",
+                    "default": false
+                  },
+                  "quotes": {
+                    "type": "boolean",
+                    "description": "Reserved Taiwan quote normalization transform flag",
+                    "default": false
+                  }
+                }
+              }
+            ]
           },
           "kaomoji": {
             "type": "boolean",

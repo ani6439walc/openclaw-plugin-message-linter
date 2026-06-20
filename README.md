@@ -34,7 +34,7 @@ Both hooks use the same linter pipeline, so tool-based sends and direct outgoing
 `lintMessageContent()` applies transformations in this order:
 
 1. Resolve feature flags with tolerant defaults.
-2. If `features.zhtw` is enabled and the message contains CJK characters, run `convertZhTw()`.
+2. If `features.zhtw.enabled` is enabled and the message contains CJK characters, run `convertZhTw()`.
 3. Fix misplaced inline bold code formatting.
 4. Mask Markdown fenced code blocks and inline code spans.
 5. Format Markdown links.
@@ -72,10 +72,10 @@ Dictionary files are stored in `assets/` and loaded at runtime:
 | `assets/s2t-tw-variants.txt` |              38 | OpenCC TWVariants-derived mappings     |
 | `assets/spelling-rules.json` |           1,694 | Contextual cross-strait spelling rules |
 
-To update dictionaries from upstream, use Bun; the generator script is written with a Bun shebang and uses `import.meta.dirname`:
+To update dictionaries from upstream, use the package script:
 
 ```bash
-bun run scripts/generate-zhtw-data.ts
+pnpm run generate:zhtw
 ```
 
 The script fetches OpenCC dictionaries and the zhtw-mcp ruleset, filters auto-fixable rule types, then regenerates the `assets/` files.
@@ -89,7 +89,15 @@ Integrate the plugin into `openclaw.json` or the relevant plugin configuration b
   "plugins": {
     "message-linter": {
       "features": {
-        "zhtw": false,
+        "zhtw": {
+          "enabled": false,
+          "profile": "base",
+          "relaxed": false,
+          "case": false,
+          "punctuation": false,
+          "spacing": false,
+          "quotes": false
+        },
         "kaomoji": true,
         "discord": {
           "headings": true,
@@ -105,6 +113,8 @@ Integrate the plugin into `openclaw.json` or the relevant plugin configuration b
 ```
 
 Defaults are tolerant: invalid or missing feature config falls back to the values above.
+
+For backward compatibility, `"zhtw": true` and `"zhtw": false` are still accepted. Boolean `true` enables the existing S2T + contextual spelling auto-fix pipeline only; the reserved subfeature flags (`case`, `punctuation`, `spacing`, `quotes`) stay disabled until their transforms are implemented.
 
 ## Development
 
@@ -124,14 +134,15 @@ pnpm run build
 
 Available package scripts:
 
-| Command              | Description                          |
-| -------------------- | ------------------------------------ |
-| `pnpm run typecheck` | Run TypeScript without emitting.     |
-| `pnpm test`          | Run the Vitest test suite.           |
-| `pnpm run build`     | Compile TypeScript into `dist/`.     |
-| `pnpm run format`    | Format Markdown, JSON, and TS files. |
+| Command                  | Description                                 |
+| ------------------------ | ------------------------------------------- |
+| `pnpm run typecheck`     | Run TypeScript without emitting.            |
+| `pnpm test`              | Run the Vitest test suite.                  |
+| `pnpm run build`         | Compile TypeScript into `dist/`.            |
+| `pnpm run format`        | Format Markdown, JSON, TS, and MJS files.   |
+| `pnpm run generate:zhtw` | Regenerate bundled ZH-TW dictionary assets. |
 
-Current verified test status: 143 tests passing across 10 test files.
+Current verified test status: 148 tests passing across 10 test files.
 
 ## Package Layout
 
