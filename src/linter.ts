@@ -40,34 +40,29 @@ export async function lintMessageContent(
     processed = wrapBoldWithBackticks(processed);
   }
 
-  const activeMask = maskMarkdownCode(processed);
-  processed = activeMask.maskedText;
+  const codeMask = maskMarkdownCode(processed);
+  processed = codeMask.maskedText;
 
   if (discord.links) {
     processed = formatLinks(processed);
   }
 
-  let maskedText = processed;
-
   if (discord.separators) {
-    maskedText = replaceSeparators(maskedText);
+    processed = replaceSeparators(processed);
   }
-
   if (cfg.kaomoji) {
-    maskedText = sanitizeTokens(maskedText);
+    processed = sanitizeTokens(processed);
   }
-
-  let inlineText = maskedText;
 
   if (discord.headings) {
-    inlineText = normalizeMarkdownHeadings(inlineText);
+    processed = normalizeMarkdownHeadings(processed);
   }
 
   if (discord.blockquotes) {
-    inlineText = formatBlockquotes(inlineText);
+    processed = formatBlockquotes(processed);
   }
 
-  return activeMask.restore(inlineText);
+  return codeMask.restore(processed);
 }
 
 export async function lintMessageToolParams(

@@ -26,8 +26,6 @@ describe("message-linter manifest", () => {
 
     const zhtwProperties = zhtwObjectSchema.properties;
     expect(zhtwProperties.enabled.default).toBe(DEFAULT_FEATURES.zhtw.enabled);
-    expect(zhtwProperties.profile.default).toBe(DEFAULT_FEATURES.zhtw.profile);
-    expect(zhtwProperties.relaxed.default).toBe(DEFAULT_FEATURES.zhtw.relaxed);
     expect(zhtwProperties.case.default).toBe(DEFAULT_FEATURES.zhtw.case);
     expect(zhtwProperties.punctuation.default).toBe(
       DEFAULT_FEATURES.zhtw.punctuation,
@@ -57,14 +55,8 @@ describe("message-linter manifest", () => {
     expect(featureProperties.zhtw.anyOf).toHaveLength(2);
     expect(zhtwBooleanSchema).toEqual({ type: "boolean" });
     expect(zhtwObjectSchema.additionalProperties).toBe(false);
-    expect(zhtwObjectSchema.properties.profile.enum).toEqual([
-      "base",
-      "strict",
-    ]);
     expect(Object.keys(zhtwObjectSchema.properties)).toEqual([
       "enabled",
-      "profile",
-      "relaxed",
       "case",
       "punctuation",
       "spacing",
