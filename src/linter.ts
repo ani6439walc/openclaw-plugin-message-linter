@@ -39,9 +39,6 @@ export async function lintMessageContent(
 
   if (discord.boldInlineCode) {
     processed = stripInlineCodeInMarkdownTables(processed);
-  }
-
-  if (discord.boldInlineCode) {
     processed = wrapBoldWithBackticks(processed);
   }
 

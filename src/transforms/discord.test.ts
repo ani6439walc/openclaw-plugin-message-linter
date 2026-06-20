@@ -353,4 +353,82 @@ describe("message-linter discord formatters (stripInlineCodeInMarkdownTables)", 
 
     expect(stripInlineCodeInMarkdownTables(input)).toBe(input);
   });
+
+  it("does not treat pipe-containing paragraphs after a table as table rows", () => {
+    const input = [
+      "| Skill | File |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+      "Run `npm list | filter foo` after the table.",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "| Skill | File |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+        "Run `npm list | filter foo` after the table.",
+      ].join("\n"),
+    );
+  });
+
+  it("keeps fence tracking stable when another fence marker appears inside code", () => {
+    const input = [
+      "```md",
+      "~~~",
+      "| Ignored | Row |",
+      "|---|---|",
+      "| `inside-code` | `kept.md` |",
+      "```",
+      "| Skill | File |",
+      "|---|---|",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "```md",
+        "~~~",
+        "| Ignored | Row |",
+        "|---|---|",
+        "| `inside-code` | `kept.md` |",
+        "```",
+        "| Skill | File |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+      ].join("\n"),
+    );
+  });
+
+  it("supports single-dash markdown table delimiters", () => {
+    const input = [
+      "| Skill | File |",
+      "| - | - |",
+      "| `api-and-interface-design` | `architecture-design.md` |",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "| Skill | File |",
+        "| - | - |",
+        "| api-and-interface-design | architecture-design.md |",
+      ].join("\n"),
+    );
+  });
+
+  it("strips multi-backtick inline code markers from table cells", () => {
+    const input = [
+      "| Skill | File |",
+      "|---|---|",
+      "| ``api-and-interface-design`` | ``architecture-design.md`` |",
+    ].join("\n");
+
+    expect(stripInlineCodeInMarkdownTables(input)).toBe(
+      [
+        "| Skill | File |",
+        "|---|---|",
+        "| api-and-interface-design | architecture-design.md |",
+      ].join("\n"),
+    );
+  });
 });

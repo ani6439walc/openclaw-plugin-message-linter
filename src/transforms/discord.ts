@@ -111,23 +111,46 @@ export function normalizeMarkdownHeadings(text: string): string {
 
 const BOLD_INLINE_RE = /\*\*`[^`]+?`\*\*|`\*\*([^`]+?)\*\*`/g;
 
-const TABLE_CELL_CODE_RE = /`([^`\n]+)`/g;
-
 function splitMarkdownTableCells(line: string): string[] {
   return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|");
 }
 
 function isMarkdownTableRow(line: string): boolean {
-  return line.trim().includes("|");
+  const trimmed = line.trim();
+  return trimmed.startsWith("|") && trimmed.endsWith("|");
 }
 
 function isMarkdownTableDelimiterRow(line: string): boolean {
   const cells = splitMarkdownTableCells(line).map((cell) => cell.trim());
-  return cells.length > 0 && cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+  return cells.length > 0 && cells.every((cell) => /^:?-+:?$/.test(cell));
 }
 
 function stripInlineCodeInTableRow(line: string): string {
-  return line.replace(TABLE_CELL_CODE_RE, "$1");
+  let result = "";
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char !== "`") {
+      result += char;
+      continue;
+    }
+
+    let markerEnd = i + 1;
+    while (line[markerEnd] === "`") markerEnd += 1;
+
+    const marker = line.slice(i, markerEnd);
+    const closingIndex = line.indexOf(marker, markerEnd);
+    if (closingIndex === -1) {
+      result += marker;
+      i = markerEnd - 1;
+      continue;
+    }
+
+    result += line.slice(markerEnd, closingIndex);
+    i = closingIndex + marker.length - 1;
+  }
+
+  return result;
 }
 
 export function stripInlineCodeInMarkdownTables(text: string): string {
@@ -142,7 +165,11 @@ export function stripInlineCodeInMarkdownTables(text: string): string {
 
     if (fenceMatch) {
       const marker = fenceMatch[1][0];
-      fenceMarker = fenceMarker === marker ? null : marker;
+      if (fenceMarker === null) {
+        fenceMarker = marker;
+      } else if (fenceMarker === marker) {
+        fenceMarker = null;
+      }
       result.push(line);
       continue;
     }
