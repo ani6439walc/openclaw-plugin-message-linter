@@ -26,7 +26,7 @@ Both hooks use the same linter pipeline, so tool-based sends and direct outgoing
   - Detect likely kaomoji tokens and replace raw backticks/accents that could accidentally start Markdown inline code.
   - Preserve real inline code spans and fenced code blocks through Markdown code masking.
 - **Optional ZH-TW conversion**
-  - Convert Simplified Chinese to Taiwan Traditional Chinese using bundled OpenCC-derived dictionaries and contextual spelling rules.
+  - Convert Simplified Chinese to Taiwan Traditional Chinese using bundled OpenCC-derived dictionaries, contextual spelling rules, and opt-in proper-noun case rules.
   - Disabled by default to avoid unnecessary cold-start asset loading.
 
 ## Linter Pipeline
@@ -34,7 +34,7 @@ Both hooks use the same linter pipeline, so tool-based sends and direct outgoing
 `lintMessageContent()` applies transformations in this order:
 
 1. Resolve feature flags with tolerant defaults.
-2. If `features.zhtw.enabled` is enabled and the message contains CJK characters, run `convertZhTw()`.
+2. If `features.zhtw.enabled` is enabled and the message contains CJK characters, run `convertZhTw()` with the resolved ZH-TW feature flags.
 3. Fix misplaced inline bold code formatting.
 4. Mask Markdown fenced code blocks and inline code spans.
 5. Format Markdown links.
@@ -54,7 +54,7 @@ The Simplified-to-Traditional Chinese conversion feature is implemented entirely
 
 The conversion pipeline uses a trie-based longest-match phrase matcher with lazy initialization:
 
-1. **Module singleton** — `ZhTwManager` owns the converter, spelling rules, and a cached initialization Promise. Assets are loaded on the first `convertZhTw()` call.
+1. **Module singleton** — `ZhTwManager` owns the converter, spelling rules, case rules, and a cached initialization Promise. Assets are loaded on the first `convertZhTw()` call.
 2. **Trie matching** — phrase mappings are stored in a trie keyed by character, so each input position walks only possible phrase prefixes instead of scanning every phrase.
 3. **Single-character fallback** — when no phrase matches, the converter falls back to the character map.
 4. **Protected zones** — phrase outputs are marked so Taiwan variant normalization does not overwrite phrase-level conversion results.
@@ -71,6 +71,7 @@ Dictionary files are stored in `assets/` and loaded at runtime:
 | `assets/s2t-chars.txt`       |           3,882 | OpenCC STCharacters-derived mappings   |
 | `assets/s2t-tw-variants.txt` |              38 | OpenCC TWVariants-derived mappings     |
 | `assets/spelling-rules.json` |           1,694 | Contextual cross-strait spelling rules |
+| `assets/case-rules.json`     |              15 | Proper-noun case correction rules      |
 
 To update dictionaries from upstream, use the package script:
 
@@ -78,7 +79,7 @@ To update dictionaries from upstream, use the package script:
 pnpm run generate:zhtw
 ```
 
-The script fetches OpenCC dictionaries and the zhtw-mcp ruleset, filters auto-fixable rule types, then regenerates the `assets/` files.
+The script fetches OpenCC dictionaries and the zhtw-mcp ruleset, filters auto-fixable spelling rule types, imports case rules, then regenerates the `assets/` files.
 
 ## Configuration
 
@@ -114,7 +115,7 @@ Integrate the plugin into `openclaw.json` or the relevant plugin configuration b
 
 Defaults are tolerant: invalid or missing feature config falls back to the values above.
 
-For backward compatibility, `"zhtw": true` and `"zhtw": false` are still accepted. Boolean `true` enables the existing S2T + contextual spelling auto-fix pipeline only; the reserved subfeature flags (`case`, `punctuation`, `spacing`, `quotes`) stay disabled until their transforms are implemented.
+For backward compatibility, `"zhtw": true` and `"zhtw": false` are still accepted. Boolean `true` enables the existing S2T + contextual spelling auto-fix pipeline only; `case` and the reserved subfeature flags (`punctuation`, `spacing`, `quotes`) stay disabled unless explicitly enabled and implemented.
 
 ## Development
 
@@ -142,14 +143,14 @@ Available package scripts:
 | `pnpm run format`        | Format Markdown, JSON, TS, and MJS files.   |
 | `pnpm run generate:zhtw` | Regenerate bundled ZH-TW dictionary assets. |
 
-Current verified test status: 148 tests passing across 10 test files.
+Current verified test status: 154 tests passing across 11 test files.
 
 ## Package Layout
 
 The published package includes:
 
 - `dist/` — compiled plugin entry and modules.
-- `assets/` — bundled ZH-TW dictionaries and spelling rules.
+- `assets/` — bundled ZH-TW dictionaries, spelling rules, and case rules.
 - `openclaw.plugin.json` — plugin metadata and configuration schema.
 - `README.md`, `package.json`, and `LICENSE`.
 

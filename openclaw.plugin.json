@@ -43,7 +43,7 @@
                   },
                   "case": {
                     "type": "boolean",
-                    "description": "Reserved proper-noun casing transform flag",
+                    "description": "Enable proper-noun casing fixes such as GitHub and TypeScript",
                     "default": false
                   },
                   "punctuation": {
