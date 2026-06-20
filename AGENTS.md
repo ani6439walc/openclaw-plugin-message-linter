@@ -66,6 +66,10 @@ pnpm run build
 - `src/transforms/zhtw/index.ts` — lazy ZH-TW manager and asset loading.
 - `src/transforms/zhtw/s2t.ts` — trie-based S2T converter.
 - `src/transforms/zhtw/case.ts` — opt-in proper-noun case rule scanner/fixer.
+- `src/transforms/zhtw/punctuation.ts` — opt-in MoE-style punctuation normalization.
+- `src/transforms/zhtw/spacing.ts` — opt-in CJK/ASCII spacing and repeated punctuation normalization.
+- `src/transforms/zhtw/quotes.ts` — opt-in Taiwan quote normalization.
+- `src/transforms/zhtw/protect.ts` — raw URL/email masking for ZH-TW rule passes.
 - `src/transforms/zhtw/scanner.ts` — contextual spelling rule scanner/fixer.
 - `assets/` — bundled dictionary/rule data loaded at runtime.
 - `scripts/generate-zhtw-data.mjs` — Node-run dictionary generator.
@@ -137,7 +141,7 @@ Current defaults:
 }
 ```
 
-Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURES` in sync. Boolean `zhtw` config remains supported for backward compatibility; `true` only enables the existing S2T + contextual spelling auto-fix pipeline, while `case` and reserved subfeature flags stay disabled unless explicitly enabled and implemented.
+Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURES` in sync. Boolean `zhtw` config remains supported for backward compatibility; `true` only enables the existing S2T + contextual spelling auto-fix pipeline, while `case`, `punctuation`, `spacing`, and `quotes` stay disabled unless explicitly enabled.
 
 ## Coding Conventions
 
@@ -156,7 +160,7 @@ Keep `openclaw.plugin.json`, README configuration examples, and `DEFAULT_FEATURE
 - For core pipeline changes, update `src/linter.test.ts`.
 - For Discord formatting behavior, update `src/transforms/discord.test.ts`.
 - For kaomoji behavior, update `src/transforms/kaomoji.test.ts` and/or `src/utils/mask.test.ts`.
-- For ZH-TW conversion, update `src/transforms/zhtw.test.ts`, `src/transforms/zhtw/case.test.ts`, and/or `src/transforms/zhtw/s2t.test.ts`.
+- For ZH-TW conversion, update `src/transforms/zhtw.test.ts`, `src/transforms/zhtw/case.test.ts`, `src/transforms/zhtw/punctuation.test.ts`, `src/transforms/zhtw/spacing.test.ts`, `src/transforms/zhtw/quotes.test.ts`, and/or `src/transforms/zhtw/s2t.test.ts`.
 - For plugin hook behavior, update `src/hooks.test.ts` or `src/plugin.test.ts`.
 - For manifest/schema drift, update `manifest.test.ts` and `src/config.test.ts`.
 
