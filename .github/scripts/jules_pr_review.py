@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import subprocess
 import time
 import urllib.error
 import urllib.request
@@ -73,7 +74,58 @@ def get_pr_diff(owner, repo, pr_number):
     return request("GET", url, github_headers("application/vnd.github.v3.diff"))
 
 
-def create_jules_session(owner, repo, diff_text):
+def create_diff_branch(pr_number, diff_text):
+    """Create a temporary branch with the full diff file for Jules to read."""
+    # Save current commit
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    original_commit = result.stdout.strip()
+    log(f"Current commit: {original_commit}")
+    
+    branch_name = f"temp/pr-{pr_number}-diff-{int(time.time())}"
+    file_name = f"pr-{pr_number}-full.diff"
+    
+    log(f"Writing full diff to {file_name} ({len(diff_text):,} chars)...")
+    with open(file_name, "w") as f:
+        f.write(diff_text)
+    
+    log(f"Creating branch {branch_name}...")
+    subprocess.run(["git", "checkout", "-b", branch_name], check=True, capture_output=True)
+    subprocess.run(["git", "add", file_name], check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", f"Add full diff for PR #{pr_number}"],
+        check=True,
+        capture_output=True
+    )
+    subprocess.run(["git", "push", "origin", branch_name], check=True, capture_output=True)
+    
+    # Switch back to original commit
+    subprocess.run(["git", "checkout", original_commit], check=True, capture_output=True)
+    log(f"Switched back to {original_commit}")
+    log(f"Full diff branch created: {branch_name}")
+    
+    return branch_name
+
+
+def delete_diff_branch(branch_name):
+    """Delete the temporary diff branch."""
+    try:
+        subprocess.run(
+            ["git", "push", "origin", "--delete", branch_name],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        log(f"Deleted diff branch: {branch_name}")
+    except subprocess.CalledProcessError as e:
+        log(f"Failed to delete diff branch: {e.stderr}")
+
+
+def create_jules_session(owner, repo, diff_text, diff_branch=None):
     pr_number = os.environ["PR_NUMBER"]
     title = os.environ.get("PR_TITLE", "")
     base_ref = os.environ["BASE_REF"]
@@ -83,32 +135,71 @@ def create_jules_session(owner, repo, diff_text):
     truncated = len(diff_text) > MAX_DIFF_CHARS
     diff_for_prompt = diff_text[:MAX_DIFF_CHARS]
 
-    prompt = f"""You are reviewing a GitHub pull request. IMPORTANT: This is a review-only task. Do NOT create any plan. Do NOT attempt to modify files. Analyze the diff and output review directly as response.
+    # Build conditional block for full diff recovery
+    full_diff_block = ""
+    if truncated and diff_branch:
+        file_name = f"pr-{pr_number}-full.diff"
+        full_diff_block = f"""
 
-Repository: {owner}/{repo}
-PR: #{pr_number}
-PR URL: {pr_url}
-Title: {title}
-Base branch: {base_ref}
-Head SHA: {head_sha}
+## ⚠️ Full Diff Recovery (IMPORTANT)
+The diff above was truncated to {MAX_DIFF_CHARS:,} characters. The complete diff ({len(diff_text):,} chars) is available in the repository.
 
-Task:
-- Perform a code review of the PR diff below.
-- Do NOT modify files or create a plan.
-- Do NOT create a pull request.
-- Output review directly as final message.
-- Focus on correctness, security, regressions, tests, maintainability, and backwards compatibility.
-- Return a Markdown review suitable for posting as a GitHub PR comment.
-- Use these sections:
-  1. Summary
-  2. All blocking issues
-  3. All non-blocking suggestions
-  4. All tests / verification concerns
-  5. Overall recommendation
-- If there are no issues, say so clearly.
-- If the diff is insufficient, state what context is missing.
+To review the full diff, run:
+```bash
+git fetch origin {diff_branch}
+git show {diff_branch}:{file_name}
+```
 
-Diff truncated: {truncated}
+Review the COMPLETE diff, not just the truncated excerpt above.
+"""
+
+    prompt = f"""You are a senior staff engineer performing a thorough code review. You focus on correctness, security, regressions, test coverage, maintainability, and backwards compatibility.
+
+## Context
+- Repo: {owner}/{repo}
+- PR: #{pr_number} — {title}
+- Base: {base_ref} → Head: {head_sha}
+- URL: {pr_url}
+- Diff fully provided: {not truncated}
+{full_diff_block}
+## Constraints
+- Review-only mode. Do NOT create plans, modify files, or open PRs.
+- Base your review solely on the diff below{", use the git commands above to obtain the full diff first" if truncated else ""}.
+
+## Review Dimensions
+Evaluate the diff across these aspects (from Google eng-practices & Palantir):
+- **Design**: Does this change belong in this codebase? Does it integrate well with the existing system?
+- **Functionality**: Does the code behave as intended? Consider edge cases and concurrency.
+- **Complexity**: Is the code more complex than necessary? Flag over-engineering and unnecessary abstractions.
+- **Security**: Input validation, injection risks, auth/authz, sensitive data handling, least privilege.
+- **Naming & Comments**: Are names descriptive? Do comments explain why (not what)?
+- **Tests**: Correct, sensible, and useful tests in the same PR as production code.
+- **Documentation**: If behavior changes, are READMEs/CHANGELOGs/docs updated?
+- **Backwards Compatibility**: Breaking changes in APIs, schemas, or user workflows?
+- **Style**: Consistent with existing codebase conventions and style guides.
+
+## Output Format
+Return a Markdown review using this exact structure:
+
+### Summary
+One paragraph: what this PR does and overall impression.
+
+### 🔴 Blocking Issues
+List each blocking issue with: file, line range, problem description, and suggested fix.
+Blocking = correctness bugs, security vulnerabilities, data loss risks, broken backwards compatibility.
+If none, write: "No blocking issues found."
+
+### 🟡 Suggestions
+List each non-blocking suggestion with: file, line range, and improvement idea.
+If none, write: "No additional suggestions."
+
+### 🧪 Tests & Verification
+List any missing test scenarios or verification steps the author should perform.
+If tests are adequate, write: "Test coverage looks good."
+
+### Verdict
+One of: ✅ Approve | ⚠️ Approve with comments | ❌ Request changes
+One sentence justification.
 
 <diff>
 {diff_for_prompt}
@@ -246,86 +337,101 @@ def main():
         post_pr_comment(owner, repo, pr_number, "No diff was found for this pull request.")
         return
 
-    log(f"Diff size: {len(diff_text)} chars, creating Jules session...")
-    session = create_jules_session(owner, repo, diff_text)
-    session_name = session["name"]
-    session_url = session.get("url", "")
-    initial_state = session.get("state", "UNKNOWN")
+    log(f"Diff size: {len(diff_text):,} chars")
+    
+    # Generate full diff branch if truncated
+    diff_branch = None
+    if len(diff_text) > MAX_DIFF_CHARS:
+        log("Diff truncated, creating full diff branch...")
+        diff_branch = create_diff_branch(pr_number, diff_text)
+    
+    try:
+        log("Creating Jules session...")
+        session = create_jules_session(owner, repo, diff_text, diff_branch)
+        session_name = session["name"]
+        session_url = session.get("url", "")
+        initial_state = session.get("state", "UNKNOWN")
 
-    log(f"Session created: {session_name}")
-    log(f"State: {initial_state}")
-    if session_url:
-        log(f"URL: {session_url}")
+        log(f"Session created: {session_name}")
+        log(f"State: {initial_state}")
+        if session_url:
+            log(f"URL: {session_url}")
 
-    final_session = session
-    state = session.get("state", "UNKNOWN")
-    early_exit = False
-    for poll_num in range(1, MAX_POLLS + 1):
-        time.sleep(POLL_SECONDS)
-        final_session = get_jules_session(session_name)
-        state = final_session.get("state", "UNKNOWN")
+        final_session = session
+        state = session.get("state", "UNKNOWN")
+        early_exit = False
+        for poll_num in range(1, MAX_POLLS + 1):
+            time.sleep(POLL_SECONDS)
+            final_session = get_jules_session(session_name)
+            state = final_session.get("state", "UNKNOWN")
 
-        if poll_num % 4 == 1 or state in FINAL_STATES:
-            log(f"Poll {poll_num}/{MAX_POLLS}: state={state}")
+            if poll_num % 4 == 1 or state in FINAL_STATES:
+                log(f"Poll {poll_num}/{MAX_POLLS}: state={state}")
 
-        if state in FINAL_STATES:
-            log(f"Session reached final state: {state}")
-            # Even in final state, check if review is already complete
-            try:
-                activities = get_jules_activities(session_name)
-                if has_complete_review(activities):
-                    log("Review detected in activities — pausing and archiving session")
-                    pause_jules_session(session_name)
-                    archive_jules_session(session_name)
-                    early_exit = True
-            except Exception as e:
-                log(f"Could not check activities: {e}")
-            break
+            if state in FINAL_STATES:
+                log(f"Session reached final state: {state}")
+                # Even in final state, check if review is already complete
+                try:
+                    activities = get_jules_activities(session_name)
+                    if has_complete_review(activities):
+                        log("Review detected in activities — pausing and archiving session")
+                        pause_jules_session(session_name)
+                        archive_jules_session(session_name)
+                        early_exit = True
+                except Exception as e:
+                    log(f"Could not check activities: {e}")
+                break
 
-        # Early exit: if IN_PROGRESS and review already complete, archive session
-        if state == "IN_PROGRESS":
-            try:
-                activities = get_jules_activities(session_name)
-                if has_complete_review(activities):
-                    log("Review detected in activities during IN_PROGRESS — pausing and archiving session")
-                    pause_jules_session(session_name)
-                    archive_jules_session(session_name)
-                    early_exit = True
-                    break
-            except Exception as e:
-                log(f"Could not check activities: {e}")
+            # Early exit: if IN_PROGRESS and review already complete, archive session
+            if state == "IN_PROGRESS":
+                try:
+                    activities = get_jules_activities(session_name)
+                    if has_complete_review(activities):
+                        log("Review detected in activities during IN_PROGRESS — pausing and archiving session")
+                        pause_jules_session(session_name)
+                        archive_jules_session(session_name)
+                        early_exit = True
+                        break
+                except Exception as e:
+                    log(f"Could not check activities: {e}")
 
-    if not early_exit and state not in FINAL_STATES:
-        log(f"Timed out after {MAX_POLLS * POLL_SECONDS}s")
-        fail_pr_comment(owner, repo, pr_number, f"Timed out waiting for Jules session after {MAX_POLLS * POLL_SECONDS // 60} minutes.\n\nLast state: `{final_session.get('state')}`\n\nSession: {session_url}")
-        raise SystemExit(1)
+        if not early_exit and state not in FINAL_STATES:
+            log(f"Timed out after {MAX_POLLS * POLL_SECONDS}s")
+            fail_pr_comment(owner, repo, pr_number, f"Timed out waiting for Jules session after {MAX_POLLS * POLL_SECONDS // 60} minutes.\n\nLast state: `{final_session.get('state')}`\n\nSession: {session_url}")
+            raise SystemExit(1)
 
-    state = final_session.get("state")
-    log(f"Fetching activities for session...")
-    activities = get_jules_activities(session_name)
-    activity_count = len(activities.get("activities", []))
-    log(f"Found {activity_count} activities")
+        state = final_session.get("state")
+        log(f"Fetching activities for session...")
+        activities = get_jules_activities(session_name)
+        activity_count = len(activities.get("activities", []))
+        log(f"Found {activity_count} activities")
 
-    if not early_exit and state not in REVIEWABLE_STATES:
-        reason = json.dumps(final_session, indent=2, ensure_ascii=False)
-        fail_pr_comment(
-            owner,
-            repo,
-            pr_number,
-            f"Jules session ended with non-reviewable state `{state}`.\n\nSession: {session_url}\n\n```json\n{reason[:4000]}\n```",
-        )
-        raise SystemExit(1)
+        if not early_exit and state not in REVIEWABLE_STATES:
+            reason = json.dumps(final_session, indent=2, ensure_ascii=False)
+            fail_pr_comment(
+                owner,
+                repo,
+                pr_number,
+                f"Jules session ended with non-reviewable state `{state}`.\n\nSession: {session_url}\n\n```json\n{reason[:4000]}\n```",
+            )
+            raise SystemExit(1)
 
-    review = extract_review_from_activities(activities)
-    if review is None:
-        review = "Jules completed, but no review message was found in session activities."
+        review = extract_review_from_activities(activities)
+        if review is None:
+            review = "Jules completed, but no review message was found in session activities."
+        
+        if session_url:
+            review += f"\n\nJules session: {session_url}"
 
-    if session_url:
-        review += f"\n\nJules session: {session_url}"
-
-    log(f"Posting review comment ({len(review)} chars)...")
-    post_pr_comment(owner, repo, pr_number, review)
-    log("Done!")
+        log(f"Posting review comment ({len(review):,} chars)...")
+        post_pr_comment(owner, repo, pr_number, review)
+        log("Done!")
+        
+    finally:
+        # Cleanup diff branch
+        if diff_branch:
+            log(f"Cleaning up diff branch: {diff_branch}")
+            delete_diff_branch(diff_branch)
 
 
 if __name__ == "__main__":
