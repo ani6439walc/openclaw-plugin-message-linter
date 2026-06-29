@@ -36,18 +36,19 @@ export async function lintMessageContent(
     const separatedRest = firstLineRest.replace(/^[ \t]+/, "");
     const hasSeparator = separatedRest.length !== firstLineRest.length;
     const backticksInRest = separatedRest.match(/`/g)?.length ?? 0;
-    const isClosed = hasSeparator
-      ? backticksInRest % 2 === 1
-      : backticksInRest > 0;
+    const firstClosingBacktick = separatedRest.indexOf("`");
+    const charAfterFirstClosing = separatedRest[firstClosingBacktick + 1];
+    const closesDirectToken =
+      !hasSeparator &&
+      firstClosingBacktick > 0 &&
+      (charAfterFirstClosing === undefined || /\s/.test(charAfterFirstClosing));
+    const isClosed = closesDirectToken || backticksInRest % 2 === 1;
 
     if (!isClosed) {
       processed =
         `${prefix}${separatedRest}` + processed.slice(leadingBacktick[0].length);
+      processed = processed.replace(/^[ \t]*\r?\n/, "");
     }
-  }
-
-  if (leadingBacktick) {
-    processed = processed.replace(/^[ \t]*\r?\n/, "");
   }
 
   if (cfg.zhtw.enabled && HAS_CJK_RE.test(processed)) {
