@@ -173,6 +173,36 @@ describe("message-linter logic (lintMessageContent)", () => {
     expect(output).toBe(input);
   });
 
+  it("removes a stray leading backtick before normal prose", async () => {
+    const input = [
+      "` 把 USB 5V 降到電池工作電壓，再接到主機板的電池接點。",
+      "",
+      "- **注意極性**：電池接點通常有 `+` / `-` 標示，接反會燒板子。",
+      "- **電流容量**：RG476H 的 T820 晶片負載時可能拉到 1.5-2A，DC-DC 模組要選夠力的（建議 3A 以上）。",
+      "",
+      "---",
+      "",
+      "## ⚠️ 風險提醒",
+    ].join("\n");
+
+    const output = await lintMessageContent(input, async (text) => text, {
+      zhtw: true,
+    });
+
+    expect(output).toBe(
+      [
+        "把 USB 5V 降到電池工作電壓，再接到主機板的電池接點。",
+        "",
+        "- **注意極性**：電池接點通常有 `+` / `-` 標示，接反會燒板子。",
+        "- **電流容量**：RG476H 的 T820 晶片負載時可能拉到 1.5-2A，DC-DC 模組要選夠力的（建議 3A 以上）。",
+        "",
+        "~~　　　　　　　　　　　　　　　~~",
+        "",
+        "## ⚠️ 風險提醒",
+      ].join("\n"),
+    );
+  });
+
   it("falls back to formatted text when converter has no output", async () => {
     const input = "[https://example.com](https://example.com) 中国";
     const output = await lintMessageContent(input, async () => undefined, {
