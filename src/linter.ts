@@ -29,11 +29,17 @@ export async function lintMessageContent(
   const { discord } = cfg;
 
   let processed = content;
+  // Strip a hallucinated single leading backtick only when the first line stays unbalanced.
   processed = processed.replace(
-    /^([ \t]*)`(?:[ \t]+([^\r\n]*)|([^\r\n]*)(?:\r?\n)?)/,
+    /^([ \t]*)`(?!`)(?:[ \t]+([^\r\n]*)|([^\r\n]*)(?:\r?\n)?)/,
     (match, prefix: string, spacedRest: string, directRest = "") => {
       const firstLineRest = spacedRest ?? directRest;
-      return firstLineRest.includes("`")
+      const backticksInRest = firstLineRest.match(/`/g)?.length ?? 0;
+      const isClosed =
+        spacedRest === undefined
+          ? backticksInRest > 0
+          : backticksInRest % 2 === 1;
+      return isClosed
         ? match
         : `${prefix}${firstLineRest}`;
     },

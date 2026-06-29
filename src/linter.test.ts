@@ -227,6 +227,17 @@ describe("message-linter logic (lintMessageContent)", () => {
     );
   });
 
+  it("removes a stray leading backtick before a later inline code span", async () => {
+    await expect(lintMessageContent("` Use `code` normally")).resolves.toBe(
+      "Use `code` normally",
+    );
+  });
+
+  it("preserves multi-backtick code that starts the message", async () => {
+    const input = "``value with `inner` tick``";
+    await expect(lintMessageContent(input)).resolves.toBe(input);
+  });
+
   it("falls back to formatted text when converter has no output", async () => {
     const input = "[https://example.com](https://example.com) 中国";
     const output = await lintMessageContent(input, async () => undefined, {
