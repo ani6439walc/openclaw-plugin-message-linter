@@ -30,9 +30,13 @@ export async function lintMessageContent(
 
   let processed = content;
   processed = processed.replace(
-    /^([ \t]*)`(?:[ \t]+([^\r\n]*)|\r?\n)/,
-    (match, prefix: string, firstLineRest = "") =>
-      firstLineRest.includes("`") ? match : `${prefix}${firstLineRest}`,
+    /^([ \t]*)`(?:[ \t]+([^\r\n]*)|([^\r\n]*)(?:\r?\n)?)/,
+    (match, prefix: string, spacedRest: string, directRest = "") => {
+      const firstLineRest = spacedRest ?? directRest;
+      return firstLineRest.includes("`")
+        ? match
+        : `${prefix}${firstLineRest}`;
+    },
   );
 
   if (cfg.zhtw.enabled && HAS_CJK_RE.test(processed)) {

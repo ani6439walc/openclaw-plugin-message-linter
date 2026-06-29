@@ -221,6 +221,12 @@ describe("message-linter logic (lintMessageContent)", () => {
     );
   });
 
+  it("removes a stray leading backtick followed directly by text", async () => {
+    await expect(lintMessageContent("`把 USB 5V 降到電池工作電壓")).resolves.toBe(
+      "把 USB 5V 降到電池工作電壓",
+    );
+  });
+
   it("falls back to formatted text when converter has no output", async () => {
     const input = "[https://example.com](https://example.com) 中国";
     const output = await lintMessageContent(input, async () => undefined, {
