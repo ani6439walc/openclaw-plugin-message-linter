@@ -173,6 +173,89 @@ describe("message-linter logic (lintMessageContent)", () => {
     expect(output).toBe(input);
   });
 
+  it("removes a stray leading backtick before normal prose", async () => {
+    const input = [
+      "` 把 USB 5V 降到電池工作電壓，再接到主機板的電池接點。",
+      "",
+      "- **注意極性**：電池接點通常有 `+` / `-` 標示，接反會燒板子。",
+      "- **電流容量**：RG476H 的 T820 晶片負載時可能拉到 1.5-2A，DC-DC 模組要選夠力的（建議 3A 以上）。",
+      "",
+      "---",
+      "",
+      "## ⚠️ 風險提醒",
+    ].join("\n");
+
+    const output = await lintMessageContent(input, async (text) => text, {
+      zhtw: true,
+    });
+
+    expect(output).toBe(
+      [
+        "把 USB 5V 降到電池工作電壓，再接到主機板的電池接點。",
+        "",
+        "- **注意極性**：電池接點通常有 `+` / `-` 標示，接反會燒板子。",
+        "- **電流容量**：RG476H 的 T820 晶片負載時可能拉到 1.5-2A，DC-DC 模組要選夠力的（建議 3A 以上）。",
+        "",
+        "~~　　　　　　　　　　　　　　　~~",
+        "",
+        "## ⚠️ 風險提醒",
+      ].join("\n"),
+    );
+  });
+
+  it("preserves leading inline code when the first line closes the backtick", async () => {
+    const input = "` USB 5V ` should stay inline code\n---\nDone";
+    const output = await lintMessageContent(input);
+
+    expect(output).toBe(
+      "` USB 5V ` should stay inline code\n~~　　　　　　　　　　　　　　　~~\nDone",
+    );
+  });
+
+  it("removes a stray leading backtick followed by a tab or newline", async () => {
+    await expect(lintMessageContent("`\tTabbed prose")).resolves.toBe(
+      "Tabbed prose",
+    );
+    await expect(lintMessageContent("`\nNext line prose")).resolves.toBe(
+      "Next line prose",
+    );
+  });
+
+  it("removes a stray leading backtick followed directly by text", async () => {
+    await expect(lintMessageContent("`把 USB 5V 降到電池工作電壓")).resolves.toBe(
+      "把 USB 5V 降到電池工作電壓",
+    );
+  });
+
+  it("removes a direct-text stray leading backtick before later inline code", async () => {
+    await expect(lintMessageContent("`Note: use `config` properly")).resolves.toBe(
+      "Note: use `config` properly",
+    );
+  });
+
+  it("preserves the newline after stripping a direct-text leading backtick", async () => {
+    await expect(lintMessageContent("`Hello\nWorld")).resolves.toBe(
+      "Hello\nWorld",
+    );
+  });
+
+  it("removes an empty first line left by a stray leading backtick", async () => {
+    await expect(lintMessageContent("`  \nNext line")).resolves.toBe(
+      "Next line",
+    );
+  });
+
+  it("removes a stray leading backtick before a later inline code span", async () => {
+    await expect(lintMessageContent("` Use `code` normally")).resolves.toBe(
+      "Use `code` normally",
+    );
+  });
+
+  it("preserves multi-backtick code that starts the message", async () => {
+    const input = "``value with `inner` tick``";
+    await expect(lintMessageContent(input)).resolves.toBe(input);
+  });
+
   it("falls back to formatted text when converter has no output", async () => {
     const input = "[https://example.com](https://example.com) 中国";
     const output = await lintMessageContent(input, async () => undefined, {
