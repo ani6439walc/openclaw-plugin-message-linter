@@ -212,6 +212,15 @@ describe("message-linter logic (lintMessageContent)", () => {
     );
   });
 
+  it("removes a stray leading backtick followed by a tab or newline", async () => {
+    await expect(lintMessageContent("`\tTabbed prose")).resolves.toBe(
+      "Tabbed prose",
+    );
+    await expect(lintMessageContent("`\nNext line prose")).resolves.toBe(
+      "Next line prose",
+    );
+  });
+
   it("falls back to formatted text when converter has no output", async () => {
     const input = "[https://example.com](https://example.com) 中国";
     const output = await lintMessageContent(input, async () => undefined, {

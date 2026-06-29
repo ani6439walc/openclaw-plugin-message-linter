@@ -30,8 +30,8 @@ export async function lintMessageContent(
 
   let processed = content;
   processed = processed.replace(
-    /^(\s*)`[ \t]+([^\r\n]*)/,
-    (match, prefix: string, firstLineRest: string) =>
+    /^([ \t]*)`(?:[ \t]+([^\r\n]*)|\r?\n)/,
+    (match, prefix: string, firstLineRest = "") =>
       firstLineRest.includes("`") ? match : `${prefix}${firstLineRest}`,
   );
 
