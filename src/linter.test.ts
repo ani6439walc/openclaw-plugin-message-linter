@@ -227,6 +227,18 @@ describe("message-linter logic (lintMessageContent)", () => {
     );
   });
 
+  it("preserves the newline after stripping a direct-text leading backtick", async () => {
+    await expect(lintMessageContent("`Hello\nWorld")).resolves.toBe(
+      "Hello\nWorld",
+    );
+  });
+
+  it("removes an empty first line left by a stray leading backtick", async () => {
+    await expect(lintMessageContent("`  \nNext line")).resolves.toBe(
+      "Next line",
+    );
+  });
+
   it("removes a stray leading backtick before a later inline code span", async () => {
     await expect(lintMessageContent("` Use `code` normally")).resolves.toBe(
       "Use `code` normally",

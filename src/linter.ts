@@ -30,20 +30,25 @@ export async function lintMessageContent(
 
   let processed = content;
   // Strip a hallucinated single leading backtick only when the first line stays unbalanced.
-  processed = processed.replace(
-    /^([ \t]*)`(?!`)(?:[ \t]+([^\r\n]*)|([^\r\n]*)(?:\r?\n)?)/,
-    (match, prefix: string, spacedRest: string, directRest = "") => {
-      const firstLineRest = spacedRest ?? directRest;
-      const backticksInRest = firstLineRest.match(/`/g)?.length ?? 0;
-      const isClosed =
-        spacedRest === undefined
-          ? backticksInRest > 0
-          : backticksInRest % 2 === 1;
-      return isClosed
-        ? match
-        : `${prefix}${firstLineRest}`;
-    },
-  );
+  const leadingBacktick = processed.match(/^([ \t]*)`(?!`)([^\r\n]*)/);
+  if (leadingBacktick) {
+    const [, prefix, firstLineRest] = leadingBacktick;
+    const separatedRest = firstLineRest.replace(/^[ \t]+/, "");
+    const hasSeparator = separatedRest.length !== firstLineRest.length;
+    const backticksInRest = separatedRest.match(/`/g)?.length ?? 0;
+    const isClosed = hasSeparator
+      ? backticksInRest % 2 === 1
+      : backticksInRest > 0;
+
+    if (!isClosed) {
+      processed =
+        `${prefix}${separatedRest}` + processed.slice(leadingBacktick[0].length);
+    }
+  }
+
+  if (leadingBacktick) {
+    processed = processed.replace(/^[ \t]*\r?\n/, "");
+  }
 
   if (cfg.zhtw.enabled && HAS_CJK_RE.test(processed)) {
     const converted = await converter(processed, cfg.zhtw);
