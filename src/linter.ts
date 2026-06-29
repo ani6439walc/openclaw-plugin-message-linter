@@ -46,7 +46,8 @@ export async function lintMessageContent(
 
     if (!isClosed) {
       processed =
-        `${prefix}${separatedRest}` + processed.slice(leadingBacktick[0].length);
+        `${prefix}${separatedRest}` +
+        processed.slice(leadingBacktick[0].length);
       processed = processed.replace(/^[ \t]*\r?\n/, "");
     }
   }

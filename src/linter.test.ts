@@ -222,15 +222,15 @@ describe("message-linter logic (lintMessageContent)", () => {
   });
 
   it("removes a stray leading backtick followed directly by text", async () => {
-    await expect(lintMessageContent("`把 USB 5V 降到電池工作電壓")).resolves.toBe(
-      "把 USB 5V 降到電池工作電壓",
-    );
+    await expect(
+      lintMessageContent("`把 USB 5V 降到電池工作電壓"),
+    ).resolves.toBe("把 USB 5V 降到電池工作電壓");
   });
 
   it("removes a direct-text stray leading backtick before later inline code", async () => {
-    await expect(lintMessageContent("`Note: use `config` properly")).resolves.toBe(
-      "Note: use `config` properly",
-    );
+    await expect(
+      lintMessageContent("`Note: use `config` properly"),
+    ).resolves.toBe("Note: use `config` properly");
   });
 
   it("preserves the newline after stripping a direct-text leading backtick", async () => {
