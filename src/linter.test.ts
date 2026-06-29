@@ -203,6 +203,15 @@ describe("message-linter logic (lintMessageContent)", () => {
     );
   });
 
+  it("preserves leading inline code when the first line closes the backtick", async () => {
+    const input = "` USB 5V ` should stay inline code\n---\nDone";
+    const output = await lintMessageContent(input);
+
+    expect(output).toBe(
+      "` USB 5V ` should stay inline code\n~~　　　　　　　　　　　　　　　~~\nDone",
+    );
+  });
+
   it("falls back to formatted text when converter has no output", async () => {
     const input = "[https://example.com](https://example.com) 中国";
     const output = await lintMessageContent(input, async () => undefined, {

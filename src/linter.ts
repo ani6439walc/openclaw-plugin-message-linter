@@ -29,7 +29,11 @@ export async function lintMessageContent(
   const { discord } = cfg;
 
   let processed = content;
-  processed = processed.replace(/^(\s*)`[ \t]+(?=\S)/, "$1");
+  processed = processed.replace(
+    /^(\s*)`[ \t]+([^\r\n]*)/,
+    (match, prefix: string, firstLineRest: string) =>
+      firstLineRest.includes("`") ? match : `${prefix}${firstLineRest}`,
+  );
 
   if (cfg.zhtw.enabled && HAS_CJK_RE.test(processed)) {
     const converted = await converter(processed, cfg.zhtw);
