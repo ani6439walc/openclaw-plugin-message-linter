@@ -28,7 +28,8 @@
     "README.md",
     "package.json",
     "openclaw.plugin.json",
-    "dist"
+    "dist",
+    "assets"
   ],
   "openclaw": {
     "extensions": [
