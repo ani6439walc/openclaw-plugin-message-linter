@@ -36,18 +36,19 @@ export class S2TConverter {
   }
 
   convert(input: string): string {
+    const inputChars = Array.from(input);
     const outChars: string[] = [];
     const protectedSet = new Set<number>();
 
     let i = 0;
-    while (i < input.length) {
+    while (i < inputChars.length) {
       let bestEnd = 0;
       let bestVal = "";
 
       let node = this.trieRoot;
       let j = i;
-      while (j < input.length) {
-        const ch = input[j];
+      while (j < inputChars.length) {
+        const ch = inputChars[j];
         const child = node.children.get(ch);
         if (!child) break;
         node = child;
@@ -64,7 +65,7 @@ export class S2TConverter {
         for (let k = zoneStart; k < outChars.length; k++) protectedSet.add(k);
         i += bestEnd;
       } else {
-        const ch = input[i];
+        const ch = inputChars[i];
         outChars.push(this.charMap.get(ch) ?? ch);
         i += 1;
       }

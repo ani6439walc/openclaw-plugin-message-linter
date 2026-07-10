@@ -45,10 +45,11 @@
     }
   },
   "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write '**/*.md' '**/*.json' '**/*.ts' '**/*.mjs'",
     "test": "vitest run",
-    "build": "tsc",
+    "build": "pnpm run clean && tsc",
     "generate:zhtw": "node scripts/generate-zhtw-data.mjs"
   },
   "dependencies": {

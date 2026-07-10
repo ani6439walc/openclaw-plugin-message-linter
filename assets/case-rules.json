@@ -1,49 +1,17 @@
 [
-  {
-    "term": "API",
-    "alternatives": ["Api", "api", "APIs"]
-  },
-  {
-    "term": "Facebook"
-  },
-  {
-    "term": "GitHub"
-  },
-  {
-    "term": "Google"
-  },
-  {
-    "term": "HTTP"
-  },
-  {
-    "term": "HTTPS"
-  },
-  {
-    "term": "Instagram"
-  },
-  {
-    "term": "JSON"
-  },
-  {
-    "term": "JavaScript",
-    "alternatives": ["javascript", "JAVASCRIPT"]
-  },
-  {
-    "term": "Linux"
-  },
-  {
-    "term": "Python"
-  },
-  {
-    "term": "React"
-  },
-  {
-    "term": "Rust"
-  },
-  {
-    "term": "TypeScript"
-  },
-  {
-    "term": "macOS"
-  }
+  { "term": "API", "alternatives": ["Api", "api", "APIs"] },
+  { "term": "Facebook" },
+  { "term": "GitHub" },
+  { "term": "Google" },
+  { "term": "HTTP" },
+  { "term": "HTTPS" },
+  { "term": "Instagram" },
+  { "term": "JSON" },
+  { "term": "JavaScript", "alternatives": ["javascript", "JAVASCRIPT"] },
+  { "term": "Linux" },
+  { "term": "Python" },
+  { "term": "React" },
+  { "term": "Rust" },
+  { "term": "TypeScript" },
+  { "term": "macOS" }
 ]

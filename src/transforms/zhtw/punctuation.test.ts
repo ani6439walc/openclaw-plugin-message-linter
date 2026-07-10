@@ -9,6 +9,14 @@ describe("zhtw punctuation rules", () => {
     );
   });
 
+  it("recognizes supplementary-plane Han punctuation context", () => {
+    expect(applyPunctuationRules("𠀀, next 𠀀. next 𠀀! next")).toBe(
+      "𠀀， next 𠀀。 next 𠀀！ next",
+    );
+    expect(applyPunctuationRules("𠀀 text, next")).toBe("𠀀 text， next");
+    expect(applyPunctuationRules("𠀀(foo)")).toBe("𠀀（foo）");
+  });
+
   it("does not rewrite raw URLs, email addresses, or English sentences", () => {
     const input =
       "URL https://example.com/api?v=1.2, email admin@test.com, English: Hello, world! 中文,測試。";
@@ -38,6 +46,23 @@ describe("zhtw punctuation rules", () => {
   it("normalizes sentence-ending periods after protected URLs", () => {
     expect(applyPunctuationRules("請看 https://example.com.")).toBe(
       "請看 https://example.com。",
+    );
+  });
+
+  it("preserves numeric thousands separators", () => {
+    expect(applyPunctuationRules("共有 1,000 筆資料")).toBe(
+      "共有 1,000 筆資料",
+    );
+  });
+
+  it("normalizes Chinese parenthetical pairs without mixing widths", () => {
+    expect(applyPunctuationRules("請看(說明).")).toBe("請看（說明）。");
+    expect(applyPunctuationRules("中文(foo)範例")).toBe("中文（foo）範例");
+  });
+
+  it("preserves function-call-like ASCII parentheses", () => {
+    expect(applyPunctuationRules("呼叫 foo(中文) 取得結果.")).toBe(
+      "呼叫 foo(中文) 取得結果。",
     );
   });
 });

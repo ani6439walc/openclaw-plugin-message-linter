@@ -1,9 +1,13 @@
 import fs from "node:fs";
 import { describe, expect, it } from "vitest";
+import plugin from "./index.js";
 import { DEFAULT_FEATURES } from "./src/config.js";
 
 const manifest = JSON.parse(
   fs.readFileSync(new URL("./openclaw.plugin.json", import.meta.url), "utf-8"),
+);
+const packageJson = JSON.parse(
+  fs.readFileSync(new URL("./package.json", import.meta.url), "utf-8"),
 );
 
 const featureProperties = manifest.configSchema.properties.features.properties;
@@ -17,7 +21,14 @@ const zhtwObjectSchema = featureProperties.zhtw.anyOf.find(
 describe("message-linter manifest", () => {
   it("has the correct basic structure", () => {
     expect(manifest.id).toBe("message-linter");
-    expect(manifest.description).toContain("angle brackets");
+    expect(manifest.description).toBe(plugin.description);
+    expect(manifest.description).toContain("Markdown");
+    expect(manifest.description).toContain("Taiwan Traditional Chinese");
+  });
+
+  it("cleans stale build output before compiling runtime sources", () => {
+    expect(packageJson.scripts.clean).toContain("rmSync");
+    expect(packageJson.scripts.build).toBe("pnpm run clean && tsc");
   });
 
   it("keeps feature defaults aligned with DEFAULT_FEATURES", () => {
@@ -52,6 +63,7 @@ describe("message-linter manifest", () => {
   });
 
   it("documents backward-compatible boolean and object zhtw config shapes", () => {
+    expect(featureProperties.zhtw.description).not.toContain("planned");
     expect(featureProperties.zhtw.anyOf).toHaveLength(2);
     expect(zhtwBooleanSchema).toEqual({ type: "boolean" });
     expect(zhtwObjectSchema.additionalProperties).toBe(false);

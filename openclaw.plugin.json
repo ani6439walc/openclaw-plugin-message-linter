@@ -1,7 +1,7 @@
 {
   "id": "message-linter",
   "name": "Message Linter",
-  "description": "Suppresses automatic URL embeds in messages by wrapping Markdown link URLs in angle brackets.",
+  "description": "Normalizes outgoing messages with Discord-oriented Markdown cleanup, kaomoji-safe formatting, and optional Simplified Chinese to Taiwan Traditional Chinese conversion.",
   "activation": {
     "onStartup": true
   },
@@ -15,7 +15,7 @@
         "additionalProperties": false,
         "properties": {
           "zhtw": {
-            "description": "Simplified Chinese to Taiwan Traditional Chinese conversion. Boolean values are kept for backward compatibility; object values configure planned ZH-TW subfeatures.",
+            "description": "Simplified Chinese to Taiwan Traditional Chinese conversion. Boolean values are kept for backward compatibility; object values configure optional case, punctuation, spacing, and quote normalization.",
             "default": false,
             "anyOf": [
               {

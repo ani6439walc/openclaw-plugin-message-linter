@@ -25,6 +25,30 @@ function hasMatchAny(text: string, terms: readonly string[]): boolean {
   return false;
 }
 
+function countNonOverlappingMatches(
+  text: string,
+  terms: readonly string[],
+): number {
+  const occupied: Array<{ start: number; end: number }> = [];
+  const uniqueTerms = [...new Set(terms)].sort(
+    (left, right) => right.length - left.length,
+  );
+
+  for (const term of uniqueTerms) {
+    let offset = text.indexOf(term);
+    while (offset !== -1) {
+      const end = offset + term.length;
+      if (!occupied.some((match) => offset < match.end && end > match.start)) {
+        occupied.push({ start: offset, end });
+        break;
+      }
+      offset = text.indexOf(term, offset + 1);
+    }
+  }
+
+  return occupied.length;
+}
+
 function forEachOccurrence(
   text: string,
   search: string,
@@ -126,8 +150,11 @@ function acceptsRuleAt(
     if (exceptions.length > 0 && hasMatchAny(window, exceptions)) {
       return false;
     }
-    if (contextClues.length > 0 && !hasMatchAny(window, contextClues)) {
-      return false;
+    if (contextClues.length > 0) {
+      const requiredMatches = rule.type === "confusable" ? 2 : 1;
+      if (countNonOverlappingMatches(window, contextClues) < requiredMatches) {
+        return false;
+      }
     }
     if (
       negativeContextClues.length > 0 &&
@@ -135,6 +162,10 @@ function acceptsRuleAt(
     ) {
       return false;
     }
+  }
+  // Confusable rules require at least 2 context clues unconditionally
+  if (rule.type === "confusable" && contextClues.length < 2) {
+    return false;
   }
 
   if (
@@ -171,6 +202,7 @@ export function applyFixes(text: string, issues: readonly Issue[]): string {
 
   const deduped: Issue[] = [];
   for (const issue of issues) {
+    if (issue.suggestions.length !== 1) continue;
     let overlapped = false;
     for (const existing of deduped) {
       const aStart = issue.offset;

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "sources": {
+    "opencc": {
+      "repository": "https://github.com/BYVoid/OpenCC",
+      "commit": "72965542721b5d0c171cda80016342aed3bd5a89",
+      "files": {
+        "STPhrases.txt": "7f121e46abc71c1055ebee0445be4a98290023124657b24557f1a36bd2dc144d",
+        "STCharacters.txt": "81c27e6364fd164181276197b9215cf95f7f12a050aa207375248a5badf8d6fc",
+        "TWVariants.txt": "48e694ad1ac43fd5927285e4fb3aa8a8dc9d9c065d6d3d314527c021a12839e2"
+      }
+    },
+    "zhtwMcp": {
+      "repository": "https://github.com/sysprog21/zhtw-mcp",
+      "commit": "2e0f4e4912a8ffdacf7fa3a155cb20c29cba043b",
+      "files": {
+        "assets/ruleset.json": "2d43bf2f84a0a842911b216dc61b63d1f194509f396c64dc11a56748de9b657a"
+      }
+    }
+  },
+  "counts": {
+    "phrases": 39751,
+    "chars": 3871,
+    "variants": 38,
+    "spellingRules": 1543,
+    "caseRules": 15
+  }
+}

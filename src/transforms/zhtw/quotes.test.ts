@@ -8,6 +8,26 @@ describe("zhtw quote rules", () => {
     );
   });
 
+  it("does not pair ASCII quotes across sentence boundaries", () => {
+    expect(applyQuoteRules('6" monitor。他說"你好"。')).toBe(
+      '6" monitor。他說「你好」。',
+    );
+    expect(applyQuoteRules('他說"你好!"。')).toBe("他說「你好!」。");
+  });
+
+  it("does not pair smart quotes across sentence boundaries", () => {
+    expect(applyQuoteRules("6“ monitor。他說“你好”。")).toBe(
+      "6“ monitor。他說「你好」。",
+    );
+    expect(applyQuoteRules("6‘ monitor。他說‘你好’。")).toBe(
+      "6‘ monitor。他說『你好』。",
+    );
+  });
+
+  it("recognizes supplementary-plane Han quote context", () => {
+    expect(applyQuoteRules('𠀀 "Hello" next')).toBe("𠀀 「Hello」 next");
+  });
+
   it("normalizes nested single quotes inside Taiwan double quotes", () => {
     expect(applyQuoteRules("他說“請看‘說明’”。")).toBe(
       "他說「請看『說明』」。",

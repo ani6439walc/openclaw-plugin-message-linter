@@ -6,6 +6,7 @@ import type { ResolvedZhTwFeatures } from "../../config.js";
 import { S2TConverter } from "./s2t.js";
 import { applyCaseRules, type CaseRule } from "./case.js";
 import { applyPunctuationRules } from "./punctuation.js";
+import { maskProtectedText } from "./protect.js";
 import { applyQuoteRules } from "./quotes.js";
 import { applySpacingRules } from "./spacing.js";
 import { scanSpelling, applyFixes } from "./scanner.js";
@@ -82,7 +83,8 @@ class ZhTwManager {
   ): Promise<string | undefined> {
     await this.ensure();
     const codeMask = maskMarkdownCode(text);
-    const s2tResult = this.converter!.convert(codeMask.maskedText);
+    const protectedMask = maskProtectedText(codeMask.maskedText);
+    const s2tResult = this.converter!.convert(protectedMask.maskedText);
     const issues = scanSpelling(s2tResult, this.spellingRules!);
     let fixed = applyFixes(s2tResult, issues);
     if (features?.case === true) {
@@ -95,9 +97,10 @@ class ZhTwManager {
       fixed = applyPunctuationRules(fixed);
     }
     if (features?.spacing === true) {
-      fixed = applySpacingRules(fixed);
+      fixed = applySpacingRules(protectedMask.restore(fixed));
+      return codeMask.restore(fixed);
     }
-    return codeMask.restore(fixed);
+    return codeMask.restore(protectedMask.restore(fixed));
   }
 }
 

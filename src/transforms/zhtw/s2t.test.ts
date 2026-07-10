@@ -94,6 +94,16 @@ describe("S2TConverter", () => {
       expect(converter.convert("字符🎉测试")).toBe("字符🎉測試");
     });
 
+    it("maps a non-BMP CJK character", () => {
+      const converter = new S2TConverter([], [["𠀾", "𠁞"]], []);
+      expect(converter.convert("𠀾")).toBe("𠁞");
+    });
+
+    it("matches a phrase containing non-BMP CJK characters", () => {
+      const converter = new S2TConverter([["复𫗧之忧", "覆餗之憂"]], [], []);
+      expect(converter.convert("复𫗧之忧")).toBe("覆餗之憂");
+    });
+
     it("shorter phrase before longer phrase in array — longest-match wins", () => {
       const converter = new S2TConverter(
         [
@@ -142,6 +152,38 @@ describe("scanSpelling edge cases", () => {
       { found: "后台", suggestions: ["後臺"], offset: 2 },
     ]);
     expect(scanSpelling("普通后台", rules)).toEqual([]);
+  });
+
+  it("requires two distinct context clues for confusable rules", () => {
+    const rules = [
+      {
+        from: "函數",
+        to: ["函式"],
+        type: "confusable",
+        contextClues: ["程式碼", "編譯", "回傳值"],
+      },
+    ];
+
+    expect(scanSpelling("程式碼函數", rules)).toEqual([]);
+    expect(scanSpelling("編譯程式碼函數", rules)).toEqual([
+      { found: "函數", suggestions: ["函式"], offset: 5 },
+    ]);
+  });
+
+  it("requires confusable context clues to match non-overlapping text", () => {
+    const rules = [
+      {
+        from: "機體",
+        to: ["記憶體"],
+        type: "confusable",
+        contextClues: ["DRAM", "RAM"],
+      },
+    ];
+
+    expect(scanSpelling("DRAM機體", rules)).toEqual([]);
+    expect(scanSpelling("DRAM 與 RAM 機體", rules)).toEqual([
+      { found: "機體", suggestions: ["記憶體"], offset: 11 },
+    ]);
   });
 
   it("honors negative context clues when scanning spelling rules", () => {
@@ -208,11 +250,11 @@ describe("applyFixes edge cases", () => {
     expect(result).toMatch(/HELLO/);
   });
 
-  it("applies only the first suggestion per issue", () => {
+  it("skips issues with multiple suggestions", () => {
     const issues: Issue[] = [
       { found: "你好", suggestions: ["HELLO", "HI"], offset: 0 },
     ];
     const result = applyFixes("你好世界", issues);
-    expect(result).toBe("HELLO世界");
+    expect(result).toBe("你好世界");
   });
 });
