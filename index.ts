@@ -5,7 +5,7 @@ const plugin: OpenClawPluginDefinition = definePluginEntry({
   id: "message-linter",
   name: "Message Linter",
   description:
-    "Suppresses automatic URL embeds in Discord messages by wrapping Markdown link URLs in angle brackets.",
+    "Normalizes outgoing messages with Discord-oriented Markdown cleanup, kaomoji-safe formatting, and optional Simplified Chinese to Taiwan Traditional Chinese conversion.",
   register: registerMessageLinterPlugin,
 });
 

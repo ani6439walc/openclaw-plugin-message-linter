@@ -281,18 +281,6 @@
     ]
   },
   {
-    "from": "中間件",
-    "to": ["中介層", "中介軟體"],
-    "type": "cross_strait",
-    "context": "@domain 網路。架構層次概念 vs 軟體產品 (如 message broker)"
-  },
-  {
-    "from": "串口",
-    "to": ["串列埠", "序列埠"],
-    "type": "cross_strait",
-    "context": "@domain 硬體"
-  },
-  {
     "from": "串行",
     "to": ["序列"],
     "type": "cross_strait",
@@ -340,12 +328,6 @@
     "to": ["企業"],
     "type": "typo",
     "context": "常見 OCR/輸入法錯字"
-  },
-  {
-    "from": "也是醉了",
-    "to": ["沒救了", "無言"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "也門",
@@ -402,12 +384,6 @@
     "to": ["二維條碼"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "二進制",
-    "to": ["二進位", "二進位制"],
-    "type": "cross_strait",
-    "context": "@domain 數學"
   },
   {
     "from": "互聯網",
@@ -537,12 +513,6 @@
     "contextClues": ["購物", "消費", "折扣", "優惠"]
   },
   {
-    "from": "令牌",
-    "to": ["權杖", "代幣", "詞元"],
-    "type": "cross_strait",
-    "context": "@domain 資安。區分驗證/授權、加密貨幣、NLP 分詞 (tokenization) 等不同語境"
-  },
-  {
     "from": "以太",
     "to": ["乙太"],
     "type": "cross_strait",
@@ -616,13 +586,6 @@
     "contextClues": ["CSS", "UI", "介面", "排版", "設計"]
   },
   {
-    "from": "位圖",
-    "to": ["點陣圖", "位元映射", "位元圖"],
-    "type": "cross_strait",
-    "context": "@domain 資料結構。限圖形/程式設計語境",
-    "contextClues": ["圖片", "像素", "畫素", "影像", "圖形"]
-  },
-  {
     "from": "位址分配",
     "to": ["位址配置"],
     "type": "cross_strait",
@@ -646,13 +609,6 @@
     "to": ["逐位元複製"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
-  },
-  {
-    "from": "位操作",
-    "to": ["逐位元操作", "逐位元運算"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計",
-    "contextClues": ["位元", "mask", "shift", "程式碼"]
   },
   {
     "from": "位模式",
@@ -731,12 +687,6 @@
     "to": ["便利商店"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "便攜式",
-    "to": ["行動式", "攜帶型"],
-    "type": "cross_strait",
-    "context": "@domain 硬體"
   },
   {
     "from": "便攜版",
@@ -847,13 +797,6 @@
     "context": "@domain 通訊"
   },
   {
-    "from": "修飾符",
-    "to": ["修飾子", "修飾詞", "飾詞"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計",
-    "contextClues": ["class", "public", "程式碼", "宣告", "類別"]
-  },
-  {
     "from": "俯臥撑",
     "to": ["伏地挺身"],
     "type": "cross_strait",
@@ -951,18 +894,6 @@
     "type": "cross_strait",
     "context": "@domain 醫學",
     "contextClues": ["截肢", "復健", "裝置", "肢體"]
-  },
-  {
-    "from": "健壯",
-    "to": ["強固", "穩健"],
-    "type": "cross_strait",
-    "context": "@domain IT"
-  },
-  {
-    "from": "健壯性",
-    "to": ["強固性", "穩健性"],
-    "type": "cross_strait",
-    "context": "@domain IT"
   },
   {
     "from": "健美褲",
@@ -1148,12 +1079,6 @@
     "context": "@domain 教育"
   },
   {
-    "from": "充值",
-    "to": ["加值", "儲值"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "充電寶",
     "to": ["行動電源"],
     "type": "cross_strait",
@@ -1239,12 +1164,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "內地",
-    "to": ["中國大陸", "中國"],
-    "type": "political_coloring",
-    "context": "區分地理區域與國家/政治實體。「內地」隱含 cn 政治立場"
-  },
-  {
     "from": "內存",
     "to": ["記憶體"],
     "type": "cross_strait",
@@ -1322,12 +1241,6 @@
     "to": ["奈洛比"],
     "type": "cross_strait",
     "context": "@geo city (城市)"
-  },
-  {
-    "from": "內聯",
-    "to": ["行內", "內嵌"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。CSS 語境 vs function 語境"
   },
   {
     "from": "內聯函數",
@@ -1446,12 +1359,6 @@
     "to": ["相容"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "冒泡排序",
-    "to": ["泡沫排序", "氣泡排序"],
-    "type": "cross_strait",
-    "context": "@domain 資料結構"
   },
   {
     "from": "冪次",
@@ -1661,12 +1568,6 @@
     "context": "@domain 程式設計"
   },
   {
-    "from": "函數庫",
-    "to": ["函式庫", "程式庫"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "函數式編程",
     "to": ["函數式程式設計"],
     "type": "cross_strait",
@@ -1675,12 +1576,6 @@
   {
     "from": "函數式語言",
     "to": ["函數式程式語言"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "函數模板",
-    "to": ["函式模板", "函式範本"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
   },
@@ -1906,7 +1801,7 @@
     "to": ["基本矩陣"],
     "type": "cross_strait",
     "context": "@domain 線性代數",
-    "contextClues": ["矩陣", "行列式", "列運算", "行變換", "消去", "高斯"]
+    "contextClues": ["行列式", "列運算", "行變換", "消去", "高斯"]
   },
   {
     "from": "利比裡亞",
@@ -1994,18 +1889,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "前方高能",
-    "to": ["注意", "小心"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
-    "from": "前沿",
-    "to": ["尖端", "前瞻", "先進"],
-    "type": "cross_strait",
-    "context": "@domain IT。視語境選用：「尖端」(技術)、「前瞻」(研究)、「先進」(一般)"
-  },
-  {
     "from": "前綴",
     "to": ["字首"],
     "type": "cross_strait",
@@ -2016,12 +1899,6 @@
     "to": ["前置宣告"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
-  },
-  {
-    "from": "剪切",
-    "to": ["剪下", "裁切"],
-    "type": "cross_strait",
-    "context": "@domain UI。UI 操作 cut = 剪下；圖片裁剪 crop = 裁切"
   },
   {
     "from": "剪貼板",
@@ -2210,23 +2087,10 @@
     "context": "@domain IT"
   },
   {
-    "from": "博取眼球",
-    "to": ["引人注目", "吸睛"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "博士研究生",
     "to": ["博士班"],
     "type": "cross_strait",
     "context": "@domain 教育"
-  },
-  {
-    "from": "博客",
-    "to": ["部落格", "網誌"],
-    "type": "cross_strait",
-    "context": "@domain IT",
-    "exceptions": ["博客來"]
   },
   {
     "from": "博茨瓦納",
@@ -2273,13 +2137,6 @@
     "contextClues": ["JIT", "編譯"]
   },
   {
-    "from": "卸載",
-    "to": ["解除安裝", "移除"],
-    "type": "cross_strait",
-    "context": "@domain IT。完整移除軟體 (uninstall) vs 移除某個元件/項目 (remove)",
-    "negativeContextClues": ["掛載", "mount", "umount", "檔案系統", "分割區"]
-  },
-  {
     "from": "厄瓜多爾",
     "to": ["厄瓜多"],
     "type": "cross_strait",
@@ -2309,55 +2166,6 @@
     "type": "cross_strait",
     "context": "@domain IT。tw 標準用語為「原始程式碼」(source code)",
     "exceptions": ["開放原始碼"]
-  },
-  {
-    "from": "原子",
-    "to": ["不可分割", "atomic"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。CS atomic 語境指 indivisible 操作；物理「原子」(atom) 為正確 tw 用法 (@seealso 原子操作, 原子性)",
-    "contextClues": [
-      "並發",
-      "並行",
-      "互斥",
-      "競態",
-      "執行緒",
-      "thread",
-      "atomic",
-      "mutex",
-      "CAS"
-    ],
-    "negativeContextClues": ["物理", "化學", "中子", "質子", "粒子"],
-    "exceptions": [
-      "原子核",
-      "原子能",
-      "原子彈",
-      "原子筆",
-      "原子鐘",
-      "原子序",
-      "原子量",
-      "原子論",
-      "原子價",
-      "原子團",
-      "原子半徑",
-      "原子軌道",
-      "原子軌域",
-      "原子質量",
-      "原子物理",
-      "原子模型",
-      "原子化"
-    ]
-  },
-  {
-    "from": "原子性",
-    "to": ["不可分割的特性", "atomics"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。CS atomicity；指操作不可被中斷的特性，與物理「原子」無關 (@seealso 原子, 原子操作)"
-  },
-  {
-    "from": "原子操作",
-    "to": ["不可分割操作", "最小操作", "atomic operation"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。此處「原子」為 indivisible 語意，非物理學的 atom (@seealso 原子, 原子性)"
   },
   {
     "from": "原珠筆",
@@ -2431,13 +2239,6 @@
     "to": ["古典機率模型"],
     "type": "cross_strait",
     "context": "@domain 數學"
-  },
-  {
-    "from": "句柄",
-    "to": ["代號", "控制代碼", "控制代號"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。作為名詞時使用",
-    "contextClues": ["函式", "檔案", "程式碼", "視窗", "資源"]
   },
   {
     "from": "另存為",
@@ -2549,18 +2350,6 @@
     "to": ["回溯相容"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "含金量",
-    "to": ["知識含量", "潛在價值", "內涵"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
-    "from": "吸引眼球",
-    "to": ["引人矚目", "目不轉睛"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "吹喇叭",
@@ -2730,12 +2519,6 @@
     "context": "@domain 日常"
   },
   {
-    "from": "單擊",
-    "to": ["點選", "按一下"],
-    "type": "cross_strait",
-    "context": "@domain UI。UI 操作 click"
-  },
-  {
     "from": "單本劇",
     "to": ["單元劇"],
     "type": "cross_strait",
@@ -2752,12 +2535,6 @@
     "to": ["微控制器"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "單選按鈕",
-    "to": ["選項按鈕", "圓鈕"],
-    "type": "cross_strait",
-    "context": "@domain UI"
   },
   {
     "from": "單選框",
@@ -2806,12 +2583,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "回滾",
-    "to": ["回溯", "還原"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "回調",
     "to": ["回呼"],
     "type": "cross_strait",
@@ -2822,12 +2593,6 @@
     "to": ["Enter"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
-  },
-  {
-    "from": "回車鍵",
-    "to": ["Enter 鍵", "輸入鍵"],
-    "type": "cross_strait",
-    "context": "@domain IT"
   },
   {
     "from": "因特網",
@@ -2861,18 +2626,6 @@
     "context": "@domain 日常"
   },
   {
-    "from": "圓括弧",
-    "to": ["小括弧", "小括號"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "圓括號",
-    "to": ["小括弧", "小括號"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "圓珠筆",
     "to": ["原子筆"],
     "type": "cross_strait",
@@ -2883,12 +2636,6 @@
     "to": ["高麗菜"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "圖像",
-    "to": ["影像", "圖片"],
-    "type": "cross_strait",
-    "context": "@domain IT。照片/圖檔 = 圖片 (image file)；電腦視覺/處理 = 影像 (visual image)"
   },
   {
     "from": "圖元",
@@ -3001,13 +2748,6 @@
     "contextClues": ["作業系統", "行程", "執行緒", "排程", "OS"]
   },
   {
-    "from": "坐標系",
-    "to": ["座標系統", "座標系"],
-    "type": "cross_strait",
-    "context": "@domain 數學。cn「坐標」= tw「座標」；cn「系」= tw「系統」",
-    "contextClues": ["直角", "極", "笛卡兒", "卡氏", "向量", "平面"]
-  },
-  {
     "from": "坦桑尼亞",
     "to": ["坦尚尼亞"],
     "type": "cross_strait",
@@ -3043,12 +2783,6 @@
     "type": "cross_strait",
     "context": "@domain IT",
     "contextClues": ["DNS", "網址", "註冊", "伺服器", "網站"]
-  },
-  {
-    "from": "埠口",
-    "to": ["通訊埠", "連接埠"],
-    "type": "cross_strait",
-    "context": "@domain 硬體"
   },
   {
     "from": "培訓",
@@ -3103,13 +2837,6 @@
     "to": ["吉里巴斯"],
     "type": "cross_strait",
     "context": "@geo country (國名)"
-  },
-  {
-    "from": "基類",
-    "to": ["基底類別", "基礎類別"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計",
-    "contextClues": ["繼承", "衍生", "多型", "類別", "class", "派生"]
   },
   {
     "from": "堆",
@@ -3333,22 +3060,10 @@
     "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
   },
   {
-    "from": "大實話",
-    "to": ["真心話", "實話", "真話", "人話"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "大文件",
     "to": ["大檔案"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "大秀一波",
-    "to": ["大顯身手", "大展身手", "展現", "發揮"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "大衍求一術",
@@ -3361,11 +3076,6 @@
     "to": ["味噌"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "大陸同胞",
-    "to": ["中國民眾"],
-    "type": "political_coloring"
   },
   {
     "from": "大面積",
@@ -3547,13 +3257,6 @@
     "type": "cross_strait",
     "context": "@domain UI。限 GUI/HCI 語境。指號碼與代號時，仍可用，如「公文字號」和「身分證字號」",
     "contextClues": ["字型", "文字", "大小", "pt", "CSS"]
-  },
-  {
-    "from": "字面量",
-    "to": ["字面值", "原詞"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計",
-    "contextClues": ["常數", "字串", "編譯", "程式碼", "型別", "代碼"]
   },
   {
     "from": "字體",
@@ -3763,43 +3466,10 @@
     "context": "@domain 資安"
   },
   {
-    "from": "實例",
-    "to": ["實體", "例項", "具現體", "具現化實體"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。依 MoE 辭典，「實例」僅有 example (實際例子) 之意。程式設計中 instance 應譯「實體」或「具現體」，不可借用「實例」",
-    "contextClues": [
-      "物件",
-      "對象",
-      "類別",
-      "class",
-      "new",
-      "建構",
-      "方法",
-      "OOP",
-      "繼承",
-      "多型",
-      "介面",
-      "實體化",
-      "具現化"
-    ]
-  },
-  {
-    "from": "實例化",
-    "to": ["具現化", "實體化"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "實參",
     "to": ["引數"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
-  },
-  {
-    "from": "實打實",
-    "to": ["穩紮穩打", "實實在在"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "實時",
@@ -3886,12 +3556,6 @@
     "to": ["定址"],
     "type": "cross_strait",
     "context": "@domain 通訊"
-  },
-  {
-    "from": "對話框",
-    "to": ["對話方塊", "對話窗", "對話盒"],
-    "type": "cross_strait",
-    "context": "@domain UI。tw「對話方塊」為 Microsoft 用語；「對話窗」「對話盒」亦常見"
   },
   {
     "from": "對象",
@@ -4067,20 +3731,8 @@
     "context": "@domain 硬體。projection screen (電影院) = 銀幕，與電子顯示裝置用途不同"
   },
   {
-    "from": "屏幕截圖",
-    "to": ["螢幕截圖", "螢幕快照"],
-    "type": "cross_strait",
-    "context": "@domain IT"
-  },
-  {
     "from": "屏蔽",
     "to": ["封鎖"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "層次結構",
-    "to": ["階層結構", "階層", "階層體系"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
   },
@@ -4461,12 +4113,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "後台進程",
-    "to": ["背景程式", "背景行程"],
-    "type": "cross_strait",
-    "context": "@domain 作業系統"
-  },
-  {
     "from": "後綴",
     "to": ["字尾"],
     "type": "cross_strait",
@@ -4516,23 +4162,11 @@
     ]
   },
   {
-    "from": "微交易",
-    "to": ["小額支付", "小額付款"],
-    "type": "cross_strait",
-    "context": "@domain 資料"
-  },
-  {
     "from": "微平均",
     "to": ["微觀平均"],
     "type": "cross_strait",
     "context": "@domain IT",
     "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
-  },
-  {
-    "from": "志願者",
-    "to": ["志工", "義工"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "忙等待",
@@ -4582,13 +4216,6 @@
     "to": ["效能"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "恢復",
-    "to": ["還原", "復原"],
-    "type": "cross_strait",
-    "context": "@domain UI。cn「恢復」；tw 用「還原」或「復原」(restore/recover)",
-    "contextClues": ["系統", "備份", "預設", "設定", "出廠", "資料"]
   },
   {
     "from": "恢覆記錄",
@@ -4657,18 +4284,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "應用程序框架",
-    "to": ["應用程式框架", "應用框架"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "懶加載",
-    "to": ["惰性載入", "延遲載入"],
-    "type": "cross_strait",
-    "context": "@domain IT"
-  },
-  {
     "from": "懸停",
     "to": ["暫留"],
     "type": "cross_strait",
@@ -4686,12 +4301,6 @@
     "type": "cross_strait",
     "context": "@domain 程式設計",
     "contextClues": ["運算", "表達式", "運算子", "C++", "編譯", "程式", "語法"]
-  },
-  {
-    "from": "成員變量",
-    "to": ["成員變數", "資料成員"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
   },
   {
     "from": "截取",
@@ -4758,12 +4367,6 @@
   {
     "from": "打橫泡",
     "to": ["攪局"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
-    "from": "打醬油",
-    "to": ["湊熱鬧", "偶然路過"],
     "type": "cross_strait",
     "context": "@domain 日常"
   },
@@ -4941,12 +4544,6 @@
     "context": "@domain 通訊"
   },
   {
-    "from": "掛起",
-    "to": ["凍結", "當機", "卡死", "暫停", "擱置"],
-    "type": "cross_strait",
-    "context": "@domain 作業系統。cn「掛起」兼指 hang（程式/系統凍結，譯為凍結/當機/卡死）與 suspend（任務/執行緒暫停，譯為暫停/擱置）；tw 依語境分別選用"
-  },
-  {
     "from": "採樣",
     "to": ["取樣"],
     "type": "cross_strait",
@@ -5001,12 +4598,6 @@
     "to": ["親民"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "控件",
-    "to": ["控制項", "控制元件"],
-    "type": "cross_strait",
-    "context": "@domain IT"
   },
   {
     "from": "控制台",
@@ -5125,12 +4716,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "擴展塢",
-    "to": ["擴充埠", "擴充集線器"],
-    "type": "cross_strait",
-    "context": "@domain 硬體"
-  },
-  {
     "from": "攝像機",
     "to": ["攝錄影機"],
     "type": "cross_strait",
@@ -5180,12 +4765,6 @@
   {
     "from": "收轉臺",
     "to": ["轉播站"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
-    "from": "放飛自我",
-    "to": ["隨心所欲", "不受拘束", "我行我素"],
     "type": "cross_strait",
     "context": "@domain 日常"
   },
@@ -5311,22 +4890,10 @@
     "context": "@domain UI"
   },
   {
-    "from": "數據成員",
-    "to": ["資料成員", "成員變數"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "數據挖掘",
     "to": ["資料探勘"],
     "type": "cross_strait",
     "context": "@domain 資料"
-  },
-  {
-    "from": "數據流",
-    "to": ["資料流", "串流"],
-    "type": "cross_strait",
-    "context": "@domain IT"
   },
   {
     "from": "數據源",
@@ -5505,12 +5072,6 @@
     "context": "@domain 日常"
   },
   {
-    "from": "新建",
-    "to": ["新增", "建立"],
-    "type": "cross_strait",
-    "context": "@domain IT。UI create/new"
-  },
-  {
     "from": "新西蘭",
     "to": ["紐西蘭"],
     "type": "cross_strait",
@@ -5524,28 +5085,10 @@
     "exceptions": ["中斷點"]
   },
   {
-    "from": "方便麪",
-    "to": ["泡麵", "速食麵"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "方便麵",
     "to": ["泡麵"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "方括弧",
-    "to": ["中括弧", "中括號"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "方括號",
-    "to": ["中括弧", "中括號"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
   },
   {
     "from": "旅遊局",
@@ -5564,22 +5107,6 @@
     "to": ["觀光農業"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "日誌",
-    "to": ["記錄檔", "紀錄"],
-    "type": "confusable",
-    "context": "限 IT 語境。旅行/個人日誌為正確 tw 用法",
-    "contextClues": [
-      "伺服器",
-      "服務器",
-      "系統",
-      "錯誤",
-      "除錯",
-      "偵錯",
-      "調試",
-      "輸出"
-    ]
   },
   {
     "from": "早上好",
@@ -5686,14 +5213,6 @@
     "context": "@domain 程式設計"
   },
   {
-    "from": "最核心",
-    "to": ["最關鍵", "最主要"],
-    "type": "confusable",
-    "context": "「核心」保留給 kernel (OS/ML)；形容詞用「關鍵」或「主要」避免語意混淆",
-    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"],
-    "positionalClues": ["not_after:kernel", "not_after:Linux"]
-  },
-  {
     "from": "最終用戶",
     "to": ["終端使用者"],
     "type": "cross_strait",
@@ -5710,12 +5229,6 @@
     "to": ["交談識別碼"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "有一說一",
-    "to": ["平心而論", "實話實說", "就事論事", "說真的", "老實說"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "有損壓縮",
@@ -5766,12 +5279,6 @@
     "context": "service process / daemon；「程序」此處指 process (@seealso 程序管理)"
   },
   {
-    "from": "服務端",
-    "to": ["伺服端", "伺服器"],
-    "type": "cross_strait",
-    "context": "@domain IT"
-  },
-  {
     "from": "木馬",
     "to": ["木馬程式"],
     "type": "cross_strait",
@@ -5805,18 +5312,6 @@
     "context": "@domain 教育"
   },
   {
-    "from": "東盟",
-    "to": ["東協"],
-    "type": "political_coloring",
-    "context": "cn「東南亞國家聯盟」簡稱，tw「東南亞國家協會」簡稱"
-  },
-  {
-    "from": "析構函數",
-    "to": ["解構函式", "解構式"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "枚舉",
     "to": ["列舉"],
     "type": "cross_strait",
@@ -5828,12 +5323,6 @@
     "type": "cross_strait",
     "context": "@domain IT",
     "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
-  },
-  {
-    "from": "查找",
-    "to": ["尋找", "搜尋"],
-    "type": "cross_strait",
-    "context": "@domain UI。UI find/search"
   },
   {
     "from": "查看",
@@ -5853,15 +5342,6 @@
     "to": ["總和檢查碼"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
-  },
-  {
-    "from": "核心功能",
-    "to": ["關鍵功能", "主要功能"],
-    "type": "confusable",
-    "context": "避免混用 kernel (核心) 和 core (關鍵)；除非指 kernel feature",
-    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"],
-    "negativeContextClues": ["kernel", "核心", "核心模組", "核心空間"],
-    "positionalClues": ["not_after:kernel", "not_after:Linux"]
   },
   {
     "from": "核心問題",
@@ -5902,14 +5382,6 @@
     "to": ["關鍵洞察"],
     "type": "cross_strait",
     "context": "@domain IT。避免濫用「核心」; 當不指 OS kernel 時改用「關鍵」"
-  },
-  {
-    "from": "核心邏輯",
-    "to": ["關鍵邏輯", "主要邏輯"],
-    "type": "confusable",
-    "context": "避免混用 kernel (核心) 和 core (關鍵)",
-    "contextClues": ["程式", "軟體", "系統", "模組", "架構", "演算法"],
-    "positionalClues": ["not_after:kernel", "not_after:Linux"]
   },
   {
     "from": "格林納達",
@@ -5998,18 +5470,6 @@
     "context": "@domain 程式設計"
   },
   {
-    "from": "構造函數",
-    "to": ["建構函式", "建構式"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "樂子人",
-    "to": ["唯恐天下不亂", "愉悅犯"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "標清",
     "to": ["標準畫質"],
     "type": "cross_strait",
@@ -6020,12 +5480,6 @@
     "to": ["標準 C 語言函式庫"],
     "type": "cross_strait",
     "context": "@domain 程式設計。避免孤立的「C」造成突兀感，完整表述為「C 語言函式庫」"
-  },
-  {
-    "from": "標準庫",
-    "to": ["標準函式庫", "標準程式庫"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。cn 用「庫」作 library 後綴；tw 用「函式庫」或「程式庫」"
   },
   {
     "from": "標準正交",
@@ -6040,13 +5494,6 @@
     "type": "cross_strait",
     "context": "@domain IT",
     "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
-  },
-  {
-    "from": "標籤頁",
-    "to": ["分頁標籤", "分頁"],
-    "type": "cross_strait",
-    "context": "@domain UI。cn「標籤頁」；tw 用「分頁標籤」或「分頁」(tab page)",
-    "contextClues": ["瀏覽器", "視窗", "開啟", "關閉", "切換"]
   },
   {
     "from": "標識符",
@@ -6194,12 +5641,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "檯式機",
-    "to": ["桌機", "桌上型電腦"],
-    "type": "cross_strait",
-    "context": "@domain IT"
-  },
-  {
     "from": "正則表達式",
     "to": ["正規表示式"],
     "type": "cross_strait",
@@ -6303,12 +5744,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "毛玻璃",
-    "to": ["磨砂玻璃", "霧面玻璃"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "毛腳女婿",
     "to": ["準女婿"],
     "type": "cross_strait",
@@ -6377,12 +5812,6 @@
   {
     "from": "沒可能",
     "to": ["不可能"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
-    "from": "沒誰了",
-    "to": ["無人能敵", "沒人能超越", "敗給你", "天兵"],
     "type": "cross_strait",
     "context": "@domain 日常"
   },
@@ -6516,12 +5945,6 @@
     "context": "@domain 日常"
   },
   {
-    "from": "流水線",
-    "to": ["生產線", "管線"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。工廠語境 vs CPU/軟體語境"
-  },
-  {
     "from": "流程重構",
     "to": ["流程再造"],
     "type": "cross_strait",
@@ -6600,12 +6023,6 @@
     "negativeContextClues": ["添加物", "添加劑", "食品"]
   },
   {
-    "from": "渠道",
-    "to": ["管道", "通路"],
-    "type": "cross_strait",
-    "context": "@domain 商業"
-  },
-  {
     "from": "渣土車",
     "to": ["砂石車"],
     "type": "cross_strait",
@@ -6666,12 +6083,6 @@
     "context": "@domain 程式設計"
   },
   {
-    "from": "溢出",
-    "to": ["溢位", "上限溢位"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "滑塊",
     "to": ["滑桿"],
     "type": "cross_strait",
@@ -6710,12 +6121,6 @@
     "context": "@domain 硬體"
   },
   {
-    "from": "演示",
-    "to": ["示範", "展示"],
-    "type": "cross_strait",
-    "context": "@domain IT。實際操作示範 (demo) vs 展覽呈現 (showcase)"
-  },
-  {
     "from": "演示文稿",
     "to": ["簡報"],
     "type": "cross_strait",
@@ -6750,18 +6155,6 @@
     "to": ["雷射"],
     "type": "cross_strait",
     "context": "@domain 硬體"
-  },
-  {
-    "from": "激活",
-    "to": ["啟用", "活化"],
-    "type": "cross_strait",
-    "context": "@domain IT。軟體/帳號語境用「啟用」，化學/生物語境用「活化」"
-  },
-  {
-    "from": "激活碼",
-    "to": ["啟動碼", "啟用碼"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
   },
   {
     "from": "灰色影片",
@@ -6805,12 +6198,6 @@
     "type": "cross_strait",
     "context": "@domain IT",
     "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
-  },
-  {
-    "from": "無節操",
-    "to": ["不道德", "不堪入目"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "無繩電話",
@@ -7014,13 +6401,6 @@
     "context": "compound:physical page = 實體頁面 (@seealso 物理記憶體)"
   },
   {
-    "from": "特化",
-    "to": ["特殊化", "特殊化定義", "特殊化宣告"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。限 C++ 模板語境",
-    "contextClues": ["模板", "範本", "C++", "泛型"]
-  },
-  {
     "from": "特立尼達和多巴哥",
     "to": ["千里達及托巴哥"],
     "type": "cross_strait",
@@ -7056,12 +6436,6 @@
     "to": ["玩家共和國"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "玩脫了",
-    "to": ["玩過頭", "過火了"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "班主任",
@@ -7140,12 +6514,6 @@
     "context": "@domain IT。tw: 使用者端堆疊 (stack→堆疊), cn: 用戶棧"
   },
   {
-    "from": "用戶界面",
-    "to": ["使用者介面", "用戶介面", "人機介面"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "用戶級線程",
     "to": ["使用者層級執行緒"],
     "type": "cross_strait",
@@ -7181,27 +6549,6 @@
     "context": "@domain 日常"
   },
   {
-    "from": "異常",
-    "to": ["例外", "異常情況"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計",
-    "contextClues": [
-      "拋出",
-      "捕獲",
-      "處理",
-      "程式碼",
-      "代碼",
-      "函式",
-      "函數",
-      "方法",
-      "類別",
-      "除錯",
-      "偵錯"
-    ],
-    "negativeContextClues": ["偵測", "檢測", "異常值", "統計", "分佈"],
-    "exceptions": ["異常情況"]
-  },
-  {
     "from": "異常聲明",
     "to": ["異常宣告"],
     "type": "cross_strait",
@@ -7214,12 +6561,6 @@
     "type": "cross_strait",
     "context": "@domain 程式設計",
     "contextClues": ["C++", "Java", "函式", "函數", "編譯", "throw"]
-  },
-  {
-    "from": "異構運算",
-    "to": ["異質運算", "異質多核運算"],
-    "type": "cross_strait",
-    "context": "@domain IT。tw 以「異質」對應 heterogeneous (不同質的元件協作)；「異構」多見於 cn。「異質多核運算」特指 CPU+GPU 整合架構 (如 AMD APU)"
   },
   {
     "from": "異步",
@@ -7463,12 +6804,6 @@
     "context": "@domain 教育"
   },
   {
-    "from": "破壁機",
-    "to": ["果汁機", "豆漿機"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "硅",
     "to": ["矽"],
     "type": "cross_strait",
@@ -7547,12 +6882,6 @@
     "to": ["秘"],
     "type": "variant",
     "context": "MoE 標準字體 (@example 秘密、神秘)"
-  },
-  {
-    "from": "祖國",
-    "to": ["中國"],
-    "type": "political_coloring",
-    "context": "當書寫者的國籍認同為 cn 時成立，否則保留原詞"
   },
   {
     "from": "票販子",
@@ -7770,12 +7099,6 @@
     "context": "process switching / context switch；「程序」此處指 process (@seealso 程序管理)"
   },
   {
-    "from": "程序員",
-    "to": ["程式設計師", "程式開發者"],
-    "type": "cross_strait",
-    "context": "@domain IT。programmer; tw 用「程式設計師」或「程式開發者」"
-  },
-  {
     "from": "程序抽象",
     "to": ["行程抽象"],
     "type": "cross_strait",
@@ -7877,13 +7200,6 @@
     "to": ["行程（Process）"],
     "type": "cross_strait",
     "context": "@domain 作業系統。OpenCC s2twp 將進程（Process）轉為程序（Process）；全形括弧版本"
-  },
-  {
-    "from": "積分",
-    "to": ["點數", "分數", "紅利"],
-    "type": "cross_strait",
-    "context": "@domain 數學。限商業語境 (loyalty points)。數學「積分」(integral) 為標準 tw 用語",
-    "contextClues": ["會員", "紅利", "兌換", "獎勵", "消費", "回饋"]
   },
   {
     "from": "空中客車",
@@ -7997,12 +7313,6 @@
     "context": "MoE 標準字體 (@example 灶台、灶神)"
   },
   {
-    "from": "站著說話不腰疼",
-    "to": ["風涼話", "高談闊論"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "站點標識按鈕",
     "to": ["網站識別鈕"],
     "type": "cross_strait",
@@ -8014,12 +7324,6 @@
     "type": "cross_strait",
     "context": "@domain IT",
     "contextClues": ["自動化", "瀏覽器", "E2E"]
-  },
-  {
-    "from": "端口",
-    "to": ["連接埠", "埠"],
-    "type": "cross_strait",
-    "context": "@domain 硬體"
   },
   {
     "from": "端口號",
@@ -8179,7 +7483,7 @@
     "to": ["系統磁碟"],
     "type": "cross_strait",
     "context": "@domain IT",
-    "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
+    "contextClues": ["程式", "軟體", "電腦", "網路"]
   },
   {
     "from": "系統資料",
@@ -8267,12 +7571,6 @@
     "to": ["元件"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
-  },
-  {
-    "from": "組合框",
-    "to": ["組合方塊", "複合方塊", "複合框"],
-    "type": "cross_strait",
-    "context": "@domain UI"
   },
   {
     "from": "組提示",
@@ -8692,12 +7990,6 @@
     "context": "@domain 作業系統"
   },
   {
-    "from": "腦洞大開",
-    "to": ["異想天開", "出其不意"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "腦流失",
     "to": ["人才外流"],
     "type": "cross_strait",
@@ -8806,27 +8098,10 @@
     "context": "@domain 硬體"
   },
   {
-    "from": "花括弧",
-    "to": ["大括弧", "大括號"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "花括號",
-    "to": ["大括弧", "大括號"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "英偉達",
     "to": ["輝達"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "英聯邦",
-    "to": ["大英國協"],
-    "type": "political_coloring"
   },
   {
     "from": "草泥馬",
@@ -9065,12 +8340,6 @@
     "contextClues": ["聊天", "下載", "傳送", "LINE"]
   },
   {
-    "from": "表達式",
-    "to": ["表示式", "運算式"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "袋泡茶",
     "to": ["茶包"],
     "type": "cross_strait",
@@ -9100,12 +8369,6 @@
     "to": ["裡"],
     "type": "variant",
     "context": "MoE 標準字體 (@example 裡面、心裡)"
-  },
-  {
-    "from": "補丁",
-    "to": ["修補程式", "更新檔"],
-    "type": "cross_strait",
-    "context": "@domain IT。修正程式碼缺陷 (patch) vs 軟體版本更新 (update)"
   },
   {
     "from": "補碼",
@@ -9144,12 +8407,6 @@
     "to": ["影印機"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "複選按鈕",
-    "to": ["核取按鈕", "方鈕"],
-    "type": "cross_strait",
-    "context": "@domain UI"
   },
   {
     "from": "複選框",
@@ -9221,12 +8478,6 @@
     "context": "@domain UI"
   },
   {
-    "from": "視頻",
-    "to": ["影片", "影音", "視訊"],
-    "type": "cross_strait",
-    "context": "指 video content 時用「影片」或「影音」；指 video call/conference 時用「視訊」(@seealso 視頻通話, 視頻會議)。無線電頻率 (RF) 與音頻 (AF) 是完全不同的物理現象，混淆頻率與內容的概念"
-  },
-  {
     "from": "視頻會議",
     "to": ["視訊會議"],
     "type": "cross_strait",
@@ -9250,20 +8501,6 @@
     "type": "cross_strait",
     "context": "@domain IT",
     "contextClues": ["檔案", "壓縮", "zip", "rar"]
-  },
-  {
-    "from": "解引用",
-    "to": ["解除參照", "取值"],
-    "type": "cross_strait",
-    "context": "@domain IT。在 C 或 C++ 程式語言一類風格的程式語言，用「取值」簡單且明確",
-    "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
-  },
-  {
-    "from": "解釋器",
-    "to": ["直譯器", "解譯器"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計",
-    "contextClues": ["腳本", "Python", "執行", "程式碼", "直譯", "代碼"]
   },
   {
     "from": "解釋型語言",
@@ -9348,12 +8585,6 @@
     "contextClues": ["通知", "圖示", "工作列", "系統"]
   },
   {
-    "from": "記憶棒",
-    "to": ["MS 記憶卡", "記憶卡"],
-    "type": "cross_strait",
-    "context": "@domain IT"
-  },
-  {
     "from": "記憶體分配",
     "to": ["記憶體配置"],
     "type": "cross_strait",
@@ -9420,13 +8651,6 @@
     "negativeContextClues": ["路障", "崗哨", "關卡", "據點"]
   },
   {
-    "from": "設計模式",
-    "to": ["設計樣式", "設計範式"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。限軟體設計語境。「設計模式」在 tw 也常用，此規則僅在明確軟體設計語境提示",
-    "contextClues": ["GoF", "物件導向", "面向對象", "軟體", "軟件"]
-  },
-  {
     "from": "許可權",
     "to": ["權限"],
     "type": "cross_strait",
@@ -9469,19 +8693,6 @@
     "to": ["片語"],
     "type": "cross_strait",
     "context": "@domain 語言學"
-  },
-  {
-    "from": "語句",
-    "to": ["敘述", "陳述式", "述句"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。語言學的「語句」為正確 tw 用法",
-    "contextClues": ["代碼", "程式碼", "編譯", "執行", "迴圈", "循環", "條件"]
-  },
-  {
-    "from": "語句塊",
-    "to": ["區塊", "區段"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
   },
   {
     "from": "語義網",
@@ -9577,12 +8788,6 @@
     "to": ["停止追蹤"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "謎語人",
-    "to": ["拐彎抹角", "含糊不清"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "證書",
@@ -9777,7 +8982,7 @@
     "to": ["購物車"],
     "type": "cross_strait",
     "context": "@domain 電商",
-    "contextClues": ["購物", "商品", "結帳", "訂單"]
+    "contextClues": ["商品", "結帳", "訂單"]
   },
   {
     "from": "贊比亞",
@@ -9829,12 +9034,6 @@
     "context": "@domain 社群"
   },
   {
-    "from": "跳樓機",
-    "to": ["大怒神", "自由落體"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "跳閘",
     "to": ["跳電"],
     "type": "cross_strait",
@@ -9861,12 +9060,6 @@
   {
     "from": "蹦極",
     "to": ["高空彈跳"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
-    "from": "蹭熱度",
-    "to": ["跟風", "跟隨潮流"],
     "type": "cross_strait",
     "context": "@domain 日常"
   },
@@ -9937,12 +9130,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "轉發函數",
-    "to": ["轉發函式", "轉呼叫函式"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "轉義字符",
     "to": ["跳脫字元"],
     "type": "cross_strait",
@@ -9953,24 +9140,6 @@
     "to": ["慘不忍睹"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "返回值",
-    "to": ["回傳值", "回返值"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "返回類型",
-    "to": ["回傳型別", "回返型別"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "返現",
-    "to": ["回饋", "現金回饋"],
-    "type": "cross_strait",
-    "context": "@domain 商業"
   },
   {
     "from": "迪拜",
@@ -10165,7 +9334,7 @@
     "to": ["程序式"],
     "type": "cross_strait",
     "context": "@domain IT",
-    "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
+    "contextClues": ["軟體", "系統", "電腦", "網路"]
   },
   {
     "from": "過程式編程",
@@ -10208,24 +9377,6 @@
     "to": ["遙控器"],
     "type": "variant",
     "context": "簡→繁字形。遥控器 → 遙控器"
-  },
-  {
-    "from": "適配",
-    "to": ["配接", "轉接"],
-    "type": "cross_strait",
-    "context": "@domain IT。軟體/介面 vs 硬體轉接頭"
-  },
-  {
-    "from": "適配卡",
-    "to": ["介面卡", "配接卡"],
-    "type": "cross_strait",
-    "context": "@domain IT"
-  },
-  {
-    "from": "適配器",
-    "to": ["配接器", "介面卡"],
-    "type": "cross_strait",
-    "context": "@domain 通訊"
   },
   {
     "from": "選中",
@@ -10276,39 +9427,10 @@
     "context": "@domain IT"
   },
   {
-    "from": "郵箱",
-    "to": ["電子信箱", "電子郵件"],
-    "type": "cross_strait",
-    "context": "@domain 網路。「郵箱」指實體郵筒，與電子信箱語意不同"
-  },
-  {
     "from": "郵遞員",
     "to": ["郵差"],
     "type": "cross_strait",
     "context": "@domain 日常"
-  },
-  {
-    "from": "配置",
-    "to": ["設定", "組態"],
-    "type": "cross_strait",
-    "context": "@domain IT。「硬體/網路配置」tw 用「組態」；「記憶體配置」(allocation) 為正確 tw 用法",
-    "contextClues": [
-      "硬體",
-      "韌體",
-      "BIOS",
-      "路由器",
-      "防火牆",
-      "網路",
-      "交換器",
-      "機箱",
-      "主機板",
-      "插槽",
-      "插卡",
-      "NIC",
-      "PCIe",
-      "PCI"
-    ],
-    "negativeContextClues": ["記憶體", "回收", "配置器", "malloc", "alloc"]
   },
   {
     "from": "配置文件",
@@ -10322,12 +9444,6 @@
     "to": ["設定檔"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "酸奶",
-    "to": ["優格", "發酵乳", "優酪乳"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "酸牛奶",
@@ -10504,12 +9620,6 @@
     "context": "@domain 日常"
   },
   {
-    "from": "長知識",
-    "to": ["學到了", "受教了"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "門戶系統",
     "to": ["入口網站"],
     "type": "cross_strait",
@@ -10578,12 +9688,6 @@
     "context": "idle process/idle task。空閒→閒置 fixer 可能產生「閒置程序」，tw 標準為「閒置行程」(@seealso 空閒程序, 空閒程式)"
   },
   {
-    "from": "閾值",
-    "to": ["門檻值", "臨界值"],
-    "type": "cross_strait",
-    "context": "@domain 數學。「閾」為罕用字，tw 多用「門檻值」"
-  },
-  {
     "from": "關係數據庫",
     "to": ["關聯式資料庫"],
     "type": "cross_strait",
@@ -10646,20 +9750,8 @@
     "context": "@domain 程式設計"
   },
   {
-    "from": "限定修飾詞",
-    "to": ["資格修飾詞", "飾詞"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "除塵器",
     "to": ["吸塵器"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
-    "from": "陰陽怪氣",
-    "to": ["怪裡怪氣", "假鬼假怪"],
     "type": "cross_strait",
     "context": "@domain 日常"
   },
@@ -10725,12 +9817,6 @@
     "type": "cross_strait",
     "context": "@domain IT",
     "contextClues": ["單元", "CI", "自動化"]
-  },
-  {
-    "from": "集成開發環境",
-    "to": ["整合式開發環境", "整合開發環境"],
-    "type": "cross_strait",
-    "context": "@domain IT"
   },
   {
     "from": "集成電路",
@@ -10802,12 +9888,6 @@
     "context": "@domain 雲端"
   },
   {
-    "from": "零幀起手",
-    "to": ["出其不意", "毫無預警", "猝不及防"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
     "from": "零部件",
     "to": ["零組件"],
     "type": "cross_strait",
@@ -10830,12 +9910,6 @@
     "to": ["電子試算表"],
     "type": "cross_strait",
     "context": "@domain IT"
-  },
-  {
-    "from": "電子陽痿",
-    "to": ["失去興趣", "提不起勁", "沒有熱情"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "電源保護",
@@ -10928,12 +10002,6 @@
     "context": "@domain IT"
   },
   {
-    "from": "音箱",
-    "to": ["喇叭", "揚聲器", "音響"],
-    "type": "cross_strait",
-    "context": "@domain 硬體。口語/日常 vs 技術文件/規格"
-  },
-  {
     "from": "音頻",
     "to": ["音訊"],
     "type": "cross_strait",
@@ -10965,12 +10033,6 @@
     "to": ["頁面配置"],
     "type": "cross_strait",
     "context": "compound:「頁面」語境自動觸發「分配→配置」(@seealso 記憶體分配)"
-  },
-  {
-    "from": "頂不住",
-    "to": ["撐不住", "受不了"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
   },
   {
     "from": "項目",
@@ -11129,56 +10191,6 @@
     ]
   },
   {
-    "from": "類型",
-    "to": ["型態", "型別"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計。「類型」在日常語境表示「種類/範疇」為正確 tw 用法",
-    "contextClues": [
-      "型別",
-      "型態",
-      "變數",
-      "變量",
-      "函式",
-      "函數",
-      "程式碼",
-      "代碼",
-      "泛型",
-      "編譯",
-      "宣告"
-    ],
-    "negativeContextClues": [
-      "哪些類型",
-      "什麼類型",
-      "各種類型",
-      "某種類型",
-      "這類型"
-    ]
-  },
-  {
-    "from": "類定義",
-    "to": ["類別定義", "類別定義式"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "類層次體系",
-    "to": ["類別繼承體系", "類別階層"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "類庫",
-    "to": ["類別程式庫", "類別庫"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "類模板",
-    "to": ["類別模板", "類別範本"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "類模板特化",
     "to": ["類別模板特化"],
     "type": "cross_strait",
@@ -11193,12 +10205,6 @@
   {
     "from": "類繼承列表",
     "to": ["類別衍化列"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
-    "from": "類聲明",
-    "to": ["類別宣告", "類別宣告式"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
   },
@@ -11361,12 +10367,6 @@
     "contextClues": ["載入", "UI", "介面", "佔位", "載入中"]
   },
   {
-    "from": "體系結構",
-    "to": ["架構", "系統架構"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
-  },
-  {
     "from": "高亮",
     "to": ["醒目標示"],
     "type": "cross_strait",
@@ -11382,12 +10382,6 @@
   {
     "from": "高壓鍋",
     "to": ["壓力鍋"],
-    "type": "cross_strait",
-    "context": "@domain 日常"
-  },
-  {
-    "from": "高大上",
-    "to": ["高貴", "高雅", "有氣質"],
     "type": "cross_strait",
     "context": "@domain 日常"
   },
@@ -11416,42 +10410,16 @@
     "context": "@domain IT"
   },
   {
-    "from": "高端",
-    "to": ["高階", "進階"],
-    "type": "cross_strait",
-    "context": "@domain IT。產品定位 vs 技術層級/難度"
-  },
-  {
     "from": "高等院校",
     "to": ["大專院校"],
     "type": "cross_strait",
     "context": "@domain 教育"
   },
   {
-    "from": "高級",
-    "to": ["高階", "進階"],
-    "type": "cross_strait",
-    "context": "@domain IT。tw「高級」= luxury/upscale (高級餐廳)；IT 語境改「高階」或「進階」",
-    "contextClues": ["設定", "功能", "語言", "型別", "選項"],
-    "negativeContextClues": ["餐廳", "飯店", "住宅", "品牌"]
-  },
-  {
-    "from": "高速緩存",
-    "to": ["快取記憶體", "快取"],
-    "type": "cross_strait",
-    "context": "@domain IT"
-  },
-  {
     "from": "髮生",
     "to": ["發生"],
     "type": "variant",
     "context": "OpenCC 轉換時可能誤植「發」為「髮」(hair)"
-  },
-  {
-    "from": "魔法數",
-    "to": ["魔術數字", "魔術數值"],
-    "type": "cross_strait",
-    "context": "@domain 程式設計"
   },
   {
     "from": "魚塘局",
@@ -11519,12 +10487,6 @@
     "to": ["預設值"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
-  },
-  {
-    "from": "點擊",
-    "to": ["點選", "按一下"],
-    "type": "cross_strait",
-    "context": "@domain UI"
   },
   {
     "from": "點贊",

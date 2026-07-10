@@ -13,7 +13,6 @@ describe("zhtw case rules", () => {
     const issues = scanCaseRules("github api typescript macos", rules);
     expect(issues.map((issue) => [issue.found, issue.suggestions[0]])).toEqual([
       ["github", "GitHub"],
-      ["api", "API"],
       ["typescript", "TypeScript"],
       ["macos", "macOS"],
     ]);
@@ -31,7 +30,7 @@ describe("zhtw case rules", () => {
 
   it("does not rewrite terms inside snake_case identifiers", () => {
     const output = applyCaseRules("my_api_key uses api", rules);
-    expect(output).toBe("my_api_key uses API");
+    expect(output).toBe("my_api_key uses api");
   });
 
   it("does not rewrite terms inside URLs or email addresses", () => {
@@ -46,6 +45,10 @@ describe("zhtw case rules", () => {
 
   it("fixes common casing variants without requiring exhaustive alternatives", () => {
     const output = applyCaseRules("Github and TYPESCRIPT call api", rules);
-    expect(output).toBe("GitHub and TypeScript call API");
+    expect(output).toBe("GitHub and TypeScript call api");
+  });
+
+  it("preserves exact declared alternatives", () => {
+    expect(applyCaseRules("APIs are stable", rules)).toBe("APIs are stable");
   });
 });

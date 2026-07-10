@@ -1,9 +1,37 @@
 import { maskProtectedText } from "./protect.js";
 
 const CJK_RE = /\p{Script=Han}/u;
+const QUOTE_PAIR_BOUNDARY_RE = /[\n\r。！？!?]/u;
 
 function hasCjk(text: string): boolean {
   return CJK_RE.test(text);
+}
+
+function crossesSentenceBoundary(text: string): boolean {
+  const match = text.match(QUOTE_PAIR_BOUNDARY_RE);
+  return (
+    match?.index !== undefined &&
+    text.slice(match.index + match[0].length).trim().length > 0
+  );
+}
+
+function characterAt(text: string, index: number): string | undefined {
+  const codePoint = text.codePointAt(index);
+  return codePoint === undefined ? undefined : String.fromCodePoint(codePoint);
+}
+
+function previousCharacter(
+  text: string,
+  index: number,
+): { char: string; index: number } | undefined {
+  if (index <= 0) return undefined;
+  let start = index - 1;
+  const last = text.charCodeAt(start);
+  if (last >= 0xdc00 && last <= 0xdfff && start > 0) {
+    const first = text.charCodeAt(start - 1);
+    if (first >= 0xd800 && first <= 0xdbff) start -= 1;
+  }
+  return { char: text.slice(start, index), index: start };
 }
 
 function hasChineseContext(text: string, start: number, end: number): boolean {
@@ -20,15 +48,21 @@ function previousNonWhitespace(
   text: string,
   index: number,
 ): string | undefined {
-  for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
-    if (!/\s/u.test(text[cursor])) return text[cursor];
+  let cursor = index;
+  while (cursor > 0) {
+    const previous = previousCharacter(text, cursor);
+    if (previous === undefined) return undefined;
+    cursor = previous.index;
+    if (!/\s/u.test(previous.char)) return previous.char;
   }
   return undefined;
 }
 
 function nextNonWhitespace(text: string, index: number): string | undefined {
-  for (let cursor = index; cursor < text.length; cursor += 1) {
-    if (!/\s/u.test(text[cursor])) return text[cursor];
+  for (let cursor = index; cursor < text.length;) {
+    const char = characterAt(text, cursor)!;
+    if (!/\s/u.test(char)) return char;
+    cursor += char.length;
   }
   return undefined;
 }
@@ -50,8 +84,14 @@ function normalizeAsciiDoubleQuotes(text: string): string {
       break;
     }
 
-    output += text.slice(cursor, start);
     const inner = text.slice(start + 1, end);
+    if (crossesSentenceBoundary(inner)) {
+      output += text.slice(cursor, start + 1);
+      cursor = start + 1;
+      continue;
+    }
+
+    output += text.slice(cursor, start);
     if (hasChineseContext(text, start, end)) {
       output += `「${inner}」`;
     } else {
@@ -86,8 +126,14 @@ function normalizeSmartPair(
       break;
     }
 
-    output += text.slice(cursor, start);
     const inner = text.slice(start + open.length, end);
+    if (crossesSentenceBoundary(inner)) {
+      output += text.slice(cursor, start + open.length);
+      cursor = start + open.length;
+      continue;
+    }
+
+    output += text.slice(cursor, start);
     if (hasChineseContext(text, start, end)) {
       output += `${replacementOpen}${inner}${replacementClose}`;
     } else {

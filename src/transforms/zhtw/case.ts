@@ -54,6 +54,7 @@ export function scanCaseRules(
     for (const pattern of casePatterns(rule)) {
       forEachCaseInsensitiveOccurrence(text, pattern, (offset, found) => {
         if (found === rule.term) return;
+        if (rule.alternatives?.includes(found)) return;
         if (!hasAsciiWordBoundary(text, offset, found.length)) return;
         const key = `${offset}:${found.length}`;
         if (seen.has(key)) return;

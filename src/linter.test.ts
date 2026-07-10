@@ -34,6 +34,21 @@ describe("message-linter logic (lintMessageContent)", () => {
     expect(output).toBe("中國軟體和影片");
   });
 
+  it("applies zh-TW conversion to Han characters beyond the BMP", async () => {
+    let received = "";
+    const output = await lintMessageContent(
+      "𠀾",
+      async (text) => {
+        received = text;
+        return "𠁞";
+      },
+      { zhtw: true },
+    );
+
+    expect(received).toBe("𠀾");
+    expect(output).toBe("𠁞");
+  });
+
   it("passes resolved zhtw feature flags to the converter", async () => {
     let caseEnabled = false;
     const input = "github 和中国软件";

@@ -15,7 +15,7 @@ import {
 import { sanitizeTokens } from "./transforms/kaomoji.js";
 import { convertZhTw } from "./transforms/zhtw.js";
 
-const HAS_CJK_RE = /[\u3400-\u9fff]/;
+const HAS_CJK_RE = /\p{Script=Han}/u;
 
 export async function lintMessageContent(
   content: string,

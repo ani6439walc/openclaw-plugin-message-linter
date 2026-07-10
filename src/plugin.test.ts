@@ -43,7 +43,7 @@ describe("message-linter plugin hooks", () => {
 
     expect(result).toBeDefined();
     expect(result.params.message).toBe(
-      "[example.com](<https://example.com>) 中國軟體和影片。",
+      "[example.com](<https://example.com>) 中國軟體和視頻。",
     );
     expect(result.params.target).toBe("1391660338470060055");
   });
