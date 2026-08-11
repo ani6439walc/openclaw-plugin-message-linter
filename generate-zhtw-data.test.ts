@@ -201,9 +201,9 @@ describe("ZH-TW data generator", () => {
     };
 
     expect(counts).toEqual({
-      phrases: 39751,
+      phrases: 39799,
       chars: 3871,
-      variants: 38,
+      variants: 39,
       spellingRules: 1543,
       caseRules: 15,
     });

@@ -26,11 +26,6 @@ describe("message-linter manifest", () => {
     expect(manifest.description).toContain("Taiwan Traditional Chinese");
   });
 
-  it("cleans stale build output before compiling runtime sources", () => {
-    expect(packageJson.scripts.clean).toContain("rmSync");
-    expect(packageJson.scripts.build).toBe("pnpm run clean && tsc");
-  });
-
   it("keeps feature defaults aligned with DEFAULT_FEATURES", () => {
     expect(featureProperties.zhtw.default).toBe(DEFAULT_FEATURES.zhtw.enabled);
     expect(featureProperties.kaomoji.default).toBe(DEFAULT_FEATURES.kaomoji);

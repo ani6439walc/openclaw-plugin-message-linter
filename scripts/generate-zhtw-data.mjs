@@ -15,13 +15,13 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import { format } from "prettier";
 
-export const OPENCC_COMMIT = "72965542721b5d0c171cda80016342aed3bd5a89";
-export const ZHTW_MCP_COMMIT = "2e0f4e4912a8ffdacf7fa3a155cb20c29cba043b";
+export const OPENCC_COMMIT = "5249273a3e5606852f088c9a8b23522145d94f78";
+export const ZHTW_MCP_COMMIT = "68c67f29791154387da02ff791153206c0cc339d";
 export const SOURCE_SHA256 = Object.freeze({
-  stPhrases: "7f121e46abc71c1055ebee0445be4a98290023124657b24557f1a36bd2dc144d",
-  stChars: "81c27e6364fd164181276197b9215cf95f7f12a050aa207375248a5badf8d6fc",
+  stPhrases: "3c5068770fd2357baa5fe3ac874732d4ae0f34677afbb297e22802c3801f8900",
+  stChars: "a0ca1601c70648cf48b33c3c6210ccbecc5c7eead4b4c3daf76587ba2c03582b",
   twVariants:
-    "48e694ad1ac43fd5927285e4fb3aa8a8dc9d9c065d6d3d314527c021a12839e2",
+    "e187278e119c427ca561180ac5da5b20e9f8681190458f35c327ce499e95a6a5",
   ruleset: "2d43bf2f84a0a842911b216dc61b63d1f194509f396c64dc11a56748de9b657a",
 });
 
