@@ -204,7 +204,7 @@ describe("ZH-TW data generator", () => {
       phrases: 39799,
       chars: 3871,
       variants: 39,
-      spellingRules: 1543,
+      spellingRules: 1561,
       caseRules: 15,
     });
     expect(provenance.counts).toEqual(counts);

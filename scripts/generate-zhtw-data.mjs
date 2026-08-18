@@ -16,13 +16,13 @@ import { fileURLToPath } from "node:url";
 import { format } from "prettier";
 
 export const OPENCC_COMMIT = "5249273a3e5606852f088c9a8b23522145d94f78";
-export const ZHTW_MCP_COMMIT = "68c67f29791154387da02ff791153206c0cc339d";
+export const ZHTW_MCP_COMMIT = "592b8d8be121e1614a2b9abe8906eb248416424e";
 export const SOURCE_SHA256 = Object.freeze({
   stPhrases: "3c5068770fd2357baa5fe3ac874732d4ae0f34677afbb297e22802c3801f8900",
   stChars: "a0ca1601c70648cf48b33c3c6210ccbecc5c7eead4b4c3daf76587ba2c03582b",
   twVariants:
     "e187278e119c427ca561180ac5da5b20e9f8681190458f35c327ce499e95a6a5",
-  ruleset: "2d43bf2f84a0a842911b216dc61b63d1f194509f396c64dc11a56748de9b657a",
+  ruleset: "6896c0f43b761efd33f01d91e0706ac43ce45c83812b0a040330fcf3622064b5",
 });
 
 const OPENCC_REPOSITORY = "https://github.com/BYVoid/OpenCC";
@@ -138,6 +138,8 @@ export function isAutoFixRule(rule) {
   return (
     AUTO_FIX_RULE_TYPES.has(rule?.type) &&
     rule.disabled !== true &&
+    !rule.context_suggestions?.length &&
+    rule.editorial_confidence !== "low" &&
     Array.isArray(rule.to) &&
     rule.to.length === 1 &&
     typeof rule.to[0] === "string" &&

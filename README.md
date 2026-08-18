@@ -115,7 +115,7 @@ Dictionary files are stored in `assets/` and loaded at runtime:
 | `assets/s2t-phrases.txt`     |          39,799 | OpenCC phrase mappings and ambiguity protections |
 | `assets/s2t-chars.txt`       |           3,871 | Safe OpenCC single-character fallbacks           |
 | `assets/s2t-tw-variants.txt` |              39 | OpenCC TWVariants-derived mappings               |
-| `assets/spelling-rules.json` |           1,543 | Deterministic contextual spelling rules          |
+| `assets/spelling-rules.json` |           1,561 | Deterministic contextual spelling rules          |
 | `assets/case-rules.json`     |              15 | Proper-noun case rules                           |
 | `assets/zhtw-sources.json`   |               — | Pinned source commits, checksums, and counts     |
 
