@@ -17,7 +17,7 @@ export type LinterFeatures = {
     headings?: boolean;
     separators?: boolean;
     links?: boolean;
-    blockquotes?: boolean;
+    blockQuotes?: boolean;
     boldInlineCode?: boolean;
   };
 };
@@ -41,7 +41,7 @@ export const DEFAULT_FEATURES: ResolvedLinterFeatures = {
     headings: true,
     separators: true,
     links: true,
-    blockquotes: true,
+    blockQuotes: true,
     boldInlineCode: true,
   },
 };
@@ -78,7 +78,7 @@ const DiscordFeaturesSchema = z
     headings: z.boolean().catch(DEFAULT_FEATURES.discord.headings),
     separators: z.boolean().catch(DEFAULT_FEATURES.discord.separators),
     links: z.boolean().catch(DEFAULT_FEATURES.discord.links),
-    blockquotes: z.boolean().catch(DEFAULT_FEATURES.discord.blockquotes),
+    blockQuotes: z.boolean().catch(DEFAULT_FEATURES.discord.blockQuotes),
     boldInlineCode: z.boolean().catch(DEFAULT_FEATURES.discord.boldInlineCode),
   })
   .catch(DEFAULT_FEATURES.discord);

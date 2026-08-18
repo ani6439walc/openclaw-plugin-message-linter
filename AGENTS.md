@@ -4,7 +4,7 @@
 
 This repository contains `message-linter`, an OpenClaw plugin that normalizes outgoing message text before dispatch.
 
-The plugin is a TypeScript ESM package for OpenClaw `2026.6.11`. It focuses on:
+The plugin is a TypeScript ESM package for OpenClaw `2026.7.1-2`. It focuses on:
 
 - Discord-oriented Markdown cleanup.
 - Kaomoji-safe backtick/accent handling.
@@ -20,7 +20,7 @@ OpenClaw loads the plugin from `./dist/index.js` as declared in `package.json`.
 - Build: clean `dist`, then run `tsc`.
 - Formatting: Prettier.
 - Runtime dependency: `zod`.
-- Peer dependency: `openclaw@2026.6.11`.
+- Peer dependency: `openclaw@2026.7.1-2`.
 
 Do not switch package managers. Use `pnpm` for install, test, build, and formatting tasks.
 
@@ -101,15 +101,16 @@ pnpm run build
 `lintMessageContent()` applies transforms in this order:
 
 1. Resolve features with `resolveFeatures()`.
-2. If `zhtw.enabled` is enabled and content contains CJK, run the converter with resolved ZH-TW feature flags.
-3. Fix misplaced inline bold code formatting.
-4. Mask Markdown fenced code blocks and inline code spans.
-5. Format Markdown links.
-6. Replace separators.
-7. Sanitize kaomoji tokens.
-8. Normalize Markdown headings.
-9. Format blockquotes.
-10. Restore masked Markdown code regions.
+2. Repair a single hallucinated leading backtick only when the first line remains unbalanced.
+3. If `zhtw.enabled` is enabled and content contains CJK, run the converter with resolved ZH-TW feature flags.
+4. Fix misplaced inline bold code formatting.
+5. Mask Markdown fenced code blocks and inline code spans.
+6. Format Markdown links.
+7. Replace separators.
+8. Sanitize kaomoji tokens.
+9. Normalize Markdown headings.
+10. Format blockquotes.
+11. Restore masked Markdown code regions.
 
 Preserve this ordering unless tests and source reasoning prove a different order is safe. The Markdown masking step is intentionally central and prevents transforms from rewriting code spans/fences.
 
@@ -133,7 +134,7 @@ Current defaults:
     "headings": true,
     "separators": true,
     "links": true,
-    "blockquotes": true,
+    "blockQuotes": true,
     "boldInlineCode": true
   }
 }

@@ -49,8 +49,8 @@ describe("message-linter manifest", () => {
     expect(discordProperties.links.default).toBe(
       DEFAULT_FEATURES.discord.links,
     );
-    expect(discordProperties.blockquotes.default).toBe(
-      DEFAULT_FEATURES.discord.blockquotes,
+    expect(discordProperties.blockQuotes.default).toBe(
+      DEFAULT_FEATURES.discord.blockQuotes,
     );
     expect(discordProperties.boldInlineCode.default).toBe(
       DEFAULT_FEATURES.discord.boldInlineCode,

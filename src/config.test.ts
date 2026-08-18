@@ -71,7 +71,7 @@ describe("resolveConfig", () => {
           headings: false,
           separators: false,
           links: false,
-          blockquotes: false,
+          blockQuotes: false,
           boldInlineCode: false,
         },
       },
@@ -81,7 +81,7 @@ describe("resolveConfig", () => {
       headings: false,
       separators: false,
       links: false,
-      blockquotes: false,
+      blockQuotes: false,
       boldInlineCode: false,
     });
   });
@@ -111,7 +111,7 @@ describe("resolveConfig", () => {
           headings: "false",
           separators: null,
           links: true,
-          blockquotes: 1,
+          blockQuotes: 1,
           boldInlineCode: false,
         },
       },
@@ -128,7 +128,7 @@ describe("resolveConfig", () => {
         headings: DEFAULT_FEATURES.discord.headings,
         separators: DEFAULT_FEATURES.discord.separators,
         links: true,
-        blockquotes: DEFAULT_FEATURES.discord.blockquotes,
+        blockQuotes: DEFAULT_FEATURES.discord.blockQuotes,
         boldInlineCode: false,
       },
     });

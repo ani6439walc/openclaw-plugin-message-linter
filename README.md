@@ -153,7 +153,7 @@ In short: this package keeps the automatic normalization subset and leaves subje
 
 ## Installation and Setup
 
-This repository targets OpenClaw `2026.6.11`. The package entry is `./dist/index.js`, so a local checkout must be built before it is installed.
+This repository targets OpenClaw `2026.7.1-2`. The package entry is `./dist/index.js`, so a local checkout must be built before it is installed.
 
 ### Install from a local checkout
 
@@ -204,7 +204,7 @@ OpenClaw stores plugin-specific configuration under `plugins.entries.<id>.config
               "headings": true,
               "separators": true,
               "links": true,
-              "blockquotes": true,
+              "blockQuotes": true,
               "boldInlineCode": true
             }
           }
@@ -228,7 +228,7 @@ OpenClaw stores plugin-specific configuration under `plugins.entries.<id>.config
 | `discord.headings`       |  `true` | Normalize deep Markdown heading levels.                     |
 | `discord.separators`     |  `true` | Replace standalone separators with Discord-friendly output. |
 | `discord.links`          |  `true` | Suppress Discord embeds for Markdown link destinations.     |
-| `discord.blockquotes`    |  `true` | Normalize blockquote spacing.                               |
+| `discord.blockQuotes`    |  `true` | Normalize blockquote spacing.                               |
 | `discord.boldInlineCode` |  `true` | Normalize Markdown tables and mixed bold/code syntax.       |
 
 Configuration parsing is tolerant: invalid or missing feature values fall back to these defaults.

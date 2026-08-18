@@ -82,7 +82,7 @@ export async function lintMessageContent(
     processed = normalizeMarkdownHeadings(processed);
   }
 
-  if (discord.blockquotes) {
+  if (discord.blockQuotes) {
     processed = formatBlockquotes(processed);
   }
 

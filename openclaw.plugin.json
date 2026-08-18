@@ -79,7 +79,7 @@
                 "description": "Wrap Markdown link URLs in angle brackets to suppress Discord embeds",
                 "default": true
               },
-              "blockquotes": {
+              "blockQuotes": {
                 "type": "boolean",
                 "description": "Ensure blockquote lines have a space after > for Discord compatibility",
                 "default": true

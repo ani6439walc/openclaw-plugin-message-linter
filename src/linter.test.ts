@@ -473,10 +473,10 @@ describe("message-linter feature toggles", () => {
     expect(output).toBe("> line 1\n> \n> line 2");
   });
 
-  it("does not fix blockquotes when blockquotes feature is disabled", async () => {
+  it("does not fix blockquotes when blockQuotes feature is disabled", async () => {
     const input = "> line 1\n>\n> line 2";
     const output = await lintMessageContent(input, async (text) => text, {
-      discord: { blockquotes: false },
+      discord: { blockQuotes: false },
     });
     expect(output).toBe("> line 1\n>\n> line 2");
   });
