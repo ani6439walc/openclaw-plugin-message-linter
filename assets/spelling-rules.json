@@ -201,6 +201,25 @@
     "context": "@domain IT"
   },
   {
+    "from": "丟包",
+    "to": ["封包遺失"],
+    "type": "cross_strait",
+    "context": "@domain 網路。packet loss；tw 用「封包遺失」或「掉封包」",
+    "contextClues": [
+      "網路",
+      "封包",
+      "連線",
+      "延遲",
+      "頻寬",
+      "傳輸",
+      "通訊",
+      "重傳",
+      "鏈路",
+      "訊號"
+    ],
+    "exceptions": ["丟包裹", "丟包袱", "被丟包"]
+  },
+  {
     "from": "並口",
     "to": ["平行埠"],
     "type": "cross_strait",
@@ -896,6 +915,31 @@
     "contextClues": ["截肢", "復健", "裝置", "肢體"]
   },
   {
+    "from": "停靠",
+    "to": ["停駐"],
+    "type": "cross_strait",
+    "context": "@domain UI。視窗 dock；tw 用「停駐」。交通工具「停靠」為正確 tw 用法",
+    "contextClues": ["窗格", "視窗", "面板", "工具列", "浮動", "側邊"],
+    "negativeContextClues": [
+      "車",
+      "船",
+      "港",
+      "站",
+      "碼頭",
+      "月台",
+      "飛機",
+      "客機",
+      "遊艇",
+      "渡輪",
+      "捷運",
+      "空橋",
+      "泊位",
+      "岸邊",
+      "防波堤"
+    ],
+    "exceptions": ["停靠點", "停靠位", "停靠時間"]
+  },
+  {
     "from": "健美褲",
     "to": ["韻律褲"],
     "type": "cross_strait",
@@ -1009,13 +1053,6 @@
     "type": "cross_strait",
     "context": "@domain 醫學",
     "contextClues": ["統計", "病例", "風險", "研究"]
-  },
-  {
-    "from": "優化",
-    "to": ["最佳化"],
-    "type": "cross_strait",
-    "context": "@domain IT。tw「優化」泛用於商業；IT optimize 改「最佳化」以區分 improve",
-    "negativeContextClues": ["流程", "體驗", "服務"]
   },
   {
     "from": "優步",
@@ -1821,6 +1858,25 @@
     "type": "cross_strait",
     "context": "@domain 金融",
     "contextClues": ["財報", "會計", "營收", "損益"]
+  },
+  {
+    "from": "制導",
+    "to": ["導引"],
+    "type": "cross_strait",
+    "context": "@domain 軍事。guidance；tw 用「導引」(精確導引武器)",
+    "contextClues": [
+      "武器",
+      "雷達",
+      "彈道",
+      "飛彈",
+      "射程",
+      "目標",
+      "精確",
+      "炸彈",
+      "攻擊",
+      "導引"
+    ],
+    "negativeContextClues": ["機制", "管制", "控制", "體制", "法制"]
   },
   {
     "from": "刷手機",
@@ -2748,6 +2804,52 @@
     "contextClues": ["作業系統", "行程", "執行緒", "排程", "OS"]
   },
   {
+    "from": "均值",
+    "to": ["平均值"],
+    "type": "cross_strait",
+    "context": "@domain 數學。mean；tw 用「平均值」",
+    "contextClues": [
+      "樣本",
+      "母體",
+      "標準差",
+      "估計",
+      "統計",
+      "變異",
+      "方差",
+      "取樣",
+      "訊號",
+      "濾波"
+    ],
+    "exceptions": ["均值得", "均值定理", "均值不等式"]
+  },
+  {
+    "from": "坐標",
+    "to": ["座標"],
+    "type": "cross_strait",
+    "context": "@domain 地理資訊。cn 用「坐標」；tw 教育部辭典與樂詞網用「座標」。需要語境線索，因為「坐」是常用動詞 (乘坐、靜坐)，會與「標X」跨詞界相接 (@seealso 坐標系)",
+    "contextClues": [
+      "座標",
+      "系統",
+      "轉換",
+      "輸入",
+      "經度",
+      "緯度",
+      "高程",
+      "定位",
+      "投影",
+      "圖幅",
+      "測繪",
+      "格網",
+      "經緯",
+      "WGS84",
+      "TWD97",
+      "TWD67",
+      "MGRS",
+      "UTM"
+    ],
+    "exceptions": ["坐標示", "坐標準"]
+  },
+  {
     "from": "坦桑尼亞",
     "to": ["坦尚尼亞"],
     "type": "cross_strait",
@@ -2885,27 +2987,6 @@
     "context": "@domain 硬體"
   },
   {
-    "from": "場景",
-    "to": ["情境"],
-    "type": "confusable",
-    "context": "限 IT 語境。電影/戲劇場景為正確 tw 用法",
-    "contextClues": [
-      "應用",
-      "部署",
-      "測試",
-      "系統",
-      "開發",
-      "架構",
-      "軟件",
-      "軟體",
-      "程式",
-      "行程",
-      "核心",
-      "記憶體",
-      "CPU"
-    ]
-  },
-  {
     "from": "塑料",
     "to": ["塑膠"],
     "type": "cross_strait",
@@ -2947,6 +3028,12 @@
     "to": ["擴增實境"],
     "type": "cross_strait",
     "context": "@domain IT"
+  },
+  {
+    "from": "墨卡托",
+    "to": ["麥卡托"],
+    "type": "cross_strait",
+    "context": "@domain 地理資訊。Mercator 音譯；tw 作「麥卡托」(通用橫麥卡托座標系統 UTM)"
   },
   {
     "from": "墨魚",
@@ -3604,6 +3691,26 @@
     "contextClues": ["論文", "研究", "碩士", "博士", "指導"]
   },
   {
+    "from": "導彈",
+    "to": ["飛彈"],
+    "type": "cross_strait",
+    "context": "@domain 軍事。missile；tw 用「飛彈」",
+    "contextClues": [
+      "射程",
+      "彈道",
+      "武器",
+      "發射",
+      "攔截",
+      "巡弋",
+      "防空",
+      "雷達",
+      "部隊",
+      "飛彈",
+      "目標"
+    ],
+    "negativeContextClues": ["報導", "主導", "領導", "引導"]
+  },
+  {
     "from": "導火索",
     "to": ["導火線"],
     "type": "cross_strait",
@@ -4107,6 +4214,36 @@
     "contextClues": ["程式", "軟體", "系統", "電腦", "網路"]
   },
   {
+    "from": "後台",
+    "to": ["背景"],
+    "type": "cross_strait",
+    "context": "@domain 作業系統。background execution → 背景；「後台」拼法版本，與「後臺」同一條規則 (@seealso 後臺)",
+    "contextClues": [
+      "執行",
+      "運行",
+      "行程",
+      "進程",
+      "程序",
+      "任務",
+      "執行緒",
+      "常駐",
+      "同步",
+      "下載",
+      "更新",
+      "流量"
+    ],
+    "negativeContextClues": [
+      "管理",
+      "登入",
+      "帳號",
+      "權限",
+      "營運",
+      "上架",
+      "儀表板"
+    ],
+    "exceptions": ["後台系統", "後台管理", "後台介面", "後台頁面", "後台帳號"]
+  },
+  {
     "from": "後台流量",
     "to": ["背景流量"],
     "type": "cross_strait",
@@ -4117,6 +4254,36 @@
     "to": ["字尾"],
     "type": "cross_strait",
     "context": "@domain 程式設計"
+  },
+  {
+    "from": "後臺",
+    "to": ["背景"],
+    "type": "cross_strait",
+    "context": "@domain 作業系統。background execution → 背景；backend admin 義的「後臺」保留，故以執行語境詞為條件並排除管理後臺 (@seealso 後台流量)",
+    "contextClues": [
+      "執行",
+      "運行",
+      "行程",
+      "進程",
+      "程序",
+      "任務",
+      "執行緒",
+      "常駐",
+      "同步",
+      "下載",
+      "更新",
+      "流量"
+    ],
+    "negativeContextClues": [
+      "管理",
+      "登入",
+      "帳號",
+      "權限",
+      "營運",
+      "上架",
+      "儀表板"
+    ],
+    "exceptions": ["後臺系統", "後臺管理", "後臺介面", "後臺頁面", "後臺帳號"]
   },
   {
     "from": "後驗機率",
@@ -4173,6 +4340,12 @@
     "to": ["忙碌等待"],
     "type": "cross_strait",
     "context": "@domain 日常"
+  },
+  {
+    "from": "快取項",
+    "to": ["快取項目"],
+    "type": "cross_strait",
+    "context": "@domain IT。cache item/entry → 快取項目；已寫成「快取項目」時由 superstring 吸收，不重複標記"
   },
   {
     "from": "快捷方式",
@@ -4276,6 +4449,24 @@
     "to": ["慢動作"],
     "type": "cross_strait",
     "context": "@domain 日常"
+  },
+  {
+    "from": "慣導",
+    "to": ["慣性導航"],
+    "type": "cross_strait",
+    "context": "@domain 軍事。cn 縮略語；tw 不縮寫，寫作「慣性導航」",
+    "contextClues": [
+      "定位",
+      "導航",
+      "衛星",
+      "慣性",
+      "陀螺",
+      "誤差",
+      "漂移",
+      "訊號",
+      "GPS"
+    ],
+    "negativeContextClues": ["習慣"]
   },
   {
     "from": "應用程序",
@@ -4620,6 +4811,22 @@
     "context": "@domain IT。tw「推遲」= postpone (推遲會議)；IT defer 改「延緩」",
     "contextClues": ["求值", "初始化", "排程", "任務", "非同步"],
     "negativeContextClues": ["會議", "選舉", "比賽"]
+  },
+  {
+    "from": "掩碼",
+    "to": ["遮罩"],
+    "type": "cross_strait",
+    "context": "@domain 網路。mask；tw 用「遮罩」(@seealso 子網掩碼)",
+    "contextClues": [
+      "子網",
+      "位元",
+      "網路",
+      "網段",
+      "遮罩",
+      "閘道",
+      "前綴",
+      "IP"
+    ]
   },
   {
     "from": "插件",
@@ -5089,6 +5296,25 @@
     "to": ["泡麵"],
     "type": "cross_strait",
     "context": "@domain 日常"
+  },
+  {
+    "from": "方差",
+    "to": ["變異數"],
+    "type": "cross_strait",
+    "context": "@domain 數學。variance；tw 用「變異數」",
+    "contextClues": [
+      "樣本",
+      "母體",
+      "標準差",
+      "估計",
+      "分布",
+      "分佈",
+      "統計",
+      "變異",
+      "期望值",
+      "常態",
+      "誤差"
+    ]
   },
   {
     "from": "旅遊局",
@@ -6071,6 +6297,57 @@
     "context": "@domain 程式設計"
   },
   {
+    "from": "源位置",
+    "to": ["來源位置"],
+    "type": "cross_strait",
+    "context": "@domain 程式設計。source location → 來源位置。程式語境為條件，並將「X源+位置」複合詞列為例外 (@seealso 源代碼)",
+    "contextClues": [
+      "代碼",
+      "例外",
+      "偵錯",
+      "原始碼",
+      "堆疊",
+      "日誌",
+      "標註",
+      "檔案",
+      "程式",
+      "程式碼",
+      "符號",
+      "編譯",
+      "設定檔",
+      "變數",
+      "變量",
+      "錯誤",
+      "除錯"
+    ],
+    "exceptions": [
+      "光源位置",
+      "熱源位置",
+      "震源位置",
+      "電源位置",
+      "水源位置",
+      "音源位置",
+      "聲源位置",
+      "能源位置",
+      "火源位置",
+      "資源位置",
+      "貨源位置",
+      "客源位置",
+      "房源位置",
+      "氣源位置",
+      "財源位置",
+      "病源位置",
+      "污染源位置",
+      "汙染源位置",
+      "輻射源位置",
+      "感染源位置",
+      "訊號源位置",
+      "信號源位置",
+      "詞源位置",
+      "字源位置"
+    ]
+  },
+  {
     "from": "源文件",
     "to": ["原始檔"],
     "type": "cross_strait",
@@ -6461,6 +6738,12 @@
     "to": ["萬那杜"],
     "type": "cross_strait",
     "context": "@geo country (國名)"
+  },
+  {
+    "from": "生命周期",
+    "to": ["生命週期"],
+    "type": "cross_strait",
+    "context": "@domain IT。lifecycle；tw 用「週」不用「周」表週期"
   },
   {
     "from": "生存空間操作符",
@@ -7629,6 +7912,39 @@
     "context": "@domain 網路"
   },
   {
+    "from": "網格",
+    "to": ["格網"],
+    "type": "cross_strait",
+    "context": "@domain 地理資訊。測繪語境的 grid，tw 國土測繪用「格網」；圖學/版面的 mesh、grid layout 用「網格」為正確 tw 用法",
+    "contextClues": [
+      "座標",
+      "測繪",
+      "圖幅",
+      "經緯",
+      "高程",
+      "MGRS",
+      "UTM",
+      "TWD97",
+      "TWD67"
+    ],
+    "negativeContextClues": [
+      "版面",
+      "佈局",
+      "排版",
+      "運算",
+      "算圖",
+      "模型",
+      "貼圖",
+      "有限元素",
+      "劃分",
+      "切割",
+      "元件",
+      "網頁",
+      "CSS"
+    ],
+    "exceptions": ["網格系統", "網格化", "網格分析", "網格產生"]
+  },
+  {
     "from": "網格線",
     "to": ["格線"],
     "type": "cross_strait",
@@ -7865,6 +8181,41 @@
     "to": ["聖馬利諾"],
     "type": "cross_strait",
     "context": "@geo country (國名)"
+  },
+  {
+    "from": "聚類",
+    "to": ["分群"],
+    "type": "cross_strait",
+    "context": "@domain 科學。clustering；tw 正式寫作用「分群」。機器學習語境為條件，並將「X聚+類Y」複合詞列為例外",
+    "contextClues": [
+      "DBSCAN",
+      "分群",
+      "向量",
+      "密度",
+      "層次",
+      "模型",
+      "機器學習",
+      "演算法",
+      "特徵",
+      "監督式",
+      "相似度",
+      "資料集",
+      "質心",
+      "距離",
+      "階層",
+      "非監督"
+    ],
+    "exceptions": [
+      "群聚類",
+      "凝聚類",
+      "匯聚類",
+      "積聚類",
+      "集聚類",
+      "團聚類",
+      "齊聚類",
+      "相聚類",
+      "聚類似"
+    ]
   },
   {
     "from": "聯機交易處理",
@@ -8677,6 +9028,27 @@
     "contextClues": ["視窗", "微軟", "系統", "登錄"]
   },
   {
+    "from": "註釋",
+    "to": ["註解"],
+    "type": "cross_strait",
+    "context": "@domain 程式設計。程式碼 comment 在 tw 統一為「註解」；古籍訓詁義的「註釋」是正確 tw 用法，故以程式語境詞為條件",
+    "contextClues": [
+      "函式",
+      "原始碼",
+      "標頭",
+      "模組",
+      "程式",
+      "程式碼",
+      "編譯",
+      "縮排",
+      "語法",
+      "變數",
+      "邏輯",
+      "重構",
+      "類別"
+    ]
+  },
+  {
     "from": "註銷",
     "to": ["登出"],
     "type": "cross_strait",
@@ -9022,6 +9394,40 @@
     "context": "@domain 醫學"
   },
   {
+    "from": "跟蹤",
+    "to": ["追蹤"],
+    "type": "cross_strait",
+    "context": "@domain 日常。tracking → 追蹤；跟人的「跟蹤」是正確 tw 用法，故以數位追蹤語境詞為條件 (@seealso 跟蹤服務)",
+    "contextClues": [
+      "Cookie",
+      "UTM",
+      "事件",
+      "像素",
+      "分析",
+      "埋點",
+      "廣告",
+      "成效",
+      "曝光",
+      "流量",
+      "瀏覽",
+      "軌跡",
+      "轉換率",
+      "頁面",
+      "點擊"
+    ],
+    "negativeContextClues": [
+      "警方",
+      "警察",
+      "嫌犯",
+      "偵查",
+      "跟監",
+      "狗仔",
+      "尾隨",
+      "保護令"
+    ],
+    "exceptions": ["跟蹤騷擾", "跟蹤狂", "跟蹤服務"]
+  },
+  {
     "from": "跟蹤服務",
     "to": ["售後服務"],
     "type": "cross_strait",
@@ -9194,7 +9600,7 @@
     "to": ["透過"],
     "type": "cross_strait",
     "context": "@domain IT。tw「通過」= pass (通過考試)；僅 via/through 義改「透過」",
-    "negativeContextClues": ["考試", "審核", "法案", "檢驗", "投票"]
+    "negativeContextClues": ["考試", "審核", "法案", "檢驗", "投票", "測試"]
   },
   {
     "from": "通配符",
@@ -9359,6 +9765,13 @@
     "to": ["達文西"],
     "type": "cross_strait",
     "context": "@domain 日常"
+  },
+  {
+    "from": "遙感",
+    "to": ["遙測"],
+    "type": "cross_strait",
+    "context": "@domain 地理資訊。remote sensing；tw 學界與官方用「遙測」",
+    "exceptions": ["遙感探測", "遙感應", "逍遙感"]
   },
   {
     "from": "遞歸",
