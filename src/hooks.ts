@@ -1,15 +1,37 @@
-import type {
-  PluginHookBeforeToolCallEvent,
-  PluginHookBeforeToolCallResult,
-  PluginHookMessageContext,
-  PluginHookMessageSendingEvent,
-  PluginHookMessageSendingResult,
-  PluginHookToolContext,
-} from "openclaw/plugin-sdk/types";
 import { logger } from "../api.js";
 import type { LinterFeatures } from "./config.js";
 import { lintMessageContent, lintMessageToolParams } from "./linter.js";
 import { convertZhTw } from "./transforms/zhtw.js";
+
+interface PluginHookBeforeToolCallEvent {
+  readonly toolName: string;
+  readonly params: Record<string, unknown>;
+}
+
+interface PluginHookBeforeToolCallResult {
+  readonly params?: Record<string, unknown>;
+  readonly block?: boolean;
+  readonly blockReason?: string;
+}
+
+interface PluginHookToolContext {
+  readonly sessionKey?: string;
+}
+
+interface PluginHookMessageSendingEvent {
+  readonly content: string;
+}
+
+interface PluginHookMessageSendingResult {
+  readonly content?: string;
+  readonly cancel?: boolean;
+  readonly cancelReason?: string;
+  readonly metadata?: Record<string, unknown>;
+}
+
+interface PluginHookMessageContext {
+  readonly sessionKey?: string;
+}
 
 export function createHookHandlers(features: LinterFeatures) {
   async function onBeforeToolCall(

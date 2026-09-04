@@ -4,7 +4,7 @@
 
 This repository contains `message-linter`, an OpenClaw plugin that normalizes outgoing message text before dispatch.
 
-The plugin is a TypeScript ESM package for OpenClaw `2026.7.1-2`. It focuses on:
+The plugin is a TypeScript ESM package for OpenClaw `2026.9.1`. It focuses on:
 
 - Discord-oriented Markdown cleanup.
 - Kaomoji-safe backtick/accent handling.
@@ -20,7 +20,7 @@ OpenClaw loads the plugin from `./dist/index.js` as declared in `package.json`.
 - Build: clean `dist`, then run `tsc`.
 - Formatting: Prettier.
 - Runtime dependency: `zod`.
-- Peer dependency: `openclaw@2026.7.1-2`.
+- Peer dependency: `openclaw@2026.9.1`.
 
 Do not switch package managers. Use `pnpm` for install, test, build, and formatting tasks.
 

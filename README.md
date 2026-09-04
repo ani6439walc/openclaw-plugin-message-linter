@@ -153,7 +153,7 @@ In short: this package keeps the automatic normalization subset and leaves subje
 
 ## Installation and Setup
 
-This repository targets OpenClaw `2026.7.1-2`. The package entry is `./dist/index.js`, so a local checkout must be built before it is installed.
+This repository targets OpenClaw `2026.9.1`. The package entry is `./dist/index.js`, so a local checkout must be built before it is installed.
 
 ### Install from a local checkout
 
