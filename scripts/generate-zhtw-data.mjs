@@ -16,13 +16,13 @@ import { fileURLToPath } from "node:url";
 import { format } from "prettier";
 
 export const OPENCC_COMMIT = "5249273a3e5606852f088c9a8b23522145d94f78";
-export const ZHTW_MCP_COMMIT = "592b8d8be121e1614a2b9abe8906eb248416424e";
+export const ZHTW_MCP_COMMIT = "cae49bb03a2aad1cf9da848a8214688ef136a32e";
 export const SOURCE_SHA256 = Object.freeze({
   stPhrases: "3c5068770fd2357baa5fe3ac874732d4ae0f34677afbb297e22802c3801f8900",
   stChars: "a0ca1601c70648cf48b33c3c6210ccbecc5c7eead4b4c3daf76587ba2c03582b",
   twVariants:
     "e187278e119c427ca561180ac5da5b20e9f8681190458f35c327ce499e95a6a5",
-  ruleset: "6896c0f43b761efd33f01d91e0706ac43ce45c83812b0a040330fcf3622064b5",
+  ruleset: "c0554a30bee9a5fedba77f692ea4df7643d719e560a50c5fac7a6abe9192b5a6",
 });
 
 const OPENCC_REPOSITORY = "https://github.com/BYVoid/OpenCC";

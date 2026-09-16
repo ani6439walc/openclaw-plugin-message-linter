@@ -12,9 +12,9 @@
     },
     "zhtwMcp": {
       "repository": "https://github.com/sysprog21/zhtw-mcp",
-      "commit": "592b8d8be121e1614a2b9abe8906eb248416424e",
+      "commit": "cae49bb03a2aad1cf9da848a8214688ef136a32e",
       "files": {
-        "assets/ruleset.json": "6896c0f43b761efd33f01d91e0706ac43ce45c83812b0a040330fcf3622064b5"
+        "assets/ruleset.json": "c0554a30bee9a5fedba77f692ea4df7643d719e560a50c5fac7a6abe9192b5a6"
       }
     }
   },
@@ -22,7 +22,7 @@
     "phrases": 39799,
     "chars": 3871,
     "variants": 39,
-    "spellingRules": 1561,
+    "spellingRules": 1572,
     "caseRules": 15
   }
 }

@@ -605,6 +605,13 @@
     "contextClues": ["CSS", "UI", "介面", "排版", "設計"]
   },
   {
+    "from": "佈署",
+    "to": ["部署"],
+    "type": "variant",
+    "context": "MoE 標準用字為「部署」。s2t 表把「布署」轉成「佈署」，本規則收尾。exceptions 排除「公佈／宣佈」後接「署長／署理」的切分",
+    "exceptions": ["公佈署", "宣佈署", "發佈署", "頒佈署"]
+  },
+  {
     "from": "位址分配",
     "to": ["位址配置"],
     "type": "cross_strait",
@@ -4624,6 +4631,22 @@
     "context": "@domain 圖形"
   },
   {
+    "from": "拉新",
+    "to": ["開發新客"],
+    "type": "cross_strait",
+    "context": "@domain 商業。cn 互聯網運營黑話；tw 用「開發新客」。需同時出現成長行銷用語才成立，因此「拉新的線／新娘的手」這類字面用法不會觸發",
+    "contextClues": [
+      "留存",
+      "促活",
+      "轉化",
+      "增長",
+      "私域",
+      "運營",
+      "漏斗",
+      "獲客"
+    ]
+  },
+  {
     "from": "拉黑",
     "to": ["封鎖"],
     "type": "cross_strait",
@@ -6241,6 +6264,12 @@
     "context": "@domain 日常"
   },
   {
+    "from": "混響",
+    "to": ["殘響"],
+    "type": "cross_strait",
+    "context": "@domain 影音"
+  },
+  {
     "from": "添加",
     "to": ["新增"],
     "type": "cross_strait",
@@ -7596,6 +7625,12 @@
     "context": "MoE 標準字體 (@example 灶台、灶神)"
   },
   {
+    "from": "立馬",
+    "to": ["馬上"],
+    "type": "cross_strait",
+    "context": "@domain 日常"
+  },
+  {
     "from": "站點標識按鈕",
     "to": ["網站識別鈕"],
     "type": "cross_strait",
@@ -7736,6 +7771,24 @@
     "to": ["典範轉移"],
     "type": "cross_strait",
     "context": "@domain 程式設計。tw 學術界標準譯法；「典範」源自孔恩 (Thomas Kuhn)《科學革命的結構》中文譯本用語"
+  },
+  {
+    "from": "簡歷",
+    "to": ["履歷"],
+    "type": "cross_strait",
+    "context": "@domain 商業。cn: 簡歷, tw: 履歷。exceptions 排除「精簡／化簡」接「歷史／歷程」的切分",
+    "exceptions": [
+      "精簡歷",
+      "化簡歷",
+      "縮簡歷",
+      "刪簡歷",
+      "從簡歷",
+      "簡簡歷",
+      "簡歷史",
+      "簡歷程",
+      "簡歷年",
+      "簡歷代"
+    ]
   },
   {
     "from": "粘貼",
@@ -7894,6 +7947,12 @@
     "context": "@domain 日常"
   },
   {
+    "from": "綫",
+    "to": ["線"],
+    "type": "variant",
+    "context": "MoE 標準字體：「綫」為異體，正體作「線」"
+  },
+  {
     "from": "網上鄰居",
     "to": ["網路芳鄰"],
     "type": "cross_strait",
@@ -7974,6 +8033,12 @@
     "to": ["網路介面卡"],
     "type": "cross_strait",
     "context": "@domain 網路"
+  },
+  {
+    "from": "網課",
+    "to": ["線上課程"],
+    "type": "cross_strait",
+    "context": "@domain 教育"
   },
   {
     "from": "網路棧",
@@ -9067,6 +9132,13 @@
     "context": "@domain 語言學"
   },
   {
+    "from": "話筒",
+    "to": ["麥克風"],
+    "type": "cross_strait",
+    "context": "@domain 影音。tw 話筒 is the handset of a telephone, not a microphone",
+    "negativeContextClues": ["電話", "聽筒", "話機", "撥號", "話務", "分機"]
+  },
+  {
     "from": "語義網",
     "to": ["語意網"],
     "type": "cross_strait",
@@ -9154,6 +9226,18 @@
     "to": ["除錯器"],
     "type": "cross_strait",
     "context": "@domain IT"
+  },
+  {
+    "from": "調音台",
+    "to": ["混音台"],
+    "type": "cross_strait",
+    "context": "@domain 影音"
+  },
+  {
+    "from": "調音臺",
+    "to": ["混音台"],
+    "type": "cross_strait",
+    "context": "@domain 影音"
   },
   {
     "from": "請勿追蹤",
@@ -10413,6 +10497,12 @@
     "to": ["程序導向"],
     "type": "cross_strait",
     "context": "@domain IT"
+  },
+  {
+    "from": "音視頻",
+    "to": ["影音"],
+    "type": "cross_strait",
+    "context": "@domain 影音"
   },
   {
     "from": "音頻",

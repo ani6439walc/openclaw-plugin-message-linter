@@ -193,4 +193,14 @@ describe("message-linter integration (convertZhTw)", () => {
       "請看 https://api.github.com/v1， `中文,api`\n```txt\n中文,api\n```\n他說「好」。",
     );
   }, 10000);
+
+  it("applies newly synchronized auto-fix rules from upstream zhtw-mcp", async () => {
+    await expect(convertZhTw("系統佈署完成")).resolves.toBe("系統部署完成");
+    await expect(convertZhTw("立馬處理音視頻文件")).resolves.toBe(
+      "馬上處理影音文件",
+    );
+    await expect(convertZhTw("投遞個人簡歷並準備話筒")).resolves.toBe(
+      "投遞個人履歷並準備麥克風",
+    );
+  }, 10000);
 });
