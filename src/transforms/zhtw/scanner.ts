@@ -178,16 +178,64 @@ function acceptsRuleAt(
   return true;
 }
 
+interface MetalinguisticRange {
+  start: number;
+  end: number;
+}
+
+const METALINGUISTIC_TERM = '[^「」『』“”"。！？；，、：\\r\\n]{1,12}';
+const METALINGUISTIC_QUOTE_RE = new RegExp(
+  `(?:「(?<corner>${METALINGUISTIC_TERM})」|『(?<white_corner>${METALINGUISTIC_TERM})』|“(?<double_curly>${METALINGUISTIC_TERM})”|"(?<ascii_double>${METALINGUISTIC_TERM})")(?:是(?:(?:中國(?:大陸)?|大陸|當地|地方|舊)?的?(?:說法|用語)|一詞|一個詞|這個詞)|一詞|這個詞)`,
+  "gu",
+);
+
+function findMetalinguisticRanges(text: string): MetalinguisticRange[] {
+  const ranges: MetalinguisticRange[] = [];
+  for (const match of text.matchAll(METALINGUISTIC_QUOTE_RE)) {
+    const groups = match.groups;
+    if (!groups) continue;
+    const term =
+      groups.corner ??
+      groups.white_corner ??
+      groups.double_curly ??
+      groups.ascii_double;
+    if (term !== undefined && match.index !== undefined) {
+      const start = match.index + 1;
+      const end = start + term.length;
+      ranges.push({ start, end });
+    }
+  }
+  return ranges;
+}
+
+function isExcludedRange(
+  offset: number,
+  length: number,
+  ranges: readonly MetalinguisticRange[],
+): boolean {
+  const end = offset + length;
+  for (const range of ranges) {
+    if (offset < range.end && end > range.start) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function scanSpelling(
   text: string,
   rules: readonly SpellingRule[],
 ): Issue[] {
   const issues: Issue[] = [];
+  const excludedRanges = findMetalinguisticRanges(text);
 
   for (const rule of rules) {
     const found = rule.from;
     forEachOccurrence(text, found, (offset) => {
-      if (acceptsRuleAt(text, rule, offset)) {
+      if (
+        !isExcludedRange(offset, found.length, excludedRanges) &&
+        acceptsRuleAt(text, rule, offset)
+      ) {
         issues.push({ found, suggestions: rule.to, offset });
       }
     });

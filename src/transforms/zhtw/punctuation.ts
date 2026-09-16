@@ -109,6 +109,67 @@ function findChineseParenthesisIndices(text: string): Set<number> {
   return indices;
 }
 
+const LATIN_RUN_SEARCH_CHARS = 128;
+const LATIN_CLAUSE_WORDS = 2;
+
+function isDottedTermPeriod(text: string, index: number): boolean {
+  return (
+    index > 0 &&
+    ASCII_ALNUM_RE.test(text[index - 1]!) &&
+    index + 1 < text.length &&
+    ASCII_ALNUM_RE.test(text[index + 1]!)
+  );
+}
+
+function closesLatinRun(text: string, index: number): boolean {
+  const code = text.charCodeAt(index);
+  const char = text[index];
+  if (
+    char === "," ||
+    char === ";" ||
+    char === ":" ||
+    char === "!" ||
+    char === "?"
+  ) {
+    return true;
+  }
+  if (char === ".") {
+    return !isDottedTermPeriod(text, index);
+  }
+  if (char === " " || char === "\t") {
+    return false;
+  }
+  if (code < 33 || code > 126 || char === "`") {
+    return true;
+  }
+  return false;
+}
+
+function inLatinClause(text: string, index: number): boolean {
+  const floor = Math.max(0, index - LATIN_RUN_SEARCH_CHARS);
+  let start = index;
+  while (start > floor && !closesLatinRun(text, start - 1)) {
+    start -= 1;
+  }
+
+  let words = 0;
+  let hasLowerCaseWord = false;
+
+  const slice = text.slice(start, index);
+  for (const token of slice.split(/\s+/)) {
+    if (!token) continue;
+    const match = token.match(/[A-Za-z]/);
+    if (match !== null) {
+      words += 1;
+      if (/[a-z]/.test(match[0])) {
+        hasLowerCaseWord = true;
+      }
+    }
+  }
+
+  return words >= LATIN_CLAUSE_WORDS && hasLowerCaseWord;
+}
+
 function normalizePunctuation(text: string): string {
   let output = "";
   const chineseParentheses = findChineseParenthesisIndices(text);
@@ -133,7 +194,8 @@ function normalizePunctuation(text: string): string {
           isAsciiDigit(previousCharacter(text, index)?.char) &&
           isAsciiDigit(characterAt(text, index + 1))
             ? char
-            : shouldNormalize(text, index) || hasCjkBefore(text, index)
+            : !inLatinClause(text, index) &&
+                (shouldNormalize(text, index) || hasCjkBefore(text, index))
               ? "，"
               : char;
         break;
@@ -142,21 +204,29 @@ function normalizePunctuation(text: string): string {
         break;
       case "!":
         output +=
-          shouldNormalize(text, index) || hasCjkBefore(text, index)
+          !inLatinClause(text, index) &&
+          (shouldNormalize(text, index) || hasCjkBefore(text, index))
             ? "！"
             : char;
         break;
       case "?":
         output +=
-          shouldNormalize(text, index) || hasCjkBefore(text, index)
+          !inLatinClause(text, index) &&
+          (shouldNormalize(text, index) || hasCjkBefore(text, index))
             ? "？"
             : char;
         break;
       case ";":
-        output += shouldNormalize(text, index) ? "；" : char;
+        output +=
+          !inLatinClause(text, index) && shouldNormalize(text, index)
+            ? "；"
+            : char;
         break;
       case ":":
-        output += shouldNormalize(text, index) ? "：" : char;
+        output +=
+          !inLatinClause(text, index) && shouldNormalize(text, index)
+            ? "："
+            : char;
         break;
       case "(":
         output += chineseParentheses.has(index) ? "（" : char;

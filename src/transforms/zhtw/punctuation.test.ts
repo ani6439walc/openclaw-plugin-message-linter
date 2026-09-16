@@ -65,4 +65,58 @@ describe("zhtw punctuation rules", () => {
       "呼叫 foo(中文) 取得結果。",
     );
   });
+
+  it("preserves half-width punctuation in embedded Latin clauses", () => {
+    expect(
+      applyPunctuationRules(
+        "審查者只回了「I agree, 但這樣還不夠完整」，於是我們補上了測試計畫。",
+      ),
+    ).toBe(
+      "審查者只回了「I agree, 但這樣還不夠完整」，於是我們補上了測試計畫。",
+    );
+
+    expect(
+      applyPunctuationRules(
+        "Write programs that do one thing and do it well,\n\n這句話出自 Unix 哲學",
+      ),
+    ).toBe(
+      "Write programs that do one thing and do it well,\n\n這句話出自 Unix 哲學",
+    );
+
+    expect(
+      applyPunctuationRules(
+        "工程師問「Are you sure this works?」我們才決定重新跑一次",
+      ),
+    ).toBe("工程師問「Are you sure this works?」我們才決定重新跑一次");
+
+    expect(
+      applyPunctuationRules(
+        "記錄檔只留下 file not found: 請先確認掛載點是否正確。",
+      ),
+    ).toBe("記錄檔只留下 file not found: 請先確認掛載點是否正確。");
+
+    expect(
+      applyPunctuationRules("他寫下 make it work; 之後才談效能與可讀性。"),
+    ).toBe("他寫下 make it work; 之後才談效能與可讀性。");
+  });
+
+  it("converts punctuation after single borrowed Latin terms and title-cased proper names", () => {
+    expect(
+      applyPunctuationRules("這個伺服器需要 Docker,才能部署整套環境。"),
+    ).toBe("這個伺服器需要 Docker，才能部署整套環境。");
+
+    expect(applyPunctuationRules("團隊只用 Windows 11,沒有其他選擇。")).toBe(
+      "團隊只用 Windows 11，沒有其他選擇。",
+    );
+
+    expect(
+      applyPunctuationRules("我們用 Visual Studio Code,開發整個前端專案。"),
+    ).toBe("我們用 Visual Studio Code，開發整個前端專案。");
+
+    expect(
+      applyPunctuationRules("這臺伺服器跑的是 nginx,不是別的網頁伺服器。"),
+    ).toBe("這臺伺服器跑的是 nginx，不是別的網頁伺服器。");
+
+    expect(applyPunctuationRules("他說, I agree")).toBe("他說， I agree");
+  });
 });

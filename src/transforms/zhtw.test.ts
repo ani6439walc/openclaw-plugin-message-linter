@@ -203,4 +203,37 @@ describe("message-linter integration (convertZhTw)", () => {
       "投遞個人履歷並準備麥克風",
     );
   }, 10000);
+
+  it("protects metalinguistic quoted terms from overcorrection while fixing ordinary usage", async () => {
+    await expect(
+      convertZhTw("「軟件」是中國用語，我們用軟件開發。"),
+    ).resolves.toBe("「軟件」是中國用語，我們用軟體開發。");
+    await expect(
+      convertZhTw("『網絡』這個詞很常出現在大陸文章。"),
+    ).resolves.toBe("『網絡』這個詞很常出現在大陸文章。");
+    await expect(
+      convertZhTw("「軟件」一詞在台灣通常稱為「軟體」。"),
+    ).resolves.toBe("「軟件」一詞在臺灣通常稱為「軟體」。");
+    await expect(convertZhTw("我們用「軟件」開發服務。")).resolves.toBe(
+      "我們用「軟體」開發服務。",
+    );
+    await expect(convertZhTw("「軟件」是產品名稱而非舊說法。")).resolves.toBe(
+      "「軟體」是產品名稱而非舊說法。",
+    );
+  }, 10000);
+
+  it("preserves embedded Latin clauses with full punctuation options", async () => {
+    const input =
+      "審查者只回了「I agree, 但這樣還不夠完整」，記錄檔只留下 file not found: 請先確認。";
+    const output = await convertZhTw(input, {
+      case: true,
+      punctuation: true,
+      spacing: true,
+      quotes: true,
+    });
+
+    expect(output).toBe(
+      "審查者只回了「I agree, 但這樣還不夠完整」，記錄檔只留下 file not found: 請先確認。",
+    );
+  }, 10000);
 });
