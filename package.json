@@ -1,9 +1,10 @@
 {
-  "name": "message-linter",
+  "name": "@ani6439walc/openclaw-plugin-message-linter",
   "displayName": "MessageLinter",
   "description": "A robust message formatting and sanitization plugin for the OpenClaw platform, ensuring consistent, readable, and aesthetically pleasing message presentation.",
   "version": "2026.9.9",
   "type": "module",
+  "packageManager": "pnpm@12.8.1",
   "license": "MIT",
   "author": "Ani <ani6439walc@gmail.com>",
   "contributors": [
@@ -58,8 +59,8 @@
     "openclaw": "2026.9.9"
   },
   "devDependencies": {
-    "typescript": "6.0.3",
-    "vitest": "5.0.0",
-    "prettier": "3.9.6"
+    "prettier": "3.9.10",
+    "typescript": "7.0.2",
+    "vitest": "5.0.3"
   }
 }
