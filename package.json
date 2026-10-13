@@ -1,5 +1,5 @@
 {
-  "name": "@ani6439walc/openclaw-plugin-message-linter",
+  "name": "@wei840222/openclaw-plugin-message-linter",
   "displayName": "MessageLinter",
   "description": "A robust message formatting and sanitization plugin for the OpenClaw platform, ensuring consistent, readable, and aesthetically pleasing message presentation.",
   "version": "2026.10.2",
